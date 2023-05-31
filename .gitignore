@@ -17,6 +17,8 @@ __pycache__
 *.jpg
 *.npy
 *.xml
+*.yml
+*.index
 
 Yads/examples/
 Yads/yads/thesis_approaches/global_approach/hard_points_predictors/global_2D/visualization/
