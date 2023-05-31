@@ -1,0 +1,1 @@
+from yads.predictors.easy_points_predictors.first_approach import make_pipeline
