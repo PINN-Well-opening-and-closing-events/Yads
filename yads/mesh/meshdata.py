@@ -101,6 +101,14 @@ class MeshData(Mesh):
     def face_groups(self):
         return self._face_groups
 
+    @property
+    def nb_boundary_faces(self) -> int:
+        count = 0
+        for group in self.face_groups.keys():
+            if group != "0":
+                count += len(self.faces(group=group, with_nodes=False))
+        return count
+
     def find_type(self):
         # only cartesian and triangular meshes are handled
         # triangular = 3 faces

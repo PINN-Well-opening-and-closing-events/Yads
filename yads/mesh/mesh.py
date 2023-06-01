@@ -72,6 +72,11 @@ class Mesh(metaclass=ABCMeta):  # pragma: no cover
     def nb_groups(self) -> int:
         pass
 
+    @property
+    @abstractmethod
+    def nb_boundary_faces(self) -> int:
+        pass
+
     @abstractmethod
     def group(self, face: int) -> str:
         pass
