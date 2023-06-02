@@ -11,15 +11,31 @@ def P_generator(lhd, coords, cov_mat_fun, cor_d, radius, P_min=10e6, P_max=20e6)
     all_P_scaled = []
     # square mesh
     for i in range(lhd.shape[0]):
-        P_unscaled = np.matmul(cov_mat_fun(X=coords, lhd=lhd[i, :], dist_func=circle_dist, cor_d=cor_d, radius=radius,
-                                           ), lhd[i, :])
+        P_unscaled = np.matmul(
+            cov_mat_fun(
+                X=coords,
+                lhd=lhd[i, :],
+                dist_func=circle_dist,
+                cor_d=cor_d,
+                radius=radius,
+            ),
+            lhd[i, :],
+        )
         P_scaled = P_min + P_unscaled * (P_max - P_min)
         all_P_scaled.append(P_scaled)
     return np.array(all_P_scaled)
 
 
-def P_generator_wrapper(grid: Mesh, nb_boundaries: int, nb_samples: int, cov_mat, cor_ds: List[float], P_min, P_max,
-                        seed=42):
+def P_generator_wrapper(
+    grid: Mesh,
+    nb_boundaries: int,
+    nb_samples: int,
+    cov_mat,
+    cor_ds: List[float],
+    P_min,
+    P_max,
+    seed=42,
+):
     np.random.seed(seed)
     random.seed(seed)
 
@@ -45,19 +61,31 @@ def P_generator_wrapper(grid: Mesh, nb_boundaries: int, nb_samples: int, cov_mat
         rd_face_coord = grid.centers(item="face")[rd_face_idx]
         rd_faces_coord.append(rd_face_coord)
 
-    denom = np.sqrt((np.array(rd_faces_coord)[:, 0] - Lx / 2) ** 2 + (
-                             np.array(rd_faces_coord)[:, 1] - Ly / 2) ** 2)
-    circle_coord_x = (np.array(rd_faces_coord)[:, 0] - Lx / 2) * radius * np.sqrt(2) / denom
-    circle_coord_y = (np.array(rd_faces_coord)[:, 1] - Ly / 2) * radius * np.sqrt(2) / denom
+    denom = np.sqrt(
+        (np.array(rd_faces_coord)[:, 0] - Lx / 2) ** 2
+        + (np.array(rd_faces_coord)[:, 1] - Ly / 2) ** 2
+    )
+    circle_coord_x = (
+        (np.array(rd_faces_coord)[:, 0] - Lx / 2) * radius * np.sqrt(2) / denom
+    )
+    circle_coord_y = (
+        (np.array(rd_faces_coord)[:, 1] - Ly / 2) * radius * np.sqrt(2) / denom
+    )
 
-    circle_coords = np.array([[circle_coord_x[i], circle_coord_y[i]] for i in range(len(circle_coord_x))])
+    circle_coords = np.array(
+        [[circle_coord_x[i], circle_coord_y[i]] for i in range(len(circle_coord_x))]
+    )
 
     lhd = lhs(n=nb_boundaries, samples=nb_samples, criterion="maximin")
 
-    P = P_generator(lhd=lhd,
-                    coords=circle_coords,
-                    cov_mat_fun=cov_mat,
-                    radius=radius,
-                    P_min=P_min, P_max=P_max, cor_d=cor_ds)
+    P = P_generator(
+        lhd=lhd,
+        coords=circle_coords,
+        cov_mat_fun=cov_mat,
+        radius=radius,
+        P_min=P_min,
+        P_max=P_max,
+        cor_d=cor_ds,
+    )
 
     return P, rd_faces_coord, circle_coords
