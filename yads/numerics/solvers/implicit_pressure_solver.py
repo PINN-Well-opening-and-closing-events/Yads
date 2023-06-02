@@ -76,6 +76,7 @@ def implicit_pressure_solver(
     if Pb:
         for bound in Pb.keys():
             for f in grid.faces(group=bound, with_nodes=False):
+
                 c = grid.face_to_cell(f, face_type="boundary")
                 # upwinding
                 m = None
@@ -100,7 +101,6 @@ def implicit_pressure_solver(
                         and Sb_dict["Neumann"][bound] is None
                     ):
                         m = 0.0
-
                 A[c, c] += T[f] * m
                 b[c] += T[f] * m * Pb[bound]
 

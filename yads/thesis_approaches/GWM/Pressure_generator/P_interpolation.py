@@ -12,7 +12,6 @@ import math
 def P_interp(P, circle_coords, grid: Mesh):
     all_circle_coords, radius = compute_circle_coord(grid=grid)
     sorted_all_circle_coords, _ = sort_clockwise(all_circle_coords)
-    print(f"len circle coords: {len(sorted_all_circle_coords)}")
     linear_coords = []
     dists = []
 
@@ -36,11 +35,7 @@ def P_interp(P, circle_coords, grid: Mesh):
         radius=radius * np.sqrt(2),
     )
     linear_coords.append(np.sum(dists) + last_dist)
-    print(f"len linear coords: {len(linear_coords)}")
-
     dists.append(last_dist)
-    print(f"len dists: {len(dists)}")
-
     linear_coords.append(0)
     linear_coords = np.array(linear_coords)
 
@@ -53,10 +48,8 @@ def P_interp(P, circle_coords, grid: Mesh):
                 return True
         return False
 
-    print(circle_coords)
     for i, coord_1 in enumerate(sorted_all_circle_coords):
         if is_element_in_array(coord_1, circle_coords):
-            print(coord_1)
             idxs_not_to_interp.append(i)
         else:
             idxs_to_interp.append(i)
@@ -65,8 +58,6 @@ def P_interp(P, circle_coords, grid: Mesh):
         [sorted_all_circle_coords, [sorted_all_circle_coords[0]]]
     )
 
-    print(f"number of elements to interp {len(idxs_to_interp)}")
-    print(f"number of elements not to interp {len(idxs_not_to_interp)}")
     coords_to_interp = linear_coords[idxs_to_interp]
     coords_not_to_interp = linear_coords[idxs_not_to_interp]
 
@@ -83,35 +74,31 @@ def P_interp(P, circle_coords, grid: Mesh):
     )
 
     P_no_interp = np.concatenate([P[P_idxs], [P[P_idxs][0]]])
-
-    print(f"len coords to interpolate: {len(coords_to_interp)}")
-    print(f"len coords not to interpolate: {len(coords_not_to_interp)}")
     P_inter = np.interp(
         coords_to_interp,
         coords_not_to_interp,
         P_no_interp,
         period=2 * np.pi * radius * np.sqrt(2),
     )
-    print(f"len P interpolate: {len(P_inter)}")
 
     return (
         (P_inter, P_no_interp),
         (coords_to_interp, coords_not_to_interp),
         (circle_coords_to_interp, circle_coords_not_to_interp),
+        (idxs_to_interp, idxs_not_to_interp),
     )
 
 
 def sort_clockwise(points):
-    # Calculer les coordonnées polaires pour chaque point
-    points_polaires = []
+    polar_points = []
     for point in points:
         x = point[0]
         y = point[1]
         angle = np.arctan2(y, x)
-        points_polaires.append((point, angle))
+        polar_points.append((point, angle))
 
-    points_tries = sorted(points_polaires, key=lambda p: p[1])
-    idxs = np.argsort(np.array(points_polaires)[:, 1])
-    points_resultat = [p[0] for p in points_tries]
+    points_tries = sorted(polar_points, key=lambda p: p[1])
+    idxs = np.argsort(np.array(polar_points)[:, 1])
+    points_result = [p[0] for p in points_tries]
 
-    return np.array(points_resultat), idxs
+    return np.array(points_result), idxs
