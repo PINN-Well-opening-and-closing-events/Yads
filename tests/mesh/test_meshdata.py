@@ -29,7 +29,10 @@ def test_MeshData_methods_wrong_inputs():
         square_3.face_to_cell(face=-1, face_type="inner")
         square_3.face_to_cell(face=square_3.nb_faces + 1, face_type="inner")
 
-    with pytest.raises(ValueError, match="invalid face_type, valid face_type are 'inner' and 'boundary'."):
+    with pytest.raises(
+        ValueError,
+        match="invalid face_type, valid face_type are 'inner' and 'boundary'.",
+    ):
         square_3.face_to_cell(face=0, face_type="error")
 
     with pytest.raises(ValueError, match="unknown cell : cell index out of range"):
@@ -42,19 +45,23 @@ def test_MeshData_methods_wrong_inputs():
 
     with pytest.raises(AssertionError):
         square_3.add_cell_group_by_index(name="error", cells_idx=[-1])
-        square_3.add_cell_group_by_index(name="error", cells_idx=[square_3.nb_cells + 1])
+        square_3.add_cell_group_by_index(
+            name="error", cells_idx=[square_3.nb_cells + 1]
+        )
 
 
 def test_MeshData_methods():
     square_3 = create_2d_cartesian(Lx=3, Ly=3, Nx=3, Ny=3)
-    assert square_3.group(face=0) == ['lower']
+    assert square_3.group(face=0) == ["lower"]
     # group creation tests
     assert square_3.cell_groups == {}
     square_3.add_cell_group_by_coord(name="coord_group", coord=np.array([[0.5, 0.5]]))
     assert len(list(square_3.cell_groups.keys())) == 1
     square_3.add_cell_group_by_index(name="index_group", cells_idx=[0, 1])
     assert len(list(square_3.cell_groups.keys())) == 2
-    square_3.add_cell_group_by_square(name="square_group", up_left=(0., 1.), down_right=(1., 0))
+    square_3.add_cell_group_by_square(
+        name="square_group", up_left=(0.0, 1.0), down_right=(1.0, 0)
+    )
     assert len(list(square_3.cell_groups.keys())) == 3
 
     #
@@ -65,7 +72,7 @@ def test_MeshData_methods():
         name="well test",
         cell_group=np.array([[0.5, 0.5]]),
         radius=0.1,
-        control={"Neumann": 0.},
+        control={"Neumann": 0.0},
         s_inj=1.0,
         schedule=[[0, 0]],
         mode="injector",

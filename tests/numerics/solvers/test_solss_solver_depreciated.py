@@ -52,18 +52,48 @@ def test_output():
         mode="injector",
     )
 
-    solss_newton_step_depreciated(grid=grid, P_i=P, S_i=S, K=K, T=T, phi=phi, Pb=Pb, Sb_dict=Sb_dict, dt_min=-1,
-                                  mu_w=mu_w, mu_g=mu_g, dt_init=dt, S_guess=S, P_guess=P, wells=[well_test])
+    solss_newton_step_depreciated(
+        grid=grid,
+        P_i=P,
+        S_i=S,
+        K=K,
+        T=T,
+        phi=phi,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        dt_min=-1,
+        mu_w=mu_w,
+        mu_g=mu_g,
+        dt_init=dt,
+        S_guess=S,
+        P_guess=P,
+        wells=[well_test],
+    )
 
     well_test = Well(
         name="well test",
         cell_group=np.array([[0.5, 0.5]]),
         radius=0.1,
-        control={"Dirichlet": 2.},
+        control={"Dirichlet": 2.0},
         s_inj=1.0,
         schedule=[[0, 0.5]],
         mode="injector",
     )
 
-    solss_newton_step_depreciated(grid=grid, P_i=P, S_i=S, K=K, T=T, phi=phi, Pb=Pb, Sb_dict=Sb_dict, dt_min=-1,
-                                  mu_w=mu_w, mu_g=mu_g, dt_init=dt, S_guess=S, P_guess=P, wells=[well_test])
+    solss_newton_step_depreciated(
+        grid=grid,
+        P_i=P,
+        S_i=S,
+        K=K,
+        T=T,
+        phi=phi,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        dt_min=-1,
+        mu_w=mu_w,
+        mu_g=mu_g,
+        dt_init=dt,
+        S_guess=S,
+        P_guess=P,
+        wells=[well_test],
+    )

@@ -1,6 +1,10 @@
 import pytest
 import numpy as np  # type: ignore
-from yads.physics.mobility import total_mobility, calculate_mobility, d_total_mobility_ds
+from yads.physics.mobility import (
+    total_mobility,
+    calculate_mobility,
+    d_total_mobility_ds,
+)
 from yads.mesh import load_mesh
 
 
@@ -25,10 +29,10 @@ def test_wrong_inputs():
     P_wrong = S_wrong = np.ones(grid.nb_faces)
 
     with pytest.raises(ValueError, match=r"viscosity must be positive"):
-        d_total_mobility_ds(sw=S, mu_w=mu_wrong, mu_o=mu_ok, model='cross')
+        d_total_mobility_ds(sw=S, mu_w=mu_wrong, mu_o=mu_ok, model="cross")
 
     with pytest.raises(ValueError, match=r"Model not handled yet"):
-        d_total_mobility_ds(sw=S, mu_w=mu_ok, mu_o=mu_ok, model='error')
+        d_total_mobility_ds(sw=S, mu_w=mu_ok, mu_o=mu_ok, model="error")
 
 
 def test_output():

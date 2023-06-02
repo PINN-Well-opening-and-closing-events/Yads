@@ -64,14 +64,14 @@ def test_outputs():
         total_sim_time=total_sim_time,
         dt_init=dt,
         max_newton_iter=max_iter,
-        wells=[well_test]
+        wells=[well_test],
     )
 
     well_test = Well(
         name="well test",
         cell_group=np.array([[0.5, 0.5]]),
         radius=0.1,
-        control={"Dirichlet": 2.},
+        control={"Dirichlet": 2.0},
         s_inj=1.0,
         schedule=[[0, 0.5]],
         mode="injector",
@@ -90,5 +90,5 @@ def test_outputs():
         total_sim_time=total_sim_time,
         dt_init=dt,
         max_newton_iter=max_iter,
-        wells=[well_test]
+        wells=[well_test],
     )

@@ -185,13 +185,9 @@ def j(
         # upwinding
         value = T[f] * (P[front] - P[back])
         if P[front] >= P[back]:
-            dF_g_dS = (
-                    d_kr_ds(S[front], model=kr_model, negative=False) * value / mu_g
-            )
+            dF_g_dS = d_kr_ds(S[front], model=kr_model, negative=False) * value / mu_g
             dF_w_dS = (
-                    d_kr_ds(1.0 - S[front], model=kr_model, negative=True)
-                    * value
-                    / mu_w
+                d_kr_ds(1.0 - S[front], model=kr_model, negative=True) * value / mu_w
             )
             # dF_g_dP
             dF_g_dP = kr(S[front], model=kr_model) * T[f] / mu_g
@@ -207,11 +203,9 @@ def j(
             jacobian[grid.nb_cells + back, grid.nb_cells + front] -= dF_w_dS
 
         else:
-            dF_g_dS = (
-                    d_kr_ds(S[back], model=kr_model, negative=False) * value / mu_g
-            )
+            dF_g_dS = d_kr_ds(S[back], model=kr_model, negative=False) * value / mu_g
             dF_w_dS = (
-                    d_kr_ds(1.0 - S[back], model=kr_model, negative=True) * value / mu_w
+                d_kr_ds(1.0 - S[back], model=kr_model, negative=True) * value / mu_w
             )
             dF_g_dP = kr(S[back], model=kr_model) * T[f] / mu_g
             dF_w_dP = kr(1.0 - S[back], model=kr_model) * T[f] / mu_w
@@ -244,14 +238,12 @@ def j(
                 value = T[f] * (P[cell] - Pb[group])
                 if P[cell] >= Pb[group]:
                     dF_g_dS = (
-                            d_kr_ds(S[cell], model=kr_model, negative=False)
-                            / mu_g
-                            * value
+                        d_kr_ds(S[cell], model=kr_model, negative=False) / mu_g * value
                     )
                     dF_w_dS = (
-                            d_kr_ds(1.0 - S[cell], model=kr_model, negative=True)
-                            / mu_w
-                            * value
+                        d_kr_ds(1.0 - S[cell], model=kr_model, negative=True)
+                        / mu_w
+                        * value
                     )
                     dF_g_dP = kr(S[cell], model=kr_model) * T[f] / mu_g
                     dF_w_dP = kr(1.0 - S[cell], model=kr_model) * T[f] / mu_w
@@ -262,14 +254,14 @@ def j(
                 else:
                     if Sb_dict["Dirichlet"][group] is not None:
                         dF_g_dP = (
-                                kr(Sb_dict["Dirichlet"][group], model=kr_model)
-                                * T[f]
-                                / mu_g
+                            kr(Sb_dict["Dirichlet"][group], model=kr_model)
+                            * T[f]
+                            / mu_g
                         )
                         dF_w_dP = (
-                                kr(1.0 - Sb_dict["Dirichlet"][group], model=kr_model)
-                                * T[f]
-                                / mu_w
+                            kr(1.0 - Sb_dict["Dirichlet"][group], model=kr_model)
+                            * T[f]
+                            / mu_w
                         )
                     else:
                         ######### RISKY NULL FLUX #####
@@ -301,14 +293,12 @@ def j(
                             )
                             continue
                         dF_g_dS = (
-                                d_kr_ds(S[c], model=kr_model, negative=False)
-                                * value
-                                / mu_g
+                            d_kr_ds(S[c], model=kr_model, negative=False) * value / mu_g
                         )
                         dF_w_dS = (
-                                d_kr_ds(1.0 - S[c], model=kr_model, negative=True)
-                                * value
-                                / mu_w
+                            d_kr_ds(1.0 - S[c], model=kr_model, negative=True)
+                            * value
+                            / mu_w
                         )
                         dF_g_dP = ip / mu_g * kr(S[c], model=kr_model)
                         dF_w_dP = ip / mu_w * kr(1.0 - S[c], model=kr_model)

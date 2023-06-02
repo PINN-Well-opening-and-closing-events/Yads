@@ -238,7 +238,9 @@ class MeshData(Mesh):
             name: name of  the cell group
             cells_idx: cell indexes belonging to the new cell group
         """
-        assert np.alltrue([0 <= idx <= self._nb_cells - 1 for idx in cells_idx])  # all index must be in [0, nb_cells]
+        assert np.alltrue(
+            [0 <= idx <= self._nb_cells - 1 for idx in cells_idx]
+        )  # all index must be in [0, nb_cells]
 
         if name not in self._cell_groups.keys():
             self._cell_groups[name] = cells_idx

@@ -16,4 +16,3 @@ def test_output():
     kr(S=S, model="quadratic")
     d_kr_ds(S=S, model="cross")
     d_kr_ds(S=S, model="quadratic")
-

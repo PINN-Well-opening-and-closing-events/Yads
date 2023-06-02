@@ -113,7 +113,6 @@ def impes_solver(
                 "CFL conditions not respected at step "
                 + str(nb_iter)
                 + ": "
-
                 + str(dt)
                 + " > "
                 + str(dt_lim)
