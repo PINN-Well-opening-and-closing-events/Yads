@@ -5,8 +5,6 @@ from yads.thesis_approaches.GWM.Pressure_generator.dists import (
     circle_dist,
     compute_circle_coord,
 )
-from itertools import cycle
-import math
 
 
 def P_interp(P, circle_coords, grid: Mesh):
@@ -85,7 +83,6 @@ def P_interp(P, circle_coords, grid: Mesh):
         (P_inter, P_no_interp),
         (coords_to_interp, coords_not_to_interp),
         (circle_coords_to_interp, circle_coords_not_to_interp),
-        (idxs_to_interp, idxs_not_to_interp),
     )
 
 
