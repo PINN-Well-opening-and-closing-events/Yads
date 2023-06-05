@@ -15,7 +15,7 @@ sys.path.append("/")
 sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
 
 from yads.mesh.utils import load_json
-from yads.numerics import calculate_transmissivity, implicit_pressure_solver
+from yads.numerics.physics import calculate_transmissivity, implicit_pressure_solver
 from yads.numerics.solvers.solss_solver_depreciated import solss_newton_step
 from yads.wells import Well
 from yads.mesh import Mesh

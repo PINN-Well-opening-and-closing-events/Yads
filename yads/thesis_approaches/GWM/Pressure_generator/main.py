@@ -28,7 +28,7 @@ if __name__ == "__main__":
     Lx, Ly = 5, 5
     Nx, Ny = 5, 5
 
-    nb_samples = 2
+    nb_samples = 100
     radius = Lx / 2
     nb_boundaries = 4
 
@@ -136,6 +136,10 @@ if __name__ == "__main__":
     plot_P_imp(grid, P_imp, ax4, Pmax=P_max, Pmin=P_min)
     ax4.title.set_text(r"$P_{IMP}$")
     plt.show()
+
+    grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
+
+    savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}"
     P_imp_generator(
         grid,
         nb_samples,
@@ -145,5 +149,5 @@ if __name__ == "__main__":
         cov_matrix_P_dist,
         cor_ds,
         seed,
-        "None",
+        savepath,
     )

@@ -2,11 +2,10 @@ from typing import Union, List
 import copy
 from yads.mesh import Mesh
 
-from yads.numerics.solvers.solss_solver_depreciated import solss_newton_step
+from yads.numerics.solvers.solss_solver import solss_newton_step
+from yads.numerics.solvers.implicit_pressure_solver import implicit_pressure_solver
 from yads.wells import Well
-from yads.numerics import calculate_transmissivity, implicit_pressure_solver
-from yads.thesis_approaches.data_generation import check_conservative
-from yads.numerics.utils import clipping_P
+from yads.numerics.physics import calculate_transmissivity
 
 
 def raw_solss(

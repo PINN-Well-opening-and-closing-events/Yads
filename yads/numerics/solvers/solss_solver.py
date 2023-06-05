@@ -65,7 +65,7 @@ def solss_newton_step(
     norm_dict["B"].append(B)
     norm_dict["L_inf"].append(norm)
     norm_dict["L2"].append(np.linalg.norm(B, ord=2))
-    print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
+    # print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
     while not norm <= eps:
         jacobian = j(
             grid=grid,
@@ -121,7 +121,7 @@ def solss_newton_step(
         norm_dict["B"].append(B)
         norm_dict["L_inf"].append(norm)
         norm_dict["L2"].append(np.linalg.norm(B, ord=2))
-        print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
+        # print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
         if debug_newton_mode:
             import json
 

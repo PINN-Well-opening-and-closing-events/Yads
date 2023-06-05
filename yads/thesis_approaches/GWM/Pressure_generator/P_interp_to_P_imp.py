@@ -1,6 +1,7 @@
 import copy
 import os
 import numpy as np
+import pickle
 
 from yads.thesis_approaches.GWM.Pressure_generator.P_interpolation import P_interp
 
@@ -66,6 +67,11 @@ def P_interp_to_P_imp(grid, P, circle_coords, savepath):
         )
         all_P = np.concatenate([P_inter, P_no_inter[:-1]])
         all_circles_coords = np.concatenate([circle_interp, circle_no_interp[:-1]])
+        # TODO: add rotations of all_P
         groups, Pb_dict = create_Pb_groups(grid_temp, all_P, all_circles_coords)
-        # TODO: save in appropriate format
+        folder_name = f"{i}"
+        if not os.path.isdir(savepath + "/" + folder_name):
+            os.mkdir(savepath + "/" + folder_name)
+        with open(savepath + "/" + folder_name + f"/{i}.pkl", "wb") as f:
+            pickle.dump((groups, Pb_dict), f)
     return

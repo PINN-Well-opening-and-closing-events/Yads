@@ -3,7 +3,7 @@ from typing import Union, List
 import numpy as np
 
 from yads.mesh import Mesh
-from yads.numerics import peaceman_radius
+from yads.numerics.physics import peaceman_radius
 from yads.wells import Well
 
 from yads.physics.relative_permeability import kr
