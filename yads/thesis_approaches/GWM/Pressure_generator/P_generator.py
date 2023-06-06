@@ -115,3 +115,9 @@ def P_imp_generator(
     )
     P_interp_to_P_imp(grid, P, circle_coords, savepath)
     return
+
+
+def P_imp_brute_force(grid, nb_samples, P_min, P_max, savepath):
+    lhd = lhs(n=grid.nb_boundary_faces, samples=nb_samples, criterion="maximin")
+    P = P_min + lhd * (P_max - P_min)
+    return

@@ -5,7 +5,11 @@ from yads.mesh import Mesh
 from yads.numerics.solvers.solss_solver import solss_newton_step
 from yads.numerics.solvers.implicit_pressure_solver import implicit_pressure_solver
 from yads.wells import Well
-from yads.numerics.physics import calculate_transmissivity
+from yads.numerics.physics import (
+    calculate_transmissivity,
+    compute_speed,
+    compute_grad_P,
+)
 
 
 def raw_solss(
@@ -243,6 +247,24 @@ def raw_solss_1_iter(
         kr_model=kr_model,
         wells=wells,
     )
+    grad_P = compute_grad_P(grid=grid, Pb=Pb, T=T, P_guess=P)
+
+    F = compute_speed(
+        grid=grid,
+        S_i=S,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        phi=phi,
+        K=K,
+        T=T,
+        dt_init=dt_init,
+        mu_g=mu_g,
+        mu_w=mu_w,
+        kr_model=kr_model,
+        P_guess=P,
+        S_guess=S,
+        wells=wells,
+    )
     step = 0
     total_time = 0.0
 
@@ -250,6 +272,8 @@ def raw_solss_1_iter(
         "metadata": {
             "kr_model": kr_model,
             "P_imp": P.tolist(),
+            "F": F.tolist(),
+            "grad_P": grad_P.tolist(),
             "Pb": Pb,
             "Sb_dict": Sb_dict,
             "T": T.tolist(),
@@ -313,6 +337,23 @@ def raw_solss_1_iter(
         S_guess=S_guess,
     )
 
+    F_final = compute_speed(
+        grid=grid,
+        S_i=S_i,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        phi=phi,
+        K=K,
+        T=T,
+        dt_init=dt_init,
+        mu_g=mu_g,
+        mu_w=mu_w,
+        kr_model=kr_model,
+        P_guess=P_i_plus_1,
+        S_guess=S_i_plus_1,
+        wells=wells,
+    )
+
     total_time += dt
     # update simulation state
     simulation_state["data"][str(total_time)] = {
@@ -325,6 +366,7 @@ def raw_solss_1_iter(
         "nb_newton": nb_newton,
         "total_time": total_time,
         "Res": norm_dict["B"][-1].tolist(),
+        "F_final": F_final.tolist(),
     }
     assert (
         simulation_state["data"][str(total_time)]["dt_init"]

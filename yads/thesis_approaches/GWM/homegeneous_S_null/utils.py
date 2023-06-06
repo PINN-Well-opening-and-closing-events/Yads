@@ -157,6 +157,7 @@ def better_data_to_df(combination_ser, sim_state):
     well_co2 = combination_ser[1][0]
     q = well_co2["control"]["Neumann"]
     P_imp = sim_state["metadata"]["P_imp"]
+    F = sim_state["metadata"]["F"]
     data_dict = sim_state["data"]
     for tot_t in data_dict.keys():
         step = data_dict[tot_t]["step"]
@@ -169,6 +170,8 @@ def better_data_to_df(combination_ser, sim_state):
         S0 = data_dict[tot_t]["S0"]
         B = data_dict[tot_t]["Res"]
         Pb = sim_state["metadata"]["Pb"]
+        F_final = data_dict[tot_t]["F_final"]
+        grad_P = sim_state["metadata"]["grad_P"]
         future_df = {
             "q": q,
             "total_time": total_time,
@@ -182,6 +185,9 @@ def better_data_to_df(combination_ser, sim_state):
             "dt_init": dt_init,
             "Res": B,
             "Pb": Pb,
+            "F_init": F,
+            "F_final": F_final,
+            "grad_P": grad_P,
         }
         list_of_dict.append(future_df)
 
