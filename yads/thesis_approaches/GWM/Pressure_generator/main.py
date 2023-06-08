@@ -28,7 +28,7 @@ if __name__ == "__main__":
     Lx, Ly = 5, 5
     Nx, Ny = 5, 5
 
-    nb_samples = 100
+    nb_samples = 2
     radius = Lx / 2
     nb_boundaries = 4
 

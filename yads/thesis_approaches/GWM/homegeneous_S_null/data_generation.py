@@ -26,7 +26,7 @@ import yads.mesh as ym
 
 
 def main():
-    save_dir = "idc"
+    save_dir = "raw_idc"
 
     np.random.seed(42)
     Lx, Ly = 555, 555
@@ -55,7 +55,7 @@ def main():
     # BOUNDARY CONDITIONS #
     # Read P boundary files
     grid = copy.deepcopy(grid_temp)
-    P_boundary_path = "data/nb_samples_100_nb_boundaries_2"
+    P_boundary_path = "data/raw_nb_samples_2"
     subfolders = [f.path for f in os.scandir(P_boundary_path) if f.is_dir()]
     all_groups, all_Pb_dicts = [], []
     for folder in subfolders:
@@ -67,6 +67,7 @@ def main():
             all_groups.append(groups)
             all_Pb_dicts.append(Pb_dict)
     nb_data = len(all_groups)
+
     lhd = lhs(2, samples=nb_data, criterion="maximin")
 
     dt = 1 * (60 * 60 * 24 * 365.25)  # in years
@@ -172,21 +173,21 @@ def main():
     ]
 
     # First simulation dataset Nmax iter
+
     for i in range(nb_data):
         data_dict_temp = data_dict_to_combi(data_dict, combinations[i], mapping)
         grid_temp = copy.deepcopy(data_dict["grid"])
+
         groups = combinations[i][3]
         for group in groups:
             grid_temp.add_face_group_by_line(*group)
         data_dict_temp["grid"] = grid_temp
-
         Sb_d = copy.deepcopy(combinations[i][2])
         Sb_n = copy.deepcopy(combinations[i][2])
         for group in Sb_d.keys():
             Sb_d[group] = 0.0
             Sb_n[group] = None
         Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
-
         data_dict_temp["Sb_dict"] = Sb_dict
         args = dict_to_args(data_dict_temp)
         sim_state = raw_solss_1_iter(*args)

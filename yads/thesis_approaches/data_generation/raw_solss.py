@@ -247,6 +247,7 @@ def raw_solss_1_iter(
         kr_model=kr_model,
         wells=wells,
     )
+    # print(grid.face_groups.items())
     grad_P = compute_grad_P(grid=grid, Pb=Pb, T=T, P_guess=P)
 
     F = compute_speed(

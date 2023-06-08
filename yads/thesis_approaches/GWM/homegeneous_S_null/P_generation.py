@@ -1,7 +1,7 @@
 import numpy as np
 
 from yads.numerics.physics import calculate_transmissivity
-from yads.thesis_approaches.GWM.Pressure_generator.P_generator import P_imp_generator
+from yads.thesis_approaches.GWM.Pressure_generator.P_generator import P_imp_generator, P_imp_brute_force
 from yads.thesis_approaches.GWM.Pressure_generator.cov_mats import cov_matrix_P_dist
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
@@ -9,8 +9,8 @@ from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 Lx, Ly = 555, 555
 Nx, Ny = 11, 11
 
-nb_samples = 100
-nb_boundaries = 2
+nb_samples = 2
+nb_boundaries = 4
 
 P_min = 10e6
 P_max = 20e6
@@ -35,7 +35,7 @@ kr_model = "quadratic"
 # BOUNDARY CONDITIONS #
 
 cor_ds = [3.0 / grid.nb_boundary_faces, 3]
-seed = 2
+seed = None
 
 
 savepath = f"data/nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}"
@@ -50,3 +50,6 @@ P_imp_generator(
     seed,
     savepath,
 )
+
+savepath = f"data/raw_nb_samples_{nb_samples}"
+P_imp_brute_force(grid, nb_samples, P_min, P_max, seed, savepath)

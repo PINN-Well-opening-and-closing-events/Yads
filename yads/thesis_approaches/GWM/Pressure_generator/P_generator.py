@@ -1,12 +1,15 @@
 import copy
+import os
+import pickle
 from typing import List
 
 import random
 import numpy as np
 from pyDOE import lhs
 from yads.mesh import Mesh
+from yads.mesh.two_D import create_2d_cartesian
 from yads.thesis_approaches.GWM.Pressure_generator.P_interp_to_P_imp import (
-    P_interp_to_P_imp,
+    P_interp_to_P_imp, create_Pb_groups,
 )
 from yads.thesis_approaches.GWM.Pressure_generator.dists import circle_dist
 
@@ -55,12 +58,13 @@ def P_generator_wrapper(
 
     # generate lhs samples and boundaries
     lhd = lhs(n=nb_boundaries, samples=nb_samples, criterion="maximin")
-    rng = np.random.RandomState(seed)
+    rng = np.random.RandomState(seed=seed)
 
     boundaries = np.empty((nb_samples, nb_boundaries), dtype=int)
+    random_faces = np.empty((nb_samples, nb_boundaries), dtype=int)
     for i in range(nb_samples):
         boundaries[i] = rng.choice(range(4), size=nb_boundaries, replace=False)
-    random_faces = np.random.randint(0, Nx, size=(nb_samples, nb_boundaries))
+        random_faces[i] = rng.choice(range(int(Nx)), size=nb_boundaries)
 
     # care !
     groups = list(grid.face_groups.keys())[1:]
@@ -117,7 +121,55 @@ def P_imp_generator(
     return
 
 
-def P_imp_brute_force(grid, nb_samples, P_min, P_max, savepath):
+def P_imp_brute_force(grid, nb_samples, P_min, P_max, seed, savepath):
+    np.random.seed(seed)
+    random.seed(seed)
     lhd = lhs(n=grid.nb_boundary_faces, samples=nb_samples, criterion="maximin")
     P = P_min + lhd * (P_max - P_min)
+    nb_bd_faces = grid.nb_boundary_faces
+    Nx = nb_bd_faces / 4
+    Lx = grid.measures(item="face")[0] * Nx
+    cart_coords = []
+    for group in grid.face_groups:
+        if group in ["left", "right", "lower", "upper"]:
+            cell_idxs = grid.face_groups[group][:, 0]
+            for coord in grid.centers(item="face")[cell_idxs]:
+                cart_coords.append(list(coord))
+    face_length = Lx / (grid.nb_boundary_faces / 4)
+    if not os.path.isdir(savepath):
+        os.mkdir(savepath)
+    for n in range(nb_samples):
+        grid_temp = copy.deepcopy(grid)
+        groups = []
+        Pb_dict = {}
+        for i, coord in enumerate(cart_coords):
+            if coord[0] == Lx or coord[0] == 0.:
+                line_point_1 = (coord[0], coord[1] - face_length / 2)
+                line_point_2 = (coord[0], coord[1] + face_length / 2)
+            else:
+                line_point_1 = (coord[0] - face_length / 2, coord[1])
+                line_point_2 = (coord[0] + face_length / 2, coord[1])
+            Pb_dict[f"boundary_face_{i}"] = P[n][i]
+            group_by_line = (f"boundary_face_{i}", line_point_1, line_point_2)
+            groups.append(group_by_line)
+
+        folder_name = f"{n}"
+        if not os.path.isdir(savepath + "/" + folder_name):
+            os.mkdir(savepath + "/" + folder_name)
+        with open(savepath + "/" + folder_name + f"/{n}.pkl", "wb") as f:
+            pickle.dump((groups, Pb_dict), f)
     return
+
+
+if __name__ == "__main__":
+    Lx, Ly = 5, 5
+    Nx, Ny = 5, 5
+
+    nb_samples = 2
+    radius = Lx / 2
+    nb_boundaries = 4
+
+    P_min = 10e6
+    P_max = 20e6
+    grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
+    P_imp_brute_force(grid, nb_samples=2,P_max=P_max, P_min=P_min, seed=None, savepath="None")

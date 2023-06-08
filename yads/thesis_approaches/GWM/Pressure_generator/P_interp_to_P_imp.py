@@ -57,6 +57,15 @@ def create_Pb_groups(grid, P_inter, circle_coords):
     return groups, Pb_dict
 
 
+def add_rotations(Pb_dict):
+    all_rotation_Pb_dicts = []
+    Pb_dict_temp = copy.deepcopy(Pb_dict)
+    # TODO: sort groups clockwise
+    for i in range(len(Pb_dict_temp) - 1):
+        pass
+    return
+
+
 def P_interp_to_P_imp(grid, P, circle_coords, savepath):
     if not os.path.isdir(savepath):
         os.mkdir(savepath)
@@ -69,6 +78,7 @@ def P_interp_to_P_imp(grid, P, circle_coords, savepath):
         all_circles_coords = np.concatenate([circle_interp, circle_no_interp[:-1]])
         # TODO: add rotations of all_P
         groups, Pb_dict = create_Pb_groups(grid_temp, all_P, all_circles_coords)
+
         folder_name = f"{i}"
         if not os.path.isdir(savepath + "/" + folder_name):
             os.mkdir(savepath + "/" + folder_name)
