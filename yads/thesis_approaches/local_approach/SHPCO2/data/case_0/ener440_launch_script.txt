@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH -J Divers_AI_kinetics                   # Request name
+#SBATCH --wckey xca03006                                 # Project ID
+#SBATCH -N 5
+#SBATCH -n 180                               # Number of tasks to use
+#SBATCH -c 1                        # Number of threads per task to use
+#SBATCH --ntasks-per-node=36                         #
+#SBATCH -t 0-24:00:00                   # Elapsed time limit in seconds
+#SBATCH -o job.o%j                # Standard output. %j is the job id
+#SBATCH -e job.e%j                # Error output. %j is the job id
+#SBATCH -q normal                  # Class Job
+##SBATCH --mail-type=ALL                                         
+##SBATCH --mail-user=antoine.lechevallier@ifpen.fr
+#
+
+# Selecting best model based on total error
+mpiexec -n 36 python hybrid_newton_quantification.py
+
+# End of job
+echo "JOB COMPLETED !"
