@@ -25,7 +25,7 @@ mu_g = 0.0285e-3
 kr_model = "quadratic"
 # BOUNDARY CONDITIONS #
 # Pressure
-Pb = {"left": 100.0e5, "right": 100.0e5}
+Pb = {"left": 110.0e5, "right": 100.0e5}
 
 # Saturation
 # only water left and right
@@ -33,17 +33,17 @@ Sb_d = {"left": 0.0, "right": 0.0}
 Sb_n = {"left": None, "right": None}
 Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
-dt = 1.0 * (60 * 60 * 24 * 365.25)  # in years
-total_sim_time = 1.0 * (60 * 60 * 24 * 365.25)
-max_newton_iter = 20
+dt = 155103597.1  # in years
+total_sim_time = 155103597.1
+max_newton_iter = -1
 
 well_co2 = Well(
     name="well co2",
     cell_group=np.array([[5000.0, 500.0]]),
     radius=0.1,
-    control={"Neumann": -5e-4},
+    control={"Neumann": -9.5e-4},
     s_inj=1.0,
-    schedule=[[0, total_sim_time],],
+    schedule=[[0, total_sim_time]],
     mode="injector",
 )
 
@@ -63,9 +63,10 @@ sim_state = raw_solss_1_iter(
     max_newton_iter=max_newton_iter,
     eps=1e-6,
     wells=[well_co2],
+    debug_newton_mode=True
 )
 
-
+print(sim_state['data'][str(dt)].keys())
 P_plot = np.array(sim_state["data"][str(dt)]["P"]) / 10 ** 6
 S_plot = sim_state["data"][str(dt)]["S"]
 
@@ -84,4 +85,4 @@ ax2.set(
     ylabel="S",
     title=f"well extension: {last_non_zero_S_x - first_non_zero_S_x} cells",
 )
-plt.show()
+# plt.show()

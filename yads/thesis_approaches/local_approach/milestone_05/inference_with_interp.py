@@ -13,8 +13,10 @@ import subprocess as sp
 sys.path.append("/")
 sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
 
-from yads.numerics import calculate_transmissivity, implicit_pressure_solver
-from yads.numerics.solvers.solss_solver_depreciated import solss_newton_step
+from NN.UnitGaussianNormalizer import UnitGaussianNormalizer
+from yads.numerics.physics import calculate_transmissivity
+from yads.numerics.solvers import implicit_pressure_solver
+from yads.numerics.solvers import solss_newton_step
 from yads.wells import Well
 from yads.mesh import Mesh
 import yads.mesh as ym
@@ -133,15 +135,19 @@ def launch_inference(qt, log_qt, Pb_dict, i):
         np.array(np.log(np.array(P_imp_local)).reshape(dist, 1))
     )
 
-    x = torch.cat([log_q, log_dt, S0, log_P_imp_local], 1).float()
+    q_normalizer, dt_normalizer, P_imp_normalizer = x_normalizers
+    log_q = q_normalizer.encode(log_q).float()
+    log_dt = dt_normalizer.encode(log_dt).float()
+    log_P_imp_local = P_imp_normalizer.encode(log_P_imp_local).float()
+
+    x = torch.cat([log_q, log_dt, log_P_imp_local], 1).float()
 
     # normalizer prep
-    x = x_normalizer.encode(x).float()
-    x = x.reshape(1, dist, 4)
+
+    x = x.reshape(1, dist, 3)
 
     S_pred_local = S_model(x)
     S_pred_local = S_pred_local.detach()
-    S_pred_local = y_normalizer.decode(S_pred_local)
     S_pred_local = S_pred_local.reshape(dist)
 
     S_pred_global = np.full(grid.nb_cells, 0.0)
@@ -245,14 +251,15 @@ def main():
 
     qts = test[["q", "dt", "P_imp_local"]].to_numpy()
     log_qts = test[["log_q", "log_dt", "P_imp_local"]].to_numpy()
-    Pb_dicts = test["Pb"]
+    Pb = {"left": 110.0e5, "right": 100.0e5}
+
     for i in range(len(test)):
         result = launch_inference(
-            qt=qts[i], log_qt=log_qts[i], Pb_dict=Pb_dicts[i], i=i
+            qt=qts[i], log_qt=log_qts[i], Pb_dict=Pb, i=i
         )
         df = pd.DataFrame([result])
         df.to_csv(
-            f"./results/quantification_train_{rank}_{len(test)}_{i}.csv",
+            f"./final_results/quantification_train_{rank}_{len(test)}_{i}.csv",
             sep="\t",
             index=False,
         )
@@ -266,11 +273,10 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     if rank == 0:
         test_full = pd.read_csv(
-            "sci_pres/data/test_well_extension_10.csv",
+            "manuscrit_data/train_well_extension_10.csv",
             converters={
                 "S_local": literal_eval,
                 "P_imp_local": literal_eval,
-                "Pb": literal_eval,
             },
             sep="\t",
         )
@@ -316,15 +322,15 @@ if __name__ == "__main__":
     max_newton_iter = 200
     eps = 1e-6
 
-    S_model = FNO1d(modes=16, width=64, n_features=4)
+    S_model = FNO1d(modes=16, width=64, n_features=3)
     S_model.load_state_dict(
         torch.load(
-            "sci_pres/models/model_well_extension_10.pt",
+            "sci_pres/manuscrit_models/final_model_well_extension_10.pt",
             map_location=torch.device("cpu"),
         )
     )
-    x_normalizer, y_normalizer = pickle.load(
-        open("sci_pres/models/xy_normalizer_well_extension_10.pkl", "rb")
+    x_normalizers = pickle.load(
+        open("sci_pres/manuscrit_models/final_xy_normalizer_well_extension_10.pkl", "rb")
     )
 
     if rank == 0:

@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-path_dir = "sci_pres_results/results/train_mid_well_extension_40"
+path_dir = "manuscrit_data/final_results_test_extension_10_well_displaced"
 filenames = os.listdir(path_dir)
 list_of_df = []
 for file in filenames:

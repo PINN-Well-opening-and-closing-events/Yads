@@ -124,9 +124,11 @@ def solss_newton_step(
         # print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
         if debug_newton_mode:
             import json
-
-            with open(debug_newton_path, "r") as f:
-                debug_dict = json.load(f)
+            if step - 1 == 0:
+                debug_dict = {'newton_step_data': {}}
+            else:
+                with open(debug_newton_path, "r") as f:
+                    debug_dict = json.load(f)
             debug_dict["newton_step_data"][step] = {
                 "P_i_plus_1": P.tolist(),
                 "S_i_plus_1": S.tolist(),

@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 def full_reconstruction(S_global, S_local, well_cell_idx, dist, plot=False):
     S_local = S_local.clip(min=1e-14)
     S_pred = copy.deepcopy(S_global)
+
     S_pred[
-        well_cell_idx - int((dist - 1) / 2) : well_cell_idx + int((dist - 1) / 2) + 1
+        well_cell_idx - int((dist - 1) / 2): well_cell_idx + int((dist - 1) / 2 + 1)
     ] = S_local
     # create polynomial left and right model based on S_local
     left_model, right_model = poly_model(S_local, well_cell_idx)
@@ -37,8 +38,8 @@ def full_reconstruction(S_global, S_local, well_cell_idx, dist, plot=False):
         ax3.scatter(range(0, len(S_pred)), S_pred, s=5, c="b")
         ax3.scatter(
             range(
-                well_cell_idx - int((dist - 1) / 2),
-                well_cell_idx + int((dist - 1) / 2) + 1,
+                well_cell_idx - int((dist - 1) / 2) - 1,
+                well_cell_idx + int((dist - 1) / 2),
             ),
             S_local,
             s=5,
@@ -101,7 +102,7 @@ def intersection(S_local, well_cell_idx, left_model, right_model, d, nb_cells):
 def reconstruct(S_global, global_view, left_intersect, right_intersect):
     S_left = S_global[0:left_intersect]
     S_right = S_global[right_intersect:-1]
-    S_mid = global_view[left_intersect : right_intersect + 1]
+    S_mid = global_view[left_intersect: right_intersect + 1]
     return np.concatenate([S_left, S_mid, S_right])
 
 
@@ -120,17 +121,35 @@ def main():
     S_global = np.full(200, 0.0)
     S_local = np.array(test["S_local"][12])
 
-    well_cell_idx = int((len(S_global)) / 2)
+    well_cell_idx = 99
+
     dist = len(S_local)
-    fig, S_reconstructed = full_reconstruction(
+    S_reconstructed = full_reconstruction(
         S_global=S_global,
         S_local=S_local,
         well_cell_idx=well_cell_idx,
         dist=dist,
-        plot=True,
+        plot=False,
     )
+
+    from matplotlib import rc
+    rc('text', usetex=False)
+    rc('font', **{'family': 'serif', 'size': 12})
+    rc('figure', **{'figsize': (5, 3)})
+
+    fig,  ax = plt.subplots(1, 1, figsize=(7, 4))
+
+    init_cells = list(range(0, 82)) + list(range(114, 200))
+    ax.scatter(init_cells, np.zeros_like(init_cells), s=10, zorder=2, label='Initial saturation')
+
+    ax.scatter(range(89, 89 + len(S_local)), S_local, s=10, zorder=1, label='Local prediction')
+    ax.scatter(range(0, len(S_reconstructed)), S_reconstructed, s=5, zorder=0, label='Linear interpolation')
+    ax.set_ylabel('Saturation')
+    ax.legend()
+    plt.savefig('local_approach_test_case_1_extension_10_pred_interp_example.pdf', bbox_inches='tight')
 
 
 if __name__ == "__main__":
     main()
+
     plt.show()

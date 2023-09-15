@@ -212,6 +212,7 @@ def raw_solss_1_iter(
     max_newton_iter=10,
     eps=1e-6,
     wells: Union[List[Well], None] = None,
+    debug_newton_mode=False
 ):
     """
 
@@ -336,6 +337,8 @@ def raw_solss_1_iter(
         kr_model=kr_model,
         P_guess=P_guess,
         S_guess=S_guess,
+        debug_newton_mode=debug_newton_mode,
+        debug_newton_path="test.json"
     )
 
     F_final = compute_speed(

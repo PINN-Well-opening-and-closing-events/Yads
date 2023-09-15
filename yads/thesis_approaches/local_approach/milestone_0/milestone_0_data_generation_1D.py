@@ -8,7 +8,7 @@ import sys
 import subprocess as sp
 
 sys.path.append("/")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
+sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/yads")
 
 from yads.wells import Well
 from yads.thesis_approaches.local_approach.milestone_0.utils import (
@@ -26,7 +26,7 @@ def main():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     nb_proc = comm.Get_size()
-    save_dir = "data/sci_pres"
+    save_dir = "data/manuscrit"
     nb_data = 1000
     np.random.seed(42)
     lhd = lhs(2, samples=nb_data, criterion="maximin")

@@ -3,7 +3,7 @@ from ast import literal_eval
 import numpy as np
 import os
 
-path_dir = "data/sci_pres"
+path_dir = "data/manuscrit"
 filenames = os.listdir(path_dir)
 dists = [10, 40]
 Pb = {"left": 110.0e5, "right": 100.0e5}
@@ -34,11 +34,11 @@ for file in filenames:
         P_imp_global_with_bc = np.concatenate(
             [np.array([Pb["left"]]), P_imp_global, np.array([Pb["right"]])]
         )
-        # centered grad
-        Grad_P_global = [
-            (P_imp_global_with_bc[i + 1] - P_imp_global_with_bc[i - 1]) / 2 * 50
-            for i in range(1, len(P_imp_global) + 1)
-        ]
+        # # centered grad
+        # Grad_P_global = [
+        #     (P_imp_global_with_bc[i + 1] - P_imp_global_with_bc[i - 1]) / 2 * 50
+        #     for i in range(1, len(P_imp_global) + 1)
+        # ]
         first_non_zero_S_x = (np.round(S_global, 6) != 0).argmax(axis=0)
         last_non_zero_S_x = len(S_global) - (
             np.flip(np.round(S_global, 6)) != 0
@@ -48,11 +48,11 @@ for file in filenames:
         for d in dists:
             P_imp_local = P_imp_global[well_loc - d : well_loc + d + 1]
             S_local = S_global[well_loc - d : well_loc + d + 1]
-            Grad_P_local = Grad_P_global[well_loc - d : well_loc + d + 1]
+            # Grad_P_local = Grad_P_global[well_loc - d : well_loc + d + 1]
             Res_local = Res_global[well_loc - d : well_loc + d + 1]
             file_df["P_imp_local"] = [P_imp_local.tolist()]
             file_df["S_local"] = [S_local.tolist()]
-            file_df["Grad_P_local"] = [Grad_P_local]
+            # file_df["Grad_P_local"] = [Grad_P_local]
             file_df["Res_local"] = [Res_local.tolist()]
             local_light_df = file_df[
                 [
@@ -60,7 +60,6 @@ for file in filenames:
                     "dt",
                     "P_imp_local",
                     "S_local",
-                    "Grad_P_local",
                     "well_extension",
                     "Res_local",
                 ]
@@ -76,4 +75,5 @@ for d in dists:
         file_df = pd.read_csv(path_dir + "_extension_" + str(d) + "/" + file, sep="\t")
         list_of_df.append(file_df)
     big_df = pd.concat(list_of_df)
+    print(len(big_df))
     big_df.to_csv("all_sim_well_extension_" + str(d) + ".csv", sep="\t", index=False)
