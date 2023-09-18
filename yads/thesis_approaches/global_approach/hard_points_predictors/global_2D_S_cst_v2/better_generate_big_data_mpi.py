@@ -8,7 +8,8 @@ import sys
 import subprocess as sp
 
 sys.path.append("/")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
+sys.path.append("/home/irsrvhome1/R16/lechevaa/yads")
+sys.path.append("/work/lechevaa/PycharmProjects/yads")
 
 from yads.wells import Well
 from yads.thesis_approaches.global_approach.hard_points_predictors.global_2D_S_cst_v2.utils import (
@@ -26,13 +27,13 @@ def main():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     nb_proc = comm.Get_size()
-    save_dir = "q_5_5_dt_1_10_S_0_06"
-    nb_data = 5004
+    save_dir = "case_1_q_5_5_dt_1_10_S_0_06"
+    nb_data = 2
     np.random.seed(42)
     lhd = lhs(3, samples=nb_data, criterion="maximin")
 
     if rank == 0:
-        grid = load_json("../../../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
+        grid = load_json("../../../../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
         # create dirs
         if not os.path.isdir(save_dir):
             sp.call(f"mkdir {save_dir}", shell=True)
@@ -81,14 +82,24 @@ def main():
 
     max_newton_iter = 200
     eps = 1e-6
-
+    # case 0
+    # well_co2 = Well(
+    #     name="well co2",
+    #     cell_group=np.array([[1500.0, 2250]]),
+    #     radius=0.1,
+    #     control={"Neumann": -0.002},
+    #     s_inj=1.0,
+    #     schedule=[[0.0, dt],],
+    #     mode="injector",
+    # )
+    # case 1
     well_co2 = Well(
         name="well co2",
-        cell_group=np.array([[1500.0, 2250]]),
+        cell_group=np.array([[1675, 1725]]),
         radius=0.1,
         control={"Neumann": -0.002},
         s_inj=1.0,
-        schedule=[[0.0, dt],],
+        schedule=[[0.0, dt], ],
         mode="injector",
     )
 
