@@ -87,11 +87,11 @@ def solss_newton_step(
         delta_PS = np.linalg.solve(jacobian, -B)
 
         relax = newton_relaxation.compute_relaxation(
-            S_obj=0.1, delta_S=delta_PS[grid.nb_cells :]
+            S_obj=0.1, delta_S=delta_PS[grid.nb_cells:]
         )
         PS += relax * delta_PS
 
-        P, S = PS[: grid.nb_cells], PS[grid.nb_cells :]
+        P, S = PS[: grid.nb_cells], PS[grid.nb_cells:]
 
         S = clipping_S(S)
         P = clipping_P(P, P_min=0.0, P_max=500.0e6)

@@ -22,10 +22,10 @@ i = 7
 # df = pd.read_csv(path_dir, sep='\t',
 #                  converters={'S': literal_eval, 'P_imp': literal_eval, 'S0': literal_eval})
 
-train_df = pd.read_csv("data/train_q_5_3_dt_1_10_v2.csv", sep='\t')
-test_df = pd.read_csv("data/test_q_5_3_dt_1_10_v2.csv", sep='\t')
-big_df = pd.concat([train_df, test_df])
-big_df.to_csv('data/all_sim_q_5_3_dt_1_10_v2.csv', sep='\t', index=False)
+# train_df = pd.read_csv("data/train_q_5_3_dt_1_10_v2.csv", sep='\t')
+# test_df = pd.read_csv("data/test_q_5_3_dt_1_10_v2.csv", sep='\t')
+# big_df = pd.concat([train_df, test_df])
+# big_df.to_csv('data/all_sim_q_5_3_dt_1_10_v2.csv', sep='\t', index=False)
 # print(len(df), (i + 1) * 1800)
 # create all light_df for training
 light_local_df = []

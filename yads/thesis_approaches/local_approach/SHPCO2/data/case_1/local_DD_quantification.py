@@ -171,7 +171,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     P_imp_DD = P_imp[cells_d]
 
     well_co2_DD = Well(
-        name="well co2 DD",
+        name="well co2",
         cell_group=np.array([[grid_dxy * (2 * ext + 1)/2, grid_dxy * (2 * ext + 1)/2]]),
         radius=0.1,
         control={"Neumann": qt[0]},
@@ -218,7 +218,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     Sb_d_DD = {}
     Sb_n_DD = {}
 
-    # get center of boundary faces of DD grid
+    # get center of boundary faces
     face_center_coords = []
     for group in DD_grid.face_groups:
         if group in ["left", "right", "upper", "lower"]:
@@ -231,13 +231,13 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         DD_index = None
         for j, coord in enumerate(grid.centers(item='cell')[cells_DD]):
             if coord[0] == coord_DD[0] + translation[0] - grid_dxy/2 and coord[1] == coord_DD[1] + translation[1]:
-                DD_index = j
+                DD_index = k
             elif coord[0] == coord_DD[0] + translation[0] + grid_dxy / 2 and coord[1] == coord_DD[1] + translation[1]:
-                DD_index = j
+                DD_index = k
             elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] + grid_dxy / 2:
-                DD_index = j
+                DD_index = k
             elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] - grid_dxy / 2:
-                DD_index = j
+                DD_index = k
 
         if np.abs(coord_DD[0]) == 0 or np.abs(coord_DD[0]) == grid_dxy * (2 * ext + 1):
             line_point_1 = (coord_DD[0], coord_DD[1] - grid_dxy/2)
@@ -245,9 +245,8 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         else:
             line_point_1 = (coord_DD[0] - grid_dxy/2, coord_DD[1])
             line_point_2 = (coord_DD[0] + grid_dxy/2, coord_DD[1])
-
-        Pb_dict_DD[f"boundary_face_{k}"] = P_imp[cells_DD[DD_index]]
-        Sb_d_DD[f"boundary_face_{k}"] = S[cells_DD[DD_index]]
+        Pb_dict_DD[f"boundary_face_{k}"] = P_imp[DD_index]
+        Sb_d_DD[f"boundary_face_{k}"] = S[DD_index]
         Sb_n_DD[f"boundary_face_{k}"] = None
 
         group_by_line = (f"boundary_face_{k}", line_point_1, line_point_2)
@@ -255,15 +254,6 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         DD_grid.add_face_group_by_line(*group_by_line)
 
     Sb_dict_DD = {"Dirichlet": Sb_d_DD, "Neumann": Sb_n_DD}
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
-    # ax1.imshow(P_imp.reshape(95, 60).T)
-    # ax2.imshow(S.reshape(95, 60).T)
-    # ax1.set_title('P imp')
-    # ax2.set_title('S')
-    # ax1.invert_yaxis()
-    # ax2.invert_yaxis()
-    # fig.suptitle('Reference')
-    # plt.show()
     # #############   INFERENCE ##############
     # Standard
     P_i_plus_1, S_i_plus_1, dt_sim, nb_newton, norms = hybrid_newton_inference(
@@ -292,24 +282,8 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save["dt_sim_classic"] = dt_sim
     dict_save["norms_classic"] = norms
 
-    # fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 4))
-    # ax1.imshow(P_imp.reshape(95, 60).T)
-    # ax2.imshow(S.reshape(95, 60).T)
-    # ax3.imshow(P_i_plus_1.reshape(95, 60).T)
-    # ax4.imshow(S_i_plus_1.reshape(95, 60).T)
-    # ax1.set_title('P imp')
-    # ax2.set_title('S')
-    # ax3.set_title('P sol')
-    # ax4.set_title('S sol')
-    # ax1.invert_yaxis()
-    # ax2.invert_yaxis()
-    # ax3.invert_yaxis()
-    # ax4.invert_yaxis()
-    # fig.suptitle(f'Reference: {nb_newton}')
-    # plt.show()
-
-    # Domain Decomposition
-    P_DD_plus_1, S_DD_plus_1, _, nb_newton, _ = hybrid_newton_inference(
+    ## Domain Decomposition
+    P_DD_plus_1, S_DD_plus_1, _, _, _ = hybrid_newton_inference(
         grid=DD_grid,
         P=P_imp_DD,
         S=S_DD,
@@ -328,29 +302,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         P_guess=P_imp_DD,
         S_guess=S_DD,
     )
-    dict_save["S_DD_local"] = S_DD_plus_1.tolist()
-    dict_save["P_DD_local"] = P_DD_plus_1.tolist()
-    # fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(30, 4))
-    # ax1.imshow(P_imp_DD.reshape(9, 9).T)
-    # ax2.imshow(S_DD.reshape(9, 9).T)
-    # ax3.imshow(P_DD_plus_1.reshape(9, 9).T)
-    # ax4.imshow(S_DD_plus_1.reshape(9, 9).T)
-    # ax5.imshow(S_pred.reshape(9, 9).T)
-    #
-    # ax1.invert_yaxis()
-    # ax2.invert_yaxis()
-    # ax3.invert_yaxis()
-    # ax4.invert_yaxis()
-    # ax5.invert_yaxis()
-    #
-    # ax1.set_title('P_imp_DD')
-    # ax2.set_title('S_DD')
-    # ax3.set_title('P_DD_plus_1')
-    # ax4.set_title('S_DD_plus_1')
-    # ax5.set_title('S_pred')
-    # fig.suptitle(f'DD local: {nb_newton}')
-    # plt.show()
-    #
+
     S_DD_global = copy.deepcopy(S)
     S_DD_global[cells_d] = S_DD_plus_1
 
@@ -444,9 +396,9 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     ext = 4
     if rank == 0:
-        test_full = test = pd.read_csv("data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
+        test_full = test = pd.read_csv("data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
                                        converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-                                       sep="\t")
+                                       sep="\t", nrows=2)
 
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)

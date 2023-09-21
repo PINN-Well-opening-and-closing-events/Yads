@@ -172,4 +172,4 @@ if __name__ == "__main__":
     P_min = 10e6
     P_max = 20e6
     grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
-    P_imp_brute_force(grid, nb_samples=2,P_max=P_max, P_min=P_min, seed=None, savepath="None")
+    P_imp_brute_force(grid, nb_samples=2, P_max=P_max, P_min=P_min, seed=None, savepath="None")
