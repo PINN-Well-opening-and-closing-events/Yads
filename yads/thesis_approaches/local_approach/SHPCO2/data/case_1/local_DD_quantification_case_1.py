@@ -122,7 +122,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save["P_imp"] = P_imp.tolist()
 
     # Data prep for model
-    well_x, well_y = 1475, 2225
+    well_x, well_y = 1675, 1725
     grid_dxy = 50
     d = 4
     cells_d = grid.find_cells_inside_square(
@@ -350,7 +350,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     # ax5.set_title('S_pred')
     # fig.suptitle(f'DD local: {nb_newton}')
     # plt.show()
-    #
+
     S_DD_global = copy.deepcopy(S)
     S_DD_global[cells_d] = S_DD_plus_1
 
@@ -423,11 +423,11 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 def main():
     test["log_q"] = -np.log10(-test["q"])
     test["log_dt"] = np.log(test["dt"])
-    qts = test[["q", "dt", "S0_local"]].to_numpy()
+    qts = test[["q", "dt", "S0"]].to_numpy()
     log_qts = test[["log_q", "log_dt"]].to_numpy()
-    P_imps = test['P_imp_local'].to_numpy()
+
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None)
+        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=None, test_S=None)
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_{ext}_test_{rank}_{len(test)}_{i}.csv",
@@ -445,7 +445,7 @@ if __name__ == "__main__":
     ext = 4
     if rank == 0:
         test_full = test = pd.read_csv("data/case_1_q_5_5_dt_1_10_S_0_06.csv",
-                                       converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
+                                       converters={"S0": literal_eval},
                                        sep="\t")
 
         save_dir = "results"
