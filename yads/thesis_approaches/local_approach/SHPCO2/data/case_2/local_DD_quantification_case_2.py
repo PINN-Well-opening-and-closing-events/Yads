@@ -15,7 +15,7 @@ import sys
 
 sys.path.append("/")
 sys.path.append("/home/irsrvhome1/R16/lechevaa/yads")
-sys.path.append("/")
+sys.path.append("/work/lechevaa/PycharmProjects/yads")
 
 from yads.mesh.utils import load_json
 from yads.numerics.physics import calculate_transmissivity
@@ -91,7 +91,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save = {"q": qt[0], "total_sim_time": qt[1], "S0": qt[2][0]}
     well_co2 = Well(
         name="well co2",
-        cell_group=np.array([[1475.0, 2225]]),
+        cell_group=np.array([[2975.0, 425]]),
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
@@ -122,7 +122,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save["P_imp"] = P_imp.tolist()
 
     # Data prep for model
-    well_x, well_y = 1475, 2225
+    well_x, well_y = 2975, 425
     grid_dxy = 50
     d = 4
     cells_d = grid.find_cells_inside_square(
@@ -350,7 +350,7 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     # ax5.set_title('S_pred')
     # fig.suptitle(f'DD local: {nb_newton}')
     # plt.show()
-    #
+
     S_DD_global = copy.deepcopy(S)
     S_DD_global[cells_d] = S_DD_plus_1
 
@@ -423,11 +423,11 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 def main():
     test["log_q"] = -np.log10(-test["q"])
     test["log_dt"] = np.log(test["dt"])
-    qts = test[["q", "dt", "S0_local"]].to_numpy()
+    qts = test[["q", "dt", "S0"]].to_numpy()
     log_qts = test[["log_q", "log_dt"]].to_numpy()
-    P_imps = test['P_imp_local'].to_numpy()
+
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None)
+        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=None, test_S=None)
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_{ext}_test_{rank}_{len(test)}_{i}.csv",
@@ -444,11 +444,11 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     ext = 4
     if rank == 0:
-        test_full = test = pd.read_csv("../case_0/data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
-                                       converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
+        test_full = test = pd.read_csv("data/case_2_q_5_5_dt_1_10_S_0_06.csv",
+                                       converters={"S0": literal_eval},
                                        sep="\t")
 
-        save_dir = "../case_0/results"
+        save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)
 
         if not os.path.isdir(save_dir):
@@ -505,11 +505,11 @@ if __name__ == "__main__":
     S_model = model = FNO2d(modes1=12, modes2=12, width=64, n_features=4)
     S_model.load_state_dict(
         torch.load(
-            "../case_0/models/checkpoint_best_model_4_local_2d_1500.pt",
+            "models/checkpoint_best_model_4_local_2d_1500.pt",
             map_location=torch.device("cpu"),
         )
     )
-    q_normalizer = pickle.load(open("../case_0/models/q_normalizer.pkl", "rb"))
-    P_imp_normalizer = pickle.load(open("../case_0/models/P_imp_normalizer.pkl", "rb"))
-    dt_normalizer = pickle.load(open("../case_0/models/dt_normalizer.pkl", "rb"))
+    q_normalizer = pickle.load(open("models/q_normalizer.pkl", "rb"))
+    P_imp_normalizer = pickle.load(open("models/P_imp_normalizer.pkl", "rb"))
+    dt_normalizer = pickle.load(open("models/dt_normalizer.pkl", "rb"))
     main()
