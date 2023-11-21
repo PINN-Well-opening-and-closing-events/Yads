@@ -1,4 +1,10 @@
 # Yet Another Darcy Solver
+Context 
+This library has been developed for a thesis purpose. The two main purposes are: 
+
+    - run reservoir simulations for C0_{2} storage
+    - Couple simulations with machine learning models
+
 
 Installation 
 
@@ -8,11 +14,9 @@ Lancement des tests
 
     pytest -vvv tests
 
-> Le répertoire `tests` doit etre un miroir de `yads`. En particulier, un fichie `test_*` est crée par 
-> fichier de `yads`.
+Funds
+The thesis is financed by: 
 
-Avant de commiter 
+References: 
 
-    black .
-    mypy .
-    mypy yads
+
