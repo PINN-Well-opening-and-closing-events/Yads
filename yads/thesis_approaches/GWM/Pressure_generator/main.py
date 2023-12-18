@@ -24,6 +24,10 @@ from yads.thesis_approaches.GWM.Pressure_generator.plots import (
 )
 from yads.thesis_approaches.GWM.Pressure_generator.P_interpolation import P_interp
 
+from matplotlib import rc
+rc('text', usetex=True)
+rc('font', **{'family': 'serif', 'size': 12})
+
 if __name__ == "__main__":
     Lx, Ly = 5, 5
     Nx, Ny = 5, 5
@@ -87,7 +91,8 @@ if __name__ == "__main__":
         circle_coords=circle_coords[0, :],
         ax=ax1,
     )
-    ax1.title.set_text(r"$cov(X_i, X_j) = \mathbf{I_n}  $")
+    # ax1.title.set_text(r"$cov(X_i, X_j) = \mathbf{I_n}  $")
+    ax1.title.set_text("Sample points and pressures")
     plot_circle_P(
         grid=grid,
         P=P2[0, :],
@@ -95,11 +100,11 @@ if __name__ == "__main__":
         circle_coords=circle_coords[0, :],
         ax=ax2,
     )
-    ax2.title.set_text(
-        r"$cov(Xi, Xj) = sign(P(X_j) - P(X_i)) "
-        r"\exp(- (\frac{d(X_i, X_j)}{\Theta} + \frac{\mu}{|P(X_i) - P(X_j)|})) $"
-    )
-
+    # ax2.title.set_text(
+    #     r"$cov(Xi, Xj) = sign(P(X_j) - P(X_i)) "
+    #     r"\exp(- (\frac{d(X_i, X_j)}{\Theta} + \frac{\mu}{|P(X_i) - P(X_j)|})) $"
+    # )
+    ax2.title.set_text("Apply correction")
     (P_inter, P_no_inter), (x_interp, x), (circle_interp, circle_no_interp) = P_interp(
         P2[0, :], circle_coords[0, :], grid=grid
     )
@@ -135,6 +140,7 @@ if __name__ == "__main__":
     )
     plot_P_imp(grid, P_imp, ax4, Pmax=P_max, Pmin=P_min)
     ax4.title.set_text(r"$P_{IMP}$")
+    plt.savefig('GWM_example.pdf', bbox_inches = 'tight')
     plt.show()
 
     grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)

@@ -1,12 +1,11 @@
 import copy
 from typing import Union, List
-from ast import literal_eval
 import pandas as pd
 import sys
 import torch
 import numpy as np
 import pickle
-from models.FNO import FNO2d, UnitGaussianNormalizer
+from models.FNO import FNO2d
 from mpi4py import MPI
 import os
 import subprocess as sp

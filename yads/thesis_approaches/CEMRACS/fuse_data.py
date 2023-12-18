@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-path_dir = "results_DD/results_case_2"
+path_dir = "data/validation"
 filenames = os.listdir(path_dir)
 list_of_df = []
 for file in filenames:

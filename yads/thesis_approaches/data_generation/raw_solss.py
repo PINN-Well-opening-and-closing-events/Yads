@@ -234,6 +234,7 @@ def raw_solss_1_iter(
     Returns
 
     """
+    P_init = copy.deepcopy(P)
     T = calculate_transmissivity(grid, K)
     P = implicit_pressure_solver(
         grid=grid,
@@ -273,6 +274,7 @@ def raw_solss_1_iter(
     simulation_state = {
         "metadata": {
             "kr_model": kr_model,
+            "P_init": P_init.tolist(),
             "P_imp": P.tolist(),
             "F": F.tolist(),
             "grad_P": grad_P.tolist(),
@@ -302,9 +304,11 @@ def raw_solss_1_iter(
         "type": grid.type,
         "dimension": grid.dim,
     }
+
     if wells:
         for well in wells:
             grid.connect_well(well)
+
 
     effective_wells = []
 

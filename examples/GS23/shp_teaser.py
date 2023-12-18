@@ -2,10 +2,6 @@ import pickle
 
 import numpy as np
 import time
-import sys
-
-sys.path.append("/work/lechevaa/PycharmProjects/IMPES/Yads")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
 
 from yads.wells import Well
 from yads.mesh.utils import load_json

@@ -13,6 +13,12 @@ from models.FNO import FNO2d, UnitGaussianNormalizer
 
 import sys
 
+from matplotlib import rc
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+rc('text', usetex=False)
+rc('font', **{'family': 'serif', 'size' : 12})
+rc('figure', **{'figsize' : (5, 3)})
+
 sys.path.append("/")
 sys.path.append("/home/irsrvhome1/R16/lechevaa/yads")
 sys.path.append("/work/lechevaa/PycharmProjects/yads")
@@ -292,6 +298,15 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save["dt_sim_classic"] = dt_sim
     dict_save["norms_classic"] = norms
 
+    # fig, ax = plt.subplots(1, 1, figsize=(5, 5))
+    # x = list(range(0, int(nb_newton) + 1))
+    # ax.scatter(x, dict_save["norms_classic"]['L_inf'], label='Standard')
+    # ax.set_xlabel('Newton iterations')
+    # ax.set_ylabel(r'Residual norm')
+    # ax.set_yscale('log')
+    # ax.legend()
+    # plt.show()
+
     # fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 4))
     # ax1.imshow(P_imp.reshape(95, 60).T)
     # ax2.imshow(S.reshape(95, 60).T)
@@ -412,11 +427,93 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     dict_save["nb_newton_hybrid"] = nb_newton
     dict_save["dt_sim_hybrid"] = dt_sim
     dict_save["norms_hybrid"] = norms
+    print(dict_save["norms_hybrid"])
     print(
         f"step {i}: Newton classic {dict_save['nb_newton_classic']}, hybrid {dict_save['nb_newton_hybrid']}, "
         f"DD {dict_save['nb_newton_DD']}"
     )
     print(f"step number {i} finished")
+    max_newton = int(max([dict_save["nb_newton_hybrid"], dict_save["nb_newton_DD"], dict_save["nb_newton_classic"]]))
+    fig, ax = plt.subplots(1, 1, figsize=(8, 8))
+
+    ax.scatter(list(range(len(dict_save["norms_hybrid"]['L_inf']))), dict_save["norms_hybrid"]['L_inf'],
+               label=r'$\bf{Hybrid}$', marker="D", s=60)
+    ax.scatter(list(range(len(dict_save["norms_DD"]['L_inf']))), dict_save["norms_DD"]['L_inf'],
+               label=r'$\bf{Domain}$ $\bf{Decomposition}$', marker="X", s=60)
+    ax.scatter(list(range(len(dict_save["norms_classic"]['L_inf']))), dict_save["norms_classic"]['L_inf'],
+               label=r'$\bf{Standard}$', marker="o", s=60)
+    ax.tick_params(axis='both', which='major', labelsize=16, width=2, length=10, labelcolor='black')
+    ax.set_xlabel(r'$\bf{Newton}$ $\bf{iterations}$', fontsize=16)
+    ax.set_ylabel(r'$\bf{Residual}$ $\bf{norm}$', fontsize=16)
+    ax.set_yscale('log')
+
+    ax.legend(loc='upper right', fontsize=14)
+    # plt.savefig('local_case_1_residual_comp.pdf', bbox_inches = 'tight')
+    plt.show()
+
+    V = grid.measures(item="cell")
+    B_classic = np.abs(np.array(dict_save['norms_classic']['B'][0])) * qt[1] / np.concatenate([V, V])
+    B_DD = np.abs(np.array(dict_save['norms_DD']['B'][0])) * qt[1] / np.concatenate([V, V])
+    B_hybrid = np.abs(np.array(dict_save['norms_hybrid']['B'][0])) * qt[1] / np.concatenate([V, V])
+
+    fig, axs = plt.subplots(3, 2, figsize=(10, 7))
+    # plt.subplots_adjust(left=0.1,
+    #                     bottom=0.1,
+    #                     right=0.9,
+    #                     top=0.9,
+    #                     wspace=0.4,
+    #                     hspace=0.4)
+    im_S_standard = axs[0][0].imshow(B_classic[:5700].reshape(95, 60).T)
+    im_P_standard = axs[0][1].imshow(B_classic[5700:].reshape(95, 60).T)
+
+    cb = plt.colorbar(im_S_standard, ax=axs[0, 0])
+    cb.ax.tick_params(labelsize=14)
+    cb = plt.colorbar(im_P_standard, ax=axs[0, 1])
+    cb.ax.tick_params(labelsize=14)
+
+    axs[0][0].set_title(f"Standard gas residual", fontsize=14)
+    axs[0][1].set_title(f'Standard water residual', fontsize=14)
+    axs[0][0].invert_yaxis()
+    axs[0][1].invert_yaxis()
+
+    axs[0][0].axis('off')
+    axs[0][1].axis('off')
+
+    im_S_hybrid = axs[1][0].imshow(B_hybrid[:5700].reshape(95, 60).T)
+    im_P_hybrid = axs[1][1].imshow(B_hybrid[5700:].reshape(95, 60).T)
+
+    cb = plt.colorbar(im_S_hybrid, ax=axs[1, 0])
+    cb.ax.tick_params(labelsize=14)
+    cb = plt.colorbar(im_P_hybrid, ax=axs[1, 1])
+    cb.ax.tick_params(labelsize=14)
+
+    axs[1][0].set_title(f"Hybrid gas residual", fontsize=14)
+    axs[1][1].set_title(f'Hybrid water residual', fontsize=14)
+    axs[1][0].invert_yaxis()
+    axs[1][1].invert_yaxis()
+
+    axs[1][0].axis('off')
+    axs[1][1].axis('off')
+
+    im_S_DD = axs[2][0].imshow(B_DD[:5700].reshape(95, 60).T)
+    im_P_DD = axs[2][1].imshow(B_DD[5700:].reshape(95, 60).T)
+
+    cb = plt.colorbar(im_S_DD, ax=axs[2, 0])
+    cb.ax.tick_params(labelsize=14)
+    cb = plt.colorbar(im_P_DD, ax=axs[2, 1])
+    cb.ax.tick_params(labelsize=14)
+
+    axs[2][0].set_title(f"DD gas residual", fontsize=14)
+    axs[2][1].set_title(f'DD water residual', fontsize=14)
+
+    axs[2][0].invert_yaxis()
+    axs[2][1].invert_yaxis()
+
+    axs[2][0].axis('off')
+    axs[2][1].axis('off')
+    plt.tight_layout()
+    plt.savefig('local_approach_case_1_test_residual_newton_init.pdf',  bbox_inches = 'tight')
+    plt.show()
     return dict_save
 
 
@@ -446,8 +543,10 @@ if __name__ == "__main__":
     if rank == 0:
         test_full = test = pd.read_csv("data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
                                        converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-                                       sep="\t")
-
+                                       sep="\t", skiprows=range(1, 397), nrows=1)
+        print(test_full[test_full['q'] == -0.000231][['q', 'dt']])
+        # print(test_full[['q', 'dt']].loc[396])
+        print(test_full[['q', 'dt']].loc[0])
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)
 

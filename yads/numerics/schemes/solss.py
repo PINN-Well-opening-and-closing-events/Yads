@@ -96,14 +96,15 @@ def solss(
             "dimension": grid.dim,
         }
         state_dict["metadata"]["well data"] = {}
-        for well in wells:
-            state_dict["metadata"]["well data"][well.name] = {
-                "cell_group": well.cell_group.tolist(),
-                "control": well.control,
-                "sat_inj": well.injected_saturation,
-                "radius": well.radius,
-                "schedule": well.schedule,
-            }
+        if wells is not None:
+            for well in wells:
+                state_dict["metadata"]["well data"][well.name] = {
+                    "cell_group": well.cell_group.tolist(),
+                    "control": well.control,
+                    "sat_inj": well.injected_saturation,
+                    "radius": well.radius,
+                    "schedule": well.schedule,
+                }
         # record initial state
         state_dict["simulation data"][str(total_time)] = {}
         state_dict["simulation data"][str(total_time)]["dt"] = 0.0
@@ -248,25 +249,26 @@ def solss(
             dt = update_dt(S_save, S, auto_dt, dt)
 
         # schedule check and total time check
-        for well in wells:
-            # 1st case: well is already effective, we check for the closing
-            if well in effective_wells:
-                for schedule in well.schedule:
-                    # check in which opening/closing we are
-                    if schedule[0] < total_time < schedule[1]:
-                        # check if the next timestep brings the simulation after the closing
-                        if total_time + dt > schedule[1]:
-                            # update timestep to fit with the schedule
-                            dt = schedule[1] - total_time
-            # 2nd case: well is not yet effective
-            else:
-                for schedule in well.schedule:
-                    # find the first next schedule for well opening
-                    if total_time < schedule[0]:
-                        if total_time + dt > schedule[0]:
-                            # update timestep to fit with the schedule
-                            dt = schedule[0] - total_time
-                            break
+        if wells is not None:
+            for well in wells:
+                # 1st case: well is already effective, we check for the closing
+                if well in effective_wells:
+                    for schedule in well.schedule:
+                        # check in which opening/closing we are
+                        if schedule[0] < total_time < schedule[1]:
+                            # check if the next timestep brings the simulation after the closing
+                            if total_time + dt > schedule[1]:
+                                # update timestep to fit with the schedule
+                                dt = schedule[1] - total_time
+                # 2nd case: well is not yet effective
+                else:
+                    for schedule in well.schedule:
+                        # find the first next schedule for well opening
+                        if total_time < schedule[0]:
+                            if total_time + dt > schedule[0]:
+                                # update timestep to fit with the schedule
+                                dt = schedule[0] - total_time
+                                break
         assert dt != 0
 
         if total_time + dt > total_sim_time:
