@@ -243,9 +243,10 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     ext = 4
     if rank == 0:
-        test_full = test = pd.read_csv("data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
-                                       converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-                                       sep="\t")
+        test_full = test = pd.read_csv(
+            "../../../local_approach/SHPCO2/data/case_0/data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
+            converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
+            sep="\t", nrows=20)
 
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)
@@ -253,7 +254,7 @@ if __name__ == "__main__":
         if not os.path.isdir(save_dir):
             sp.call(f"mkdir {save_dir}", shell=True)
         # define reservoir setup
-        grid = load_json("../../../../../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
+        grid = load_json("../../../../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
         # Boundary groups creation
         grid.add_face_group_by_line("injector_one", (0.0, 0.0), (0.0, 1000.0))
         grid.add_face_group_by_line("injector_two", (2500.0, 3000.0), (3500.0, 3000.0))
@@ -304,10 +305,11 @@ if __name__ == "__main__":
     S_model = model = FNO2d(modes1=12, modes2=12, width=64, n_features=4)
     S_model.load_state_dict(
         torch.load(
-            "models/checkpoint_best_model_4_local_2d_1500.pt",
+            "models/GWM_3000_3_checkpoint_2000.pt",
             map_location=torch.device("cpu"),
-        )
+        )["model"]
     )
+
     q_normalizer = pickle.load(open("models/q_normalizer.pkl", "rb"))
     P_imp_normalizer = pickle.load(open("models/P_imp_normalizer.pkl", "rb"))
     dt_normalizer = pickle.load(open("models/dt_normalizer.pkl", "rb"))
