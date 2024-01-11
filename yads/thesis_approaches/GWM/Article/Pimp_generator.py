@@ -40,7 +40,7 @@ mu_g = 0.0285e-3
 
 kr_model = "quadratic"
 
-folder_path = "nb_samples_3000_nb_boundaries_3/"
+folder_path = "nb_samples_100_nb_boundaries_1_size_9_9/"
 sample_dirs = os.listdir(folder_path)
 # create dirs
 save_dir = "test_" + folder_path
@@ -66,6 +66,7 @@ for seed, sample_num in enumerate(sample_dirs):
     for i, rota in enumerate(rota_files):
         with open(folder_path + sample_num + "/" + rota, 'rb') as f:
             (groups, Pb_dict) = pickle.load(f)
+
         # prepare for save
         well_co2 = Well(
             name="well co2",
@@ -136,8 +137,9 @@ for seed, sample_num in enumerate(sample_dirs):
                 "S0": S0,
                 "nb_newton": nb_newton,
             }
-            print(nb_newton)
+            # print(nb_newton)
         df = pd.DataFrame([data_dict])
         save_path = save_dir + sample_num + "/" + rota
         # save to csv
         df.to_csv(save_path + ".csv", sep="\t", index=False)
+        break

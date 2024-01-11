@@ -14,13 +14,10 @@ from yads.thesis_approaches.GWM.Pressure_generator.cov_mats import (
 Nx, Ny = 9, 9
 dxy = 50
 Lx, Ly = Nx * dxy, Ny * dxy
+radius = Lx / 2
 
 P_min = 10e6
 P_max = 20e6
-
-nb_samples = 3000
-radius = Lx / 2
-nb_boundaries = 3
 
 grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
 
@@ -44,10 +41,60 @@ kr_model = "quadratic"
 # BOUNDARY CONDITIONS #
 
 cor_ds = [3. / grid.nb_boundary_faces, 3.]
-seed = 2
+
+nb_samples = 100
+nb_boundaries = seed = 1
 savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}_size_{Nx}_{Ny}"
 
 # Wrapper of everything
+P_imp_generator(
+    grid,
+    nb_samples,
+    nb_boundaries,
+    P_min,
+    P_max,
+    cov_matrix_P_dist,
+    cor_ds,
+    seed,
+    savepath,
+)
+
+nb_samples = 1000
+nb_boundaries = seed = 2
+savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}_size_{Nx}_{Ny}"
+
+P_imp_generator(
+    grid,
+    nb_samples,
+    nb_boundaries,
+    P_min,
+    P_max,
+    cov_matrix_P_dist,
+    cor_ds,
+    seed,
+    savepath,
+)
+
+nb_samples = 1000
+nb_boundaries = seed = 3
+savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}_size_{Nx}_{Ny}"
+
+P_imp_generator(
+    grid,
+    nb_samples,
+    nb_boundaries,
+    P_min,
+    P_max,
+    cov_matrix_P_dist,
+    cor_ds,
+    seed,
+    savepath,
+)
+
+nb_samples = 1000
+nb_boundaries = seed = 4
+savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}_size_{Nx}_{Ny}"
+
 P_imp_generator(
     grid,
     nb_samples,

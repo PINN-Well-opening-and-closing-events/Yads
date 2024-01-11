@@ -246,7 +246,7 @@ if __name__ == "__main__":
         test_full = test = pd.read_csv(
             "../../../local_approach/SHPCO2/data/case_0/data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
             converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-            sep="\t", nrows=20)
+            sep="\t", nrows=2)
 
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)
