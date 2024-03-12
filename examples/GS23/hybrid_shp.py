@@ -4,9 +4,6 @@ import numpy as np
 import time
 import sys
 
-sys.path.append("/work/lechevaa/PycharmProjects/IMPES/Yads")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
-
 from yads.wells import Well
 from yads.mesh.utils import load_json
 from examples.GS23.hybrid_solss import solss
@@ -64,9 +61,11 @@ def main():
         name="well co2",
         cell_group=np.array([[1475.0, 2225]]),
         radius=0.1,
-        control={"Neumann": -(10 ** -3.1)},
+        control={"Neumann": -(10**-3.1)},
         s_inj=1.0,
-        schedule=[[2 * dt, 12 * dt],],
+        schedule=[
+            [2 * dt, 12 * dt],
+        ],
         mode="injector",
     )
 

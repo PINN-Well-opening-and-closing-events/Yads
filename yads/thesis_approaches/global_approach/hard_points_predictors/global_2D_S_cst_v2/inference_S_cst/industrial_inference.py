@@ -73,7 +73,7 @@ def raw_solss_n_iter(
     dt_list = []
     total_time = 0.0
     newton_list = []
-    dt_min = dt_init / 2 ** n
+    dt_min = dt_init / 2**n
     S_i_plus_1 = None
     P_i_plus_1 = None
     i = 0
@@ -89,7 +89,6 @@ def raw_solss_n_iter(
     P_i = P
 
     while total_time < total_sim_time and dt != -1:
-
         P_i_plus_1, S_i_plus_1, dt, nb_newton = solss_newton_step(
             grid=grid,
             P_i=P_i,
@@ -121,7 +120,7 @@ def raw_solss_n_iter(
         # print(f"Simulation progress: {total_time/total_sim_time*100}%")
         # number of newton fails
         if dt != dt_save and total_time < total_sim_time and dt != -1:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 i += 1
 
         # check if we need to synch dt with total_sim_time
@@ -140,7 +139,9 @@ def launch_inference(qt, log_qt, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     # Data prep for model

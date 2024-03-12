@@ -95,7 +95,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Sb_dict["Dirichlet"] = {
@@ -163,8 +165,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 
     # Domain Decomposition
 
-    DD_grid = ym.two_D.create_2d_cartesian(grid_dxy * (2 * ext + 1), grid_dxy * (2 * ext + 1),
-                                           (2 * ext + 1), (2 * ext + 1))
+    DD_grid = ym.two_D.create_2d_cartesian(
+        grid_dxy * (2 * ext + 1), grid_dxy * (2 * ext + 1), (2 * ext + 1), (2 * ext + 1)
+    )
     S_DD = S[cells_d]
     K_DD = K[cells_d]
     phi_DD = phi[cells_d]
@@ -172,29 +175,39 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 
     well_co2_DD = Well(
         name="well co2 DD",
-        cell_group=np.array([[grid_dxy * (2 * ext + 1)/2, grid_dxy * (2 * ext + 1)/2]]),
+        cell_group=np.array(
+            [[grid_dxy * (2 * ext + 1) / 2, grid_dxy * (2 * ext + 1) / 2]]
+        ),
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]], ],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
     # draw wider rectangle of extension (d+1)
     cells_d_plus_1 = grid.find_cells_inside_square(
-        (grid_dxy * (well_x / grid_dxy - (d+1)), grid_dxy * (well_y / grid_dxy + (d+1))),
-        (grid_dxy * (well_x / grid_dxy + (d+1)), grid_dxy * (well_y / grid_dxy - (d+1))),
+        (
+            grid_dxy * (well_x / grid_dxy - (d + 1)),
+            grid_dxy * (well_y / grid_dxy + (d + 1)),
+        ),
+        (
+            grid_dxy * (well_x / grid_dxy + (d + 1)),
+            grid_dxy * (well_y / grid_dxy - (d + 1)),
+        ),
     )
 
     # intersect with local domain of extension d
     cells_DD = [c for c in cells_d_plus_1 if c not in cells_d]
     # remove edges
-    cells_DD_centers = grid.centers(item='cell')[cells_DD]
+    cells_DD_centers = grid.centers(item="cell")[cells_DD]
 
-    ur = (well_x + (d+1) * grid_dxy, well_y + (d+1) * grid_dxy)
-    ul = (well_x + (d+1) * grid_dxy, well_y - (d+1) * grid_dxy)
-    lr = (well_x - (d+1) * grid_dxy, well_y + (d+1) * grid_dxy)
-    ll = (well_x - (d+1) * grid_dxy, well_y - (d+1) * grid_dxy)
+    ur = (well_x + (d + 1) * grid_dxy, well_y + (d + 1) * grid_dxy)
+    ul = (well_x + (d + 1) * grid_dxy, well_y - (d + 1) * grid_dxy)
+    lr = (well_x - (d + 1) * grid_dxy, well_y + (d + 1) * grid_dxy)
+    ll = (well_x - (d + 1) * grid_dxy, well_y - (d + 1) * grid_dxy)
     edges_idx = []
     cells_DD_wo_edges = []
     for k, c in enumerate(cells_DD_centers):
@@ -226,25 +239,40 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
             for coord in DD_grid.centers(item="face")[cell_idxs]:
                 face_center_coords.append(list(coord))
 
-    translation = (well_x - d * grid_dxy - grid_dxy/2, well_y - d * grid_dxy - grid_dxy/2)
+    translation = (
+        well_x - d * grid_dxy - grid_dxy / 2,
+        well_y - d * grid_dxy - grid_dxy / 2,
+    )
     for k, coord_DD in enumerate(face_center_coords):
         DD_index = None
-        for j, coord in enumerate(grid.centers(item='cell')[cells_DD]):
-            if coord[0] == coord_DD[0] + translation[0] - grid_dxy/2 and coord[1] == coord_DD[1] + translation[1]:
+        for j, coord in enumerate(grid.centers(item="cell")[cells_DD]):
+            if (
+                coord[0] == coord_DD[0] + translation[0] - grid_dxy / 2
+                and coord[1] == coord_DD[1] + translation[1]
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] + grid_dxy / 2 and coord[1] == coord_DD[1] + translation[1]:
+            elif (
+                coord[0] == coord_DD[0] + translation[0] + grid_dxy / 2
+                and coord[1] == coord_DD[1] + translation[1]
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] + grid_dxy / 2:
+            elif (
+                coord[0] == coord_DD[0] + translation[0]
+                and coord[1] == coord_DD[1] + translation[1] + grid_dxy / 2
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] - grid_dxy / 2:
+            elif (
+                coord[0] == coord_DD[0] + translation[0]
+                and coord[1] == coord_DD[1] + translation[1] - grid_dxy / 2
+            ):
                 DD_index = j
 
         if np.abs(coord_DD[0]) == 0 or np.abs(coord_DD[0]) == grid_dxy * (2 * ext + 1):
-            line_point_1 = (coord_DD[0], coord_DD[1] - grid_dxy/2)
-            line_point_2 = (coord_DD[0], coord_DD[1] + grid_dxy/2)
+            line_point_1 = (coord_DD[0], coord_DD[1] - grid_dxy / 2)
+            line_point_2 = (coord_DD[0], coord_DD[1] + grid_dxy / 2)
         else:
-            line_point_1 = (coord_DD[0] - grid_dxy/2, coord_DD[1])
-            line_point_2 = (coord_DD[0] + grid_dxy/2, coord_DD[1])
+            line_point_1 = (coord_DD[0] - grid_dxy / 2, coord_DD[1])
+            line_point_2 = (coord_DD[0] + grid_dxy / 2, coord_DD[1])
 
         Pb_dict_DD[f"boundary_face_{k}"] = P_imp[cells_DD[DD_index]]
         Sb_d_DD[f"boundary_face_{k}"] = S[cells_DD[DD_index]]
@@ -427,7 +455,9 @@ def main():
     log_qts = test[["log_q", "log_dt"]].to_numpy()
 
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=None, test_S=None)
+        result = launch_inference(
+            qt=qts[i], log_qt=log_qts[i], i=i, test_P=None, test_S=None
+        )
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_{ext}_test_{rank}_{len(test)}_{i}.csv",
@@ -444,9 +474,11 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     ext = 4
     if rank == 0:
-        test_full = test = pd.read_csv("data/case_1_q_5_5_dt_1_10_S_0_06.csv",
-                                       converters={"S0": literal_eval},
-                                       sep="\t")
+        test_full = test = pd.read_csv(
+            "data/case_1_q_5_5_dt_1_10_S_0_06.csv",
+            converters={"S0": literal_eval},
+            sep="\t",
+        )
 
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)

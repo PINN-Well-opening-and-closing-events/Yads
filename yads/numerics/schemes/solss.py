@@ -80,7 +80,6 @@ def solss(
     state_dict = {"simulation data": {}, "metadata": {}}
     # record simulation metadata for json export
     if save_states_to_json:
-
         state_dict["metadata"]["other"] = {
             "total_sim_time": total_sim_time,
             "max_newton_iter": max_newton_iter,
@@ -122,7 +121,13 @@ def solss(
             ym.export_vtk(
                 filename,
                 grid=grid,
-                cell_data={"P": P, "S gas": S, "S water": 1.0 - S, "K": K, "phi": phi,},
+                cell_data={
+                    "P": P,
+                    "S gas": S,
+                    "S water": 1.0 - S,
+                    "K": K,
+                    "phi": phi,
+                },
             )
     ### connect wells to grid
     if wells:
@@ -196,7 +201,7 @@ def solss(
         # number of newton fails
         i = 0
         if dt != dt_save:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 newton_list.append(-1)
                 i += 1
         dt_list.append(dt)

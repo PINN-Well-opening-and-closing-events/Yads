@@ -3,8 +3,8 @@ import json
 from matplotlib import rc
 import numpy as np
 
-rc('text', usetex=True)
-rc('font', **{'family': 'serif', 'size' : 12})
+rc("text", usetex=True)
+rc("font", **{"family": "serif", "size": 12})
 
 data_dict = json.load(open("well_impact.json", "rb"))
 print(data_dict.keys())
@@ -90,5 +90,5 @@ fig.tight_layout()
 ax4.legend(prop={"size": 17})
 ax2.legend(prop={"size": 17})
 # plt.savefig("MDS_PS_discontinuity.png", dpi=2400)
-plt.savefig(f"well_event_PS_discontinuity.pdf", bbox_inches='tight')
+plt.savefig(f"well_event_PS_discontinuity.pdf", bbox_inches="tight")
 plt.show()

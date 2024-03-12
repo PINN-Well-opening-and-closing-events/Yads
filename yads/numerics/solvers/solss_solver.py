@@ -32,7 +32,6 @@ def solss_newton_step(
     debug_newton_mode=False,
     debug_newton_path="./debug_newton_autopath.json",
 ):
-
     step = 0
     S_save = copy.deepcopy(S_i)
     P_save = copy.deepcopy(P_i)
@@ -87,11 +86,11 @@ def solss_newton_step(
         delta_PS = np.linalg.solve(jacobian, -B)
 
         relax = newton_relaxation.compute_relaxation(
-            S_obj=0.1, delta_S=delta_PS[grid.nb_cells:]
+            S_obj=0.1, delta_S=delta_PS[grid.nb_cells :]
         )
         PS += relax * delta_PS
 
-        P, S = PS[: grid.nb_cells], PS[grid.nb_cells:]
+        P, S = PS[: grid.nb_cells], PS[grid.nb_cells :]
 
         S = clipping_S(S)
         P = clipping_P(P, P_min=0.0, P_max=500.0e6)
@@ -124,8 +123,9 @@ def solss_newton_step(
         # print(f"norm: {np.linalg.norm(B, ord=2):0.2E}")
         if debug_newton_mode:
             import json
+
             if step - 1 == 0:
-                debug_dict = {'newton_step_data': {}}
+                debug_dict = {"newton_step_data": {}}
             else:
                 with open(debug_newton_path, "r") as f:
                     debug_dict = json.load(f)

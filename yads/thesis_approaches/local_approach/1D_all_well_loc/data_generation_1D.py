@@ -24,10 +24,11 @@ import yads.mesh as ym
 
 def generate_wells_from_q(q_list, well_ref: Well, other_wells, well_loc_list):
     import copy
+
     well_list = []
 
     for i, q in enumerate(q_list):
-        new_loc = np.array([[well_loc_list[i], 500.]])
+        new_loc = np.array([[well_loc_list[i], 500.0]])
         well_displaced = Well(
             name=well_ref.name,
             cell_group=new_loc,
@@ -35,7 +36,8 @@ def generate_wells_from_q(q_list, well_ref: Well, other_wells, well_loc_list):
             control=well_ref.control,
             s_inj=well_ref.injected_saturation,
             schedule=well_ref.schedule,
-            mode="injector")
+            mode="injector",
+        )
 
         well_displaced.set_control(q)
         well_list.append([copy.deepcopy(well_displaced)] + other_wells)
@@ -44,9 +46,10 @@ def generate_wells_from_q(q_list, well_ref: Well, other_wells, well_loc_list):
 
 def better_data_to_df(combination_ser, sim_state):
     import pandas as pd
+
     list_of_dict = []
     well_co2 = combination_ser[1][0]
-    well_loc = well_co2['cell_group']
+    well_loc = well_co2["cell_group"]
     q = well_co2["control"]["Neumann"]
     P_imp = sim_state["metadata"]["P_imp"]
     data_dict = sim_state["data"]
@@ -61,7 +64,7 @@ def better_data_to_df(combination_ser, sim_state):
         S0 = data_dict[tot_t]["S0"]
         B = data_dict[tot_t]["Res"]
         future_df = {
-            "well_loc": well_co2['cell_group'],
+            "well_loc": well_co2["cell_group"],
             "q": q,
             "total_time": total_time,
             "step": step,
@@ -134,7 +137,9 @@ def main():
         radius=0.1,
         control={"Neumann": -5e-4},
         s_inj=1.0,
-        schedule=[[0.0, dt],],
+        schedule=[
+            [0.0, dt],
+        ],
         mode="injector",
     )
 
@@ -188,7 +193,7 @@ def main():
                 assert well_ref is not None
                 mapping["wells"] = i
                 non_ser_wells = generate_wells_from_q(
-                    var_dict["q"], well_ref, other_wells, var_dict['well_locs']
+                    var_dict["q"], well_ref, other_wells, var_dict["well_locs"]
                 )
                 var_list.append(non_ser_wells)
                 var_list_serializable.append(
@@ -201,7 +206,10 @@ def main():
     combinations = [(var_list[0][i], var_list[1][i]) for i in range(len(var_dict["q"]))]
 
     combinations_serializable = [
-        (var_list_serializable[0][i], var_list_serializable[1][i],)
+        (
+            var_list_serializable[0][i],
+            var_list_serializable[1][i],
+        )
         for i in range(len(var_dict["q"]))
     ]
 
@@ -212,7 +220,7 @@ def main():
         int(len(combinations) / nb_proc * (rank + 1)),
     ):
         data_dict = data_dict_to_combi(data_dict, combinations[i], mapping)
-        data_dict['grid'] = copy.deepcopy(grid)
+        data_dict["grid"] = copy.deepcopy(grid)
         args = dict_to_args(data_dict)
         if rank == 0:
             print(

@@ -3,7 +3,6 @@ from yads.mesh.two_D.load_2d import load_mesh_2d  # type: ignore
 
 
 def test_wrong_inputs():
-
     with pytest.raises(TypeError, match=r"meshfile must be a string"):
         load_mesh_2d(404)
     with pytest.raises(NotImplementedError, match=r"file extension not supported yet"):
@@ -21,7 +20,8 @@ def test_wrong_inputs():
         )
     with pytest.raises(FileNotFoundError, match=r"invalid path to geometric file"):
         load_mesh_2d(
-            "./meshes/2D/Tests_with_geom/disk_8_hole_4/disk_8_hole_4.mesh", "error.txt",
+            "./meshes/2D/Tests_with_geom/disk_8_hole_4/disk_8_hole_4.mesh",
+            "error.txt",
         )
 
 

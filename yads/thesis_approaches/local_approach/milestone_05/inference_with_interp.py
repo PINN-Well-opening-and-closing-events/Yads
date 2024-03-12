@@ -92,7 +92,9 @@ def launch_inference(qt, log_qt, Pb_dict, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Pb = Pb_dict
@@ -254,9 +256,7 @@ def main():
     Pb = {"left": 110.0e5, "right": 100.0e5}
 
     for i in range(len(test)):
-        result = launch_inference(
-            qt=qts[i], log_qt=log_qts[i], Pb_dict=Pb, i=i
-        )
+        result = launch_inference(qt=qts[i], log_qt=log_qts[i], Pb_dict=Pb, i=i)
         df = pd.DataFrame([result])
         df.to_csv(
             f"./final_results/quantification_train_{rank}_{len(test)}_{i}.csv",
@@ -330,7 +330,9 @@ if __name__ == "__main__":
         )
     )
     x_normalizers = pickle.load(
-        open("sci_pres/manuscrit_models/final_xy_normalizer_well_extension_10.pkl", "rb")
+        open(
+            "sci_pres/manuscrit_models/final_xy_normalizer_well_extension_10.pkl", "rb"
+        )
     )
 
     if rank == 0:

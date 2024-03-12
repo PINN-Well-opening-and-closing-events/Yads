@@ -4,7 +4,6 @@ from yads.mesh.one_D.create_1d_mesh import create_1d  # type: ignore
 
 
 def test_wrong_inputs():
-
     with pytest.raises(ValueError, match=r"nb_cells must be an integer > 0"):
         create_1d(-1, (0, 1))
 

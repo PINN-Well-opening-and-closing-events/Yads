@@ -24,7 +24,7 @@ nb_boundaries = 3
 
 grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
 
-assert grid.nb_cells == Nx*Ny
+assert grid.nb_cells == Nx * Ny
 
 # Porosity
 phi = 0.2
@@ -43,7 +43,7 @@ mu_g = 0.0285e-3
 kr_model = "quadratic"
 # BOUNDARY CONDITIONS #
 
-cor_ds = [3. / grid.nb_boundary_faces, 3.]
+cor_ds = [3.0 / grid.nb_boundary_faces, 3.0]
 seed = 2
 savepath = f"nb_samples_{nb_samples}_nb_boundaries_{nb_boundaries}_size_{Nx}_{Ny}"
 
@@ -59,5 +59,3 @@ P_imp_generator(
     seed,
     savepath,
 )
-
-

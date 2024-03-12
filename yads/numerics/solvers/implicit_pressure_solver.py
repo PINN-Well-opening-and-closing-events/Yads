@@ -58,7 +58,6 @@ def implicit_pressure_solver(
 
     # inner faces
     for f in grid.faces(group="0", with_nodes=False):
-
         i, j = grid.face_to_cell(f, face_type="inner")
         # upwinding
         if P[i] >= P[j]:
@@ -76,7 +75,6 @@ def implicit_pressure_solver(
     if Pb:
         for bound in Pb.keys():
             for f in grid.faces(group=bound, with_nodes=False):
-
                 c = grid.face_to_cell(f, face_type="boundary")
                 # upwinding
                 m = None

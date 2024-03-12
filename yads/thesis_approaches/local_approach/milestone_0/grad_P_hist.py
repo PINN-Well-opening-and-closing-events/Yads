@@ -84,7 +84,9 @@ def launch_inference(qt):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
@@ -109,7 +111,9 @@ def launch_inference(qt):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 

@@ -109,6 +109,7 @@ def get_cell_centers(cells: np.ndarray, node_coordinates: np.ndarray) -> np.ndar
          array of cell centers:
             ex: [center1, center2,...]
     """
+
     # auxiliary function that computes the center of a triangle described by 3 points
     def tri_center(a, b, c):
         center = [(a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3]
@@ -231,7 +232,7 @@ def get_groups(faces: list, edges: list) -> Dict[str, np.ndarray]:
     face_groups = {}  # type: ignore
     # first we add all faces that are on the edges and remove them from the face list
 
-    for (face, group) in edges:
+    for face, group in edges:
         idx = None
         if str(group) not in face_groups:
             face_groups[str(group)] = []

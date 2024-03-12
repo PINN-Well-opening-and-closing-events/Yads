@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def quality_check(path: str):
-
     if not os.path.isdir(path):
         print(f"given path does not exists or is not a directory (given path: {path})")
         return False

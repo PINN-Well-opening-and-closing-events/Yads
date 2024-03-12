@@ -2,9 +2,10 @@ import pickle
 import matplotlib.pyplot as plt
 
 from matplotlib import rc
-rc('text', usetex=True)
-rc('font', **{'family': 'serif', 'size' : 12})
-rc('figure', **{'figsize' : (5, 3)})
+
+rc("text", usetex=True)
+rc("font", **{"family": "serif", "size": 12})
+rc("figure", **{"figsize": (5, 3)})
 
 
 newtons = pickle.load(
@@ -18,6 +19,7 @@ newtons_hybrid = pickle.load(
 
 print(sum(newtons_hybrid[0:40]) / (sum(newtons[0:40])))
 print(sum(newtons_hybrid[2:12]) / (sum(newtons[2:12])))
+
 
 def draw_newton_plot(cts, savepath=None):
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
@@ -48,7 +50,7 @@ def draw_newton_plot(cts, savepath=None):
         s=100,
         linewidths=4,
         zorder=1,
-        label=r'\bf{Standard}'
+        label=r"\bf{Standard}",
     )
 
     plt.scatter(
@@ -58,8 +60,8 @@ def draw_newton_plot(cts, savepath=None):
         s=100,
         linewidths=4,
         zorder=1,
-        color='green',
-        label=r'$\bf{Hybrid}$'
+        color="green",
+        label=r"$\bf{Hybrid}$",
     )
 
     plt.yticks(fontsize=16)
@@ -78,8 +80,9 @@ def draw_newton_plot(cts, savepath=None):
     plt.tight_layout()
     return fig
 
+
 draw_newton_plot(0)
 # plt.savefig(f"physical_video/newton_video/newton_video_hybrid_v2/frame_{i}.jpg")
-plt.savefig(f"article_hybrid_standard_example.pdf", bbox_inches='tight')
+plt.savefig(f"article_hybrid_standard_example.pdf", bbox_inches="tight")
 # plt.close()
 plt.show()

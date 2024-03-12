@@ -63,11 +63,11 @@ sim_state = raw_solss_1_iter(
     max_newton_iter=max_newton_iter,
     eps=1e-6,
     wells=[well_co2],
-    debug_newton_mode=True
+    debug_newton_mode=True,
 )
 
-print(sim_state['data'][str(dt)].keys())
-P_plot = np.array(sim_state["data"][str(dt)]["P"]) / 10 ** 6
+print(sim_state["data"][str(dt)].keys())
+P_plot = np.array(sim_state["data"][str(dt)]["P"]) / 10**6
 S_plot = sim_state["data"][str(dt)]["S"]
 
 first_non_zero_S_x = (np.round(S_plot, 6) != 0).argmax(axis=0)

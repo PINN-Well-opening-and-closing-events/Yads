@@ -83,7 +83,6 @@ def hybrid_newton_inference(
 
 
 def main():
-
     for seed, sample_num in enumerate(sample_dirs):
         rota_files = os.listdir("../" + folder_path + sample_num)
         if not os.path.isdir(save_dir + sample_num):
@@ -101,7 +100,7 @@ def main():
         q_pow = np.round(q_pow, 6)
         dt_init = np.round(dt_init, 1)
         for i, rota in enumerate(rota_files):
-            with open("../" + folder_path + sample_num + "/" + rota, 'rb') as f:
+            with open("../" + folder_path + sample_num + "/" + rota, "rb") as f:
                 (groups, Pb_dict) = pickle.load(f)
 
             data_dict = {"q": q_pow[i], "total_sim_time": dt_init[i], "S0": S0}
@@ -109,11 +108,13 @@ def main():
             # prepare for save
             well_co2 = Well(
                 name="well co2",
-                cell_group=np.array([[Lx/2, Ly/2]]),
+                cell_group=np.array([[Lx / 2, Ly / 2]]),
                 radius=0.1,
                 control={"Neumann": q_pow[i]},
                 s_inj=1.0,
-                schedule=[[0.0,  dt_init[i]],],
+                schedule=[
+                    [0.0, dt_init[i]],
+                ],
                 mode="injector",
             )
             grid_temp = copy.deepcopy(grid)
@@ -137,7 +138,7 @@ def main():
                 Sb_dict=Sb_dict,
                 mu_g=mu_g,
                 mu_w=mu_w,
-                wells=[well_co2]
+                wells=[well_co2],
             )
             # classic sim
             P_i_plus_1, S_i_plus_1, dt_sim, nb_newton, norms = hybrid_newton_inference(
@@ -173,9 +174,7 @@ def main():
             log_q = torch.from_numpy(np.reshape(q_flat_zeros, (Nx, Ny, 1)))
             log_dt = torch.from_numpy(np.full((Nx, Ny, 1), np.log(dt_init[i])))
             S_n = torch.from_numpy(np.array(np.reshape(S, (Nx, Ny, 1))))
-            P_imp_local_n = torch.from_numpy(
-                np.array(np.reshape(P_imp, (Nx, Ny, 1)))
-            )
+            P_imp_local_n = torch.from_numpy(np.array(np.reshape(P_imp, (Nx, Ny, 1))))
 
             # normalizer prep
             log_q_n = q_normalizer.encode(log_q)
@@ -222,18 +221,24 @@ def main():
             save_path = save_dir + sample_num + "/" + rota
             # save to csv
             df.to_csv(save_path + ".csv", sep="\t", index=False)
-            if data_dict['nb_newton_classic'] < data_dict['nb_newton_hybrid']:
+            if data_dict["nb_newton_classic"] < data_dict["nb_newton_hybrid"]:
                 import matplotlib.pyplot as plt
+
                 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4)
                 ax1.imshow(np.array(data_dict["S_i_plus_1_classic"]).reshape(Nx, Ny))
-                ax2.imshow(S_pred. reshape(Nx, Ny))
+                ax2.imshow(S_pred.reshape(Nx, Ny))
                 ax3.imshow(S.reshape(Nx, Ny))
-                ax4.imshow(np.abs(np.array(data_dict["S_i_plus_1_classic"]).reshape(Nx, Ny) - S_pred. reshape(Nx, Ny)))
+                ax4.imshow(
+                    np.abs(
+                        np.array(data_dict["S_i_plus_1_classic"]).reshape(Nx, Ny)
+                        - S_pred.reshape(Nx, Ny)
+                    )
+                )
                 for ax in [ax1, ax2, ax3, ax4]:
                     ax.xaxis.set_ticks([])
                     ax.yaxis.set_ticks([])
-                print("Classic: ", data_dict["norms_classic"]['L_inf'])
-                print("Hybrid: ", data_dict["norms_hybrid"]['L_inf'])
+                print("Classic: ", data_dict["norms_classic"]["L_inf"])
+                print("Hybrid: ", data_dict["norms_hybrid"]["L_inf"])
                 plt.show()
 
 

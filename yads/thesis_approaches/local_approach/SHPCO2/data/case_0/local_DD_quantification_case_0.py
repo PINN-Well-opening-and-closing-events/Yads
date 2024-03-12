@@ -15,9 +15,10 @@ import sys
 
 from matplotlib import rc
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-rc('text', usetex=False)
-rc('font', **{'family': 'serif', 'size' : 12})
-rc('figure', **{'figsize' : (5, 3)})
+
+rc("text", usetex=False)
+rc("font", **{"family": "serif", "size": 12})
+rc("figure", **{"figsize": (5, 3)})
 
 sys.path.append("/")
 sys.path.append("/home/irsrvhome1/R16/lechevaa/yads")
@@ -101,7 +102,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Sb_dict["Dirichlet"] = {
@@ -169,8 +172,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 
     # Domain Decomposition
 
-    DD_grid = ym.two_D.create_2d_cartesian(grid_dxy * (2 * ext + 1), grid_dxy * (2 * ext + 1),
-                                           (2 * ext + 1), (2 * ext + 1))
+    DD_grid = ym.two_D.create_2d_cartesian(
+        grid_dxy * (2 * ext + 1), grid_dxy * (2 * ext + 1), (2 * ext + 1), (2 * ext + 1)
+    )
     S_DD = S[cells_d]
     K_DD = K[cells_d]
     phi_DD = phi[cells_d]
@@ -178,29 +182,39 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
 
     well_co2_DD = Well(
         name="well co2 DD",
-        cell_group=np.array([[grid_dxy * (2 * ext + 1)/2, grid_dxy * (2 * ext + 1)/2]]),
+        cell_group=np.array(
+            [[grid_dxy * (2 * ext + 1) / 2, grid_dxy * (2 * ext + 1) / 2]]
+        ),
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]], ],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
     # draw wider rectangle of extension (d+1)
     cells_d_plus_1 = grid.find_cells_inside_square(
-        (grid_dxy * (well_x / grid_dxy - (d+1)), grid_dxy * (well_y / grid_dxy + (d+1))),
-        (grid_dxy * (well_x / grid_dxy + (d+1)), grid_dxy * (well_y / grid_dxy - (d+1))),
+        (
+            grid_dxy * (well_x / grid_dxy - (d + 1)),
+            grid_dxy * (well_y / grid_dxy + (d + 1)),
+        ),
+        (
+            grid_dxy * (well_x / grid_dxy + (d + 1)),
+            grid_dxy * (well_y / grid_dxy - (d + 1)),
+        ),
     )
 
     # intersect with local domain of extension d
     cells_DD = [c for c in cells_d_plus_1 if c not in cells_d]
     # remove edges
-    cells_DD_centers = grid.centers(item='cell')[cells_DD]
+    cells_DD_centers = grid.centers(item="cell")[cells_DD]
 
-    ur = (well_x + (d+1) * grid_dxy, well_y + (d+1) * grid_dxy)
-    ul = (well_x + (d+1) * grid_dxy, well_y - (d+1) * grid_dxy)
-    lr = (well_x - (d+1) * grid_dxy, well_y + (d+1) * grid_dxy)
-    ll = (well_x - (d+1) * grid_dxy, well_y - (d+1) * grid_dxy)
+    ur = (well_x + (d + 1) * grid_dxy, well_y + (d + 1) * grid_dxy)
+    ul = (well_x + (d + 1) * grid_dxy, well_y - (d + 1) * grid_dxy)
+    lr = (well_x - (d + 1) * grid_dxy, well_y + (d + 1) * grid_dxy)
+    ll = (well_x - (d + 1) * grid_dxy, well_y - (d + 1) * grid_dxy)
     edges_idx = []
     cells_DD_wo_edges = []
     for k, c in enumerate(cells_DD_centers):
@@ -232,25 +246,40 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
             for coord in DD_grid.centers(item="face")[cell_idxs]:
                 face_center_coords.append(list(coord))
 
-    translation = (well_x - d * grid_dxy - grid_dxy/2, well_y - d * grid_dxy - grid_dxy/2)
+    translation = (
+        well_x - d * grid_dxy - grid_dxy / 2,
+        well_y - d * grid_dxy - grid_dxy / 2,
+    )
     for k, coord_DD in enumerate(face_center_coords):
         DD_index = None
-        for j, coord in enumerate(grid.centers(item='cell')[cells_DD]):
-            if coord[0] == coord_DD[0] + translation[0] - grid_dxy/2 and coord[1] == coord_DD[1] + translation[1]:
+        for j, coord in enumerate(grid.centers(item="cell")[cells_DD]):
+            if (
+                coord[0] == coord_DD[0] + translation[0] - grid_dxy / 2
+                and coord[1] == coord_DD[1] + translation[1]
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] + grid_dxy / 2 and coord[1] == coord_DD[1] + translation[1]:
+            elif (
+                coord[0] == coord_DD[0] + translation[0] + grid_dxy / 2
+                and coord[1] == coord_DD[1] + translation[1]
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] + grid_dxy / 2:
+            elif (
+                coord[0] == coord_DD[0] + translation[0]
+                and coord[1] == coord_DD[1] + translation[1] + grid_dxy / 2
+            ):
                 DD_index = j
-            elif coord[0] == coord_DD[0] + translation[0] and coord[1] == coord_DD[1] + translation[1] - grid_dxy / 2:
+            elif (
+                coord[0] == coord_DD[0] + translation[0]
+                and coord[1] == coord_DD[1] + translation[1] - grid_dxy / 2
+            ):
                 DD_index = j
 
         if np.abs(coord_DD[0]) == 0 or np.abs(coord_DD[0]) == grid_dxy * (2 * ext + 1):
-            line_point_1 = (coord_DD[0], coord_DD[1] - grid_dxy/2)
-            line_point_2 = (coord_DD[0], coord_DD[1] + grid_dxy/2)
+            line_point_1 = (coord_DD[0], coord_DD[1] - grid_dxy / 2)
+            line_point_2 = (coord_DD[0], coord_DD[1] + grid_dxy / 2)
         else:
-            line_point_1 = (coord_DD[0] - grid_dxy/2, coord_DD[1])
-            line_point_2 = (coord_DD[0] + grid_dxy/2, coord_DD[1])
+            line_point_1 = (coord_DD[0] - grid_dxy / 2, coord_DD[1])
+            line_point_2 = (coord_DD[0] + grid_dxy / 2, coord_DD[1])
 
         Pb_dict_DD[f"boundary_face_{k}"] = P_imp[cells_DD[DD_index]]
         Sb_d_DD[f"boundary_face_{k}"] = S[cells_DD[DD_index]]
@@ -433,28 +462,63 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         f"DD {dict_save['nb_newton_DD']}"
     )
     print(f"step number {i} finished")
-    max_newton = int(max([dict_save["nb_newton_hybrid"], dict_save["nb_newton_DD"], dict_save["nb_newton_classic"]]))
+    max_newton = int(
+        max(
+            [
+                dict_save["nb_newton_hybrid"],
+                dict_save["nb_newton_DD"],
+                dict_save["nb_newton_classic"],
+            ]
+        )
+    )
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
 
-    ax.scatter(list(range(len(dict_save["norms_hybrid"]['L_inf']))), dict_save["norms_hybrid"]['L_inf'],
-               label=r'$\bf{Hybrid}$', marker="D", s=60)
-    ax.scatter(list(range(len(dict_save["norms_DD"]['L_inf']))), dict_save["norms_DD"]['L_inf'],
-               label=r'$\bf{Domain}$ $\bf{Decomposition}$', marker="X", s=60)
-    ax.scatter(list(range(len(dict_save["norms_classic"]['L_inf']))), dict_save["norms_classic"]['L_inf'],
-               label=r'$\bf{Standard}$', marker="o", s=60)
-    ax.tick_params(axis='both', which='major', labelsize=16, width=2, length=10, labelcolor='black')
-    ax.set_xlabel(r'$\bf{Newton}$ $\bf{iterations}$', fontsize=16)
-    ax.set_ylabel(r'$\bf{Residual}$ $\bf{norm}$', fontsize=16)
-    ax.set_yscale('log')
+    ax.scatter(
+        list(range(len(dict_save["norms_hybrid"]["L_inf"]))),
+        dict_save["norms_hybrid"]["L_inf"],
+        label=r"$\bf{Hybrid}$",
+        marker="D",
+        s=60,
+    )
+    ax.scatter(
+        list(range(len(dict_save["norms_DD"]["L_inf"]))),
+        dict_save["norms_DD"]["L_inf"],
+        label=r"$\bf{Domain}$ $\bf{Decomposition}$",
+        marker="X",
+        s=60,
+    )
+    ax.scatter(
+        list(range(len(dict_save["norms_classic"]["L_inf"]))),
+        dict_save["norms_classic"]["L_inf"],
+        label=r"$\bf{Standard}$",
+        marker="o",
+        s=60,
+    )
+    ax.tick_params(
+        axis="both", which="major", labelsize=16, width=2, length=10, labelcolor="black"
+    )
+    ax.set_xlabel(r"$\bf{Newton}$ $\bf{iterations}$", fontsize=16)
+    ax.set_ylabel(r"$\bf{Residual}$ $\bf{norm}$", fontsize=16)
+    ax.set_yscale("log")
 
-    ax.legend(loc='upper right', fontsize=14)
+    ax.legend(loc="upper right", fontsize=14)
     # plt.savefig('local_case_1_residual_comp.pdf', bbox_inches = 'tight')
     plt.show()
 
     V = grid.measures(item="cell")
-    B_classic = np.abs(np.array(dict_save['norms_classic']['B'][0])) * qt[1] / np.concatenate([V, V])
-    B_DD = np.abs(np.array(dict_save['norms_DD']['B'][0])) * qt[1] / np.concatenate([V, V])
-    B_hybrid = np.abs(np.array(dict_save['norms_hybrid']['B'][0])) * qt[1] / np.concatenate([V, V])
+    B_classic = (
+        np.abs(np.array(dict_save["norms_classic"]["B"][0]))
+        * qt[1]
+        / np.concatenate([V, V])
+    )
+    B_DD = (
+        np.abs(np.array(dict_save["norms_DD"]["B"][0])) * qt[1] / np.concatenate([V, V])
+    )
+    B_hybrid = (
+        np.abs(np.array(dict_save["norms_hybrid"]["B"][0]))
+        * qt[1]
+        / np.concatenate([V, V])
+    )
 
     fig, axs = plt.subplots(3, 2, figsize=(10, 7))
     # plt.subplots_adjust(left=0.1,
@@ -472,12 +536,12 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     cb.ax.tick_params(labelsize=14)
 
     axs[0][0].set_title(f"Standard gas residual", fontsize=14)
-    axs[0][1].set_title(f'Standard water residual', fontsize=14)
+    axs[0][1].set_title(f"Standard water residual", fontsize=14)
     axs[0][0].invert_yaxis()
     axs[0][1].invert_yaxis()
 
-    axs[0][0].axis('off')
-    axs[0][1].axis('off')
+    axs[0][0].axis("off")
+    axs[0][1].axis("off")
 
     im_S_hybrid = axs[1][0].imshow(B_hybrid[:5700].reshape(95, 60).T)
     im_P_hybrid = axs[1][1].imshow(B_hybrid[5700:].reshape(95, 60).T)
@@ -488,12 +552,12 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     cb.ax.tick_params(labelsize=14)
 
     axs[1][0].set_title(f"Hybrid gas residual", fontsize=14)
-    axs[1][1].set_title(f'Hybrid water residual', fontsize=14)
+    axs[1][1].set_title(f"Hybrid water residual", fontsize=14)
     axs[1][0].invert_yaxis()
     axs[1][1].invert_yaxis()
 
-    axs[1][0].axis('off')
-    axs[1][1].axis('off')
+    axs[1][0].axis("off")
+    axs[1][1].axis("off")
 
     im_S_DD = axs[2][0].imshow(B_DD[:5700].reshape(95, 60).T)
     im_P_DD = axs[2][1].imshow(B_DD[5700:].reshape(95, 60).T)
@@ -504,15 +568,17 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
     cb.ax.tick_params(labelsize=14)
 
     axs[2][0].set_title(f"DD gas residual", fontsize=14)
-    axs[2][1].set_title(f'DD water residual', fontsize=14)
+    axs[2][1].set_title(f"DD water residual", fontsize=14)
 
     axs[2][0].invert_yaxis()
     axs[2][1].invert_yaxis()
 
-    axs[2][0].axis('off')
-    axs[2][1].axis('off')
+    axs[2][0].axis("off")
+    axs[2][1].axis("off")
     plt.tight_layout()
-    plt.savefig('local_approach_case_1_test_residual_newton_init.pdf',  bbox_inches = 'tight')
+    plt.savefig(
+        "local_approach_case_1_test_residual_newton_init.pdf", bbox_inches="tight"
+    )
     plt.show()
     return dict_save
 
@@ -522,9 +588,11 @@ def main():
     test["log_dt"] = np.log(test["dt"])
     qts = test[["q", "dt", "S0_local"]].to_numpy()
     log_qts = test[["log_q", "log_dt"]].to_numpy()
-    P_imps = test['P_imp_local'].to_numpy()
+    P_imps = test["P_imp_local"].to_numpy()
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None)
+        result = launch_inference(
+            qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None
+        )
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_{ext}_test_{rank}_{len(test)}_{i}.csv",
@@ -541,12 +609,16 @@ if __name__ == "__main__":
     nb_proc = comm.Get_size()
     ext = 4
     if rank == 0:
-        test_full = test = pd.read_csv("data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
-                                       converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-                                       sep="\t", skiprows=range(1, 397), nrows=1)
-        print(test_full[test_full['q'] == -0.000231][['q', 'dt']])
+        test_full = test = pd.read_csv(
+            "data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
+            converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
+            sep="\t",
+            skiprows=range(1, 397),
+            nrows=1,
+        )
+        print(test_full[test_full["q"] == -0.000231][["q", "dt"]])
         # print(test_full[['q', 'dt']].loc[396])
-        print(test_full[['q', 'dt']].loc[0])
+        print(test_full[["q", "dt"]].loc[0])
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)
 

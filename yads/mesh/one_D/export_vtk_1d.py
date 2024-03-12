@@ -56,13 +56,13 @@ def export_vtk_1d(
     x, y, z = grid_to_xyz_1d(grid)
 
     if cell_data:
-        for (key, value) in [*cell_data.items()]:
+        for key, value in [*cell_data.items()]:
             if not value.size == grid.nb_cells:
                 raise AssertionError(
                     f"cell_data key has wrong size (key: '{key}' expected {grid.nb_cells}, got {value.size})"
                 )
     if point_data:
-        for (key, value) in [*point_data.items()]:
+        for key, value in [*point_data.items()]:
             if not value.size == grid.nb_nodes:
                 raise AssertionError(
                     f"point_data key has wrong size (key: '{key}' expected {grid.nb_nodes}, got {value.size})"

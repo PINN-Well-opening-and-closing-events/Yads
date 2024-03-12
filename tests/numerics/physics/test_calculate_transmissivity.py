@@ -8,7 +8,6 @@ from yads.numerics.physics.calculate_transmissivity import calculate_transmissiv
 
 
 def test_wrong_inputs():
-
     with pytest.raises(TypeError, match=r"grid must be a Mesh object"):
         grid_err = "error"
         K = np.ones(10)
@@ -20,7 +19,6 @@ def test_wrong_inputs():
 
 
 def test_calculate_transmissivity_1d():
-
     m = create_1d(nb_cells=4, interval=(0, 1))
     p = np.ones(m.nb_cells)
     T = calculate_transmissivity_1d(m, p)

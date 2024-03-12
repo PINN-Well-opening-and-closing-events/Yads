@@ -110,7 +110,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Sb_dict["Dirichlet"] = {

@@ -279,7 +279,13 @@ def solss_newton_step_v2(
             ym.export_vtk(
                 filename,
                 grid=grid,
-                cell_data={"P": P, "S gas": S, "S water": 1.0 - S, "K": K, "phi": phi,},
+                cell_data={
+                    "P": P,
+                    "S gas": S,
+                    "S water": 1.0 - S,
+                    "K": K,
+                    "phi": phi,
+                },
             )
         # ITERCRIT criterion (test on the norm of the normalised residual Res)
         norm = np.max(np.abs(B) * dt_init / np.concatenate([V, V]))

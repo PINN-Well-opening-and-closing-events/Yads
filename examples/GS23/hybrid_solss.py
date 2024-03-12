@@ -88,7 +88,13 @@ def solss(
             ym.export_vtk(
                 filename,
                 grid=grid,
-                cell_data={"P": P, "S gas": S, "S water": 1.0 - S, "K": K, "phi": phi,},
+                cell_data={
+                    "P": P,
+                    "S gas": S,
+                    "S water": 1.0 - S,
+                    "K": K,
+                    "phi": phi,
+                },
             )
     ### connect wells to grid
     if wells:
@@ -147,7 +153,6 @@ def solss(
         )
 
         if effective_wells:
-
             q_flat_zeros = np.zeros((95 * 60))
             q_flat_zeros[1784] = -np.log10(-effective_wells[0].control["Neumann"])
             log_q = torch.from_numpy(np.reshape(q_flat_zeros, (95, 60, 1)))
@@ -216,7 +221,7 @@ def solss(
         # number of newton fails
         i = 0
         if dt != dt_save:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 newton_list.append(-1)
                 i += 1
         dt_list.append(dt)

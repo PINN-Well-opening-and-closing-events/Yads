@@ -9,7 +9,8 @@ from pyDOE import lhs
 from yads.mesh import Mesh
 from yads.mesh.two_D import create_2d_cartesian
 from yads.thesis_approaches.GWM.Pressure_generator.P_interp_to_P_imp import (
-    P_interp_to_P_imp, create_Pb_groups,
+    P_interp_to_P_imp,
+    create_Pb_groups,
 )
 from yads.thesis_approaches.GWM.Pressure_generator.dists import circle_dist
 
@@ -20,7 +21,11 @@ def P_generator(lhd, coords, cov_mat_fun, cor_d, radius, P_min=10e6, P_max=20e6)
 
     P_unscaled = np.matmul(
         cov_mat_fun(
-            X=coords, lhd=lhd, dist_func=circle_dist, cor_d=cor_d, radius=radius,
+            X=coords,
+            lhd=lhd,
+            dist_func=circle_dist,
+            cor_d=cor_d,
+            radius=radius,
         ),
         lhd,
     )
@@ -115,7 +120,14 @@ def P_imp_generator(
     grid, nb_samples, nb_boundaries, P_min, P_max, cov_mat, cor_ds, seed, savepath
 ):
     P, cart_coords, circle_coords = P_generator_wrapper(
-        grid, nb_boundaries, nb_samples, cov_mat, cor_ds, P_min, P_max, seed,
+        grid,
+        nb_boundaries,
+        nb_samples,
+        cov_mat,
+        cor_ds,
+        P_min,
+        P_max,
+        seed,
     )
     P_interp_to_P_imp(grid, P, circle_coords, savepath)
     return
@@ -143,7 +155,7 @@ def P_imp_brute_force(grid, nb_samples, P_min, P_max, seed, savepath):
         groups = []
         Pb_dict = {}
         for i, coord in enumerate(cart_coords):
-            if coord[0] == Lx or coord[0] == 0.:
+            if coord[0] == Lx or coord[0] == 0.0:
                 line_point_1 = (coord[0], coord[1] - face_length / 2)
                 line_point_2 = (coord[0], coord[1] + face_length / 2)
             else:
@@ -172,4 +184,6 @@ if __name__ == "__main__":
     P_min = 10e6
     P_max = 20e6
     grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
-    P_imp_brute_force(grid, nb_samples=2, P_max=P_max, P_min=P_min, seed=None, savepath="None")
+    P_imp_brute_force(
+        grid, nb_samples=2, P_max=P_max, P_min=P_min, seed=None, savepath="None"
+    )

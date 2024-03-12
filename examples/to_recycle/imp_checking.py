@@ -135,7 +135,7 @@ def solss_model_test_1_iter(
     # number of newton fails
     i = 0
     if dt != dt_save:
-        while dt_save / 2 ** i != dt:
+        while dt_save / 2**i != dt:
             newton_list.append(-1)
             i += 1
     dt_list.append(dt)
@@ -205,7 +205,9 @@ def main():
         radius=0.1,
         control={"Neumann": -0.0001},
         s_inj=1.0,
-        schedule=[[0.0, total_sim_time],],
+        schedule=[
+            [0.0, total_sim_time],
+        ],
         mode="injector",
     )
 

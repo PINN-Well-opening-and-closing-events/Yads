@@ -36,9 +36,7 @@ def visualize(grid, df):
     axes[0][0].set_ylim(bottom=0, top=nb_cells)
     axes[0][0].grid(True)
 
-    axes[0][0].title.set_text(
-        r"$P_{IMP}$"
-    )
+    axes[0][0].title.set_text(r"$P_{IMP}$")
 
     axes[0][1].set_xticks(np.arange(0, nb_cells + 1, 1))
     axes[0][1].set_yticks(np.arange(0, nb_cells + 1, 1))
@@ -50,7 +48,7 @@ def visualize(grid, df):
     valeurs = np.array(df["F_init"].loc[0])
     colormap = plt.cm.get_cmap("viridis")
     Fg = valeurs[: grid.nb_faces]
-    Fw = valeurs[grid.nb_faces: 2 * grid.nb_faces]
+    Fw = valeurs[grid.nb_faces : 2 * grid.nb_faces]
     sm = ScalarMappable(cmap=colormap)
 
     lines = get_grid_face_line_coords(grid)
@@ -63,9 +61,7 @@ def visualize(grid, df):
     # axes[1].scatter(nb_cells/2, nb_cells/2)
     axes[0][1].add_collection(lc)
 
-    axes[0][1].title.set_text(
-        r"$F(P_{IMP}, S)=\lambda(S)T(K)\nabla P$"
-    )
+    axes[0][1].title.set_text(r"$F(P_{IMP}, S)=\lambda(S)T(K)\nabla P$")
 
     axes[1][0].set_xticks(np.arange(0, nb_cells + 1, 1))
     axes[1][0].set_yticks(np.arange(0, nb_cells + 1, 1))
@@ -85,14 +81,12 @@ def visualize(grid, df):
     plt.colorbar(sm, ax=axes[1][0])
     lc = matplotlib.collections.LineCollection(lines, colors=couleurs, linewidths=4)
     axes[1][0].add_collection(lc)
-    axes[1][0].title.set_text(
-        r"$T(K)\nabla P$"
-    )
+    axes[1][0].title.set_text(r"$T(K)\nabla P$")
 
     axes[1][1].set_xticks(np.arange(0, nb_cells + 1, 1))
     axes[1][1].set_yticks(np.arange(0, nb_cells + 1, 1))
-    axes[1][1].set_xlim(left=-1., right=nb_cells + 1.)
-    axes[1][1].set_ylim(bottom=-1., top=nb_cells + 1.)
+    axes[1][1].set_xlim(left=-1.0, right=nb_cells + 1.0)
+    axes[1][1].set_ylim(bottom=-1.0, top=nb_cells + 1.0)
     axes[1][1].set_aspect("equal")
     plt.setp(axes[1][1], xticklabels=[], yticklabels=[])
 
@@ -103,8 +97,8 @@ def visualize(grid, df):
         extent=(0, nb_cells, nb_cells, 0),
     )
 
-    X_quiver = grid.centers(item='face')[:, 0]/Lx * nb_cells
-    Y_quiver = grid.centers(item='face')[:, 1]/Ly * nb_cells
+    X_quiver = grid.centers(item="face")[:, 0] / Lx * nb_cells
+    Y_quiver = grid.centers(item="face")[:, 1] / Ly * nb_cells
     U, V = get_quiver_arrows(grid, grad_P)
     axes[1][1].quiver(X_quiver, Y_quiver, U, V)
     axes[1][1].grid(True)
@@ -135,18 +129,24 @@ def get_quiver_arrows(grid, grad_P):
     V = np.empty((len(grad_P)))
     for f in range(grid.nb_faces):
         group = grid.group(f)[0]
-        if group == '0':
+        if group == "0":
             front, back = grid.face_to_cell(f, face_type="inner")
             # same x
-            if grid.centers(item="cell")[front][0] == grid.centers(item="cell")[back][0]:
+            if (
+                grid.centers(item="cell")[front][0]
+                == grid.centers(item="cell")[back][0]
+            ):
                 U[f] = 0
                 V[f] = np.sign(grad_P[f])
             # same y
-            elif grid.centers(item="cell")[front][1] == grid.centers(item="cell")[back][1]:
+            elif (
+                grid.centers(item="cell")[front][1]
+                == grid.centers(item="cell")[back][1]
+            ):
                 U[f] = np.sign(grad_P[f])
                 V[f] = 0
         else:
-            if grid.group(f)[0] in ['left', 'right']:
+            if grid.group(f)[0] in ["left", "right"]:
                 U[f] = np.sign(grad_P[f])
                 V[f] = 0
             else:

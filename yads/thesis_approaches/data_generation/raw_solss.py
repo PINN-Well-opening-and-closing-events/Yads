@@ -146,7 +146,7 @@ def raw_solss(
         # number of newton fails
         i = 0
         if dt != dt_save:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 newton_list.append(-1)
                 i += 1
         dt_list.append(dt)
@@ -212,7 +212,7 @@ def raw_solss_1_iter(
     max_newton_iter=10,
     eps=1e-6,
     wells: Union[List[Well], None] = None,
-    debug_newton_mode=False
+    debug_newton_mode=False,
 ):
     """
 
@@ -309,7 +309,6 @@ def raw_solss_1_iter(
         for well in wells:
             grid.connect_well(well)
 
-
     effective_wells = []
 
     if wells:
@@ -342,7 +341,7 @@ def raw_solss_1_iter(
         P_guess=P_guess,
         S_guess=S_guess,
         debug_newton_mode=debug_newton_mode,
-        debug_newton_path="test.json"
+        debug_newton_path="test.json",
     )
 
     F_final = compute_speed(
@@ -424,14 +423,14 @@ def raw_solss_n_iter(
 
     # correct simulation total time and timestep to avoid Newton > max iter
     total_sim_time = dt_init
-    dt = dt_init / 2 ** n
+    dt = dt_init / 2**n
     # end of corrections
     T = calculate_transmissivity(grid, K)
     step = 0
     dt_list = []
     total_time = 0.0
     newton_list = []
-    dt_min = dt_init / 2 ** 5
+    dt_min = dt_init / 2**5
     S_i_plus_1 = None
     P_i_plus_1 = None
     i = 0
@@ -479,7 +478,6 @@ def raw_solss_n_iter(
     P_guess, S_guess = P_i, S_i
 
     while total_time < total_sim_time and dt != -1:
-
         P_i_plus_1, S_i_plus_1, dt, nb_newton = solss_newton_step(
             grid=grid,
             P_i=P_i,
@@ -509,7 +507,7 @@ def raw_solss_n_iter(
         # print(f"Simulation progress: {total_time/total_sim_time*100}%")
         # number of newton fails
         if dt != dt_save and total_time < total_sim_time and dt != -1:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 i += 1
 
         # check if we need to synch dt with total_sim_time
@@ -662,7 +660,7 @@ def raw_solss_1_hard_iter(
     )
     i = 0
     if dt != dt_init and dt != -1:
-        while dt_init / 2 ** i != dt:
+        while dt_init / 2**i != dt:
             i += 1
 
     # update simulation state

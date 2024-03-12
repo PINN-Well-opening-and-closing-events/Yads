@@ -99,7 +99,9 @@ def launch_inference(qt, log_qt, S_bounds, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
@@ -266,7 +268,10 @@ if __name__ == "__main__":
     if rank == 0:
         test_full = pd.read_csv(
             "data/light_test_q_5_3_dt_1_10_v2.csv",
-            converters={"S0": literal_eval, "S_boundary": literal_eval,},
+            converters={
+                "S0": literal_eval,
+                "S_boundary": literal_eval,
+            },
             sep="\t",
             skiprows=range(1, 6),
             nrows=4,

@@ -165,7 +165,6 @@ def compute_flow_by_face(
         # Boundary conditions
         # a border face is always connected to only one cell c
         if Sb_dict["Dirichlet"][group] is not None:
-
             c = grid.face_to_cell(f, face_type="boundary")
 
             # upwinding

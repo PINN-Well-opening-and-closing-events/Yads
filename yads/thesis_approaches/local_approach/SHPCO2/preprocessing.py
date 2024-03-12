@@ -4,6 +4,7 @@ import numpy as np
 import os
 import yads.mesh as ym
 import matplotlib.pyplot as plt
+
 path_dir = "data/case_0/data/train_q_5_3_dt_1_10_S_0_06_P_imp.csv"
 dists = [4]
 
@@ -19,8 +20,11 @@ i = 0
 #     converters={"S": literal_eval, "P_imp": literal_eval, "S0": literal_eval},
 # )
 
-df = pd.read_csv(path_dir, sep='\t',
-                 converters={'S': literal_eval, 'S0': literal_eval, 'P_imp': literal_eval})
+df = pd.read_csv(
+    path_dir,
+    sep="\t",
+    converters={"S": literal_eval, "S0": literal_eval, "P_imp": literal_eval},
+)
 
 
 # print(len(df), (i + 1) * 1800)
@@ -61,9 +65,6 @@ print(len(S0_local_list))
 # df[["q", "dt", "P_imp_local", "S_local", "S0_local"]].to_csv(
 #     path_dir[:-4] + f"_extension_4_{i}.csv", sep="\t", index=False
 # )
-df[['q', 'dt', 'P_imp_local', 'S_local', 'S0_local']].to_csv(path_dir[:-4] + f"_extension_4.csv", sep='\t', index=False)
-
-
-
-
-
+df[["q", "dt", "P_imp_local", "S_local", "S0_local"]].to_csv(
+    path_dir[:-4] + f"_extension_4.csv", sep="\t", index=False
+)

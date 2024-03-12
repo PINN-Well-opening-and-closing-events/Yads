@@ -89,7 +89,9 @@ def launch_inference(qt, log_qt, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
@@ -114,7 +116,7 @@ def launch_inference(qt, log_qt, i):
 
     dist = 21
     P_imp_local = P_imp_global[
-        well_cell_idx - int((dist - 1) / 2): well_cell_idx + int((dist - 1) / 2) + 1
+        well_cell_idx - int((dist - 1) / 2) : well_cell_idx + int((dist - 1) / 2) + 1
     ]
     # Data prep for model
     # shape prep

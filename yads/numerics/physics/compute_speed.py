@@ -139,7 +139,10 @@ def compute_speed(
 
 
 def compute_grad_P(
-    grid: Mesh, Pb, T, P_guess=None,
+    grid: Mesh,
+    Pb,
+    T,
+    P_guess=None,
 ):
     P = P_guess
     grad_P = np.zeros(grid.nb_faces)

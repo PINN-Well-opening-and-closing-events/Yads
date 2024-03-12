@@ -24,7 +24,7 @@ P_max = 20e6
 
 grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
 
-assert grid.nb_cells == Nx*Ny
+assert grid.nb_cells == Nx * Ny
 
 # Porosity
 phi = 0.2
@@ -64,17 +64,19 @@ for seed, sample_num in enumerate(sample_dirs):
     q_pow = np.round(q_pow, 6)
     dt_init = np.round(dt_init, 1)
     for i, rota in enumerate(rota_files):
-        with open(folder_path + sample_num + "/" + rota, 'rb') as f:
+        with open(folder_path + sample_num + "/" + rota, "rb") as f:
             (groups, Pb_dict) = pickle.load(f)
 
         # prepare for save
         well_co2 = Well(
             name="well co2",
-            cell_group=np.array([[Lx/2, Ly/2]]),
+            cell_group=np.array([[Lx / 2, Ly / 2]]),
             radius=0.1,
             control={"Neumann": q_pow[i]},
             s_inj=1.0,
-            schedule=[[0.0,  dt_init[i]],],
+            schedule=[
+                [0.0, dt_init[i]],
+            ],
             mode="injector",
         )
         grid_temp = copy.deepcopy(grid)
@@ -98,7 +100,7 @@ for seed, sample_num in enumerate(sample_dirs):
             Sb_dict=Sb_dict,
             mu_g=mu_g,
             mu_w=mu_w,
-            wells=[well_co2]
+            wells=[well_co2],
         )
 
         sim_state = raw_solss_1_iter(
@@ -129,7 +131,7 @@ for seed, sample_num in enumerate(sample_dirs):
                 "groups": groups,
                 "Pb_dict": Pb_dict,
                 "Pb_file": folder_path + sample_num + "/" + rota,
-                "q": well_co2.control['Neumann'],
+                "q": well_co2.control["Neumann"],
                 "S": S_i_plus_1,
                 "dt": dt_init[i],
                 "P": P_i_plus_1,

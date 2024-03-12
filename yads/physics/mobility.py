@@ -28,7 +28,7 @@ def total_mobility(sw, mu_w, mu_o, model="cross"):
         m_w, m_o = sw / mu_w, (1.0 - sw) / mu_o
 
     elif model == "quadratic":
-        m_w, m_o = sw ** 2 / mu_w, (1.0 - sw) ** 2 / mu_o
+        m_w, m_o = sw**2 / mu_w, (1.0 - sw) ** 2 / mu_o
 
     assert m_w is not None
     assert m_o is not None

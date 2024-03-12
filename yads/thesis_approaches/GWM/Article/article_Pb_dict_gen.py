@@ -21,7 +21,7 @@ P_max = 20e6
 
 grid = create_2d_cartesian(Lx=Lx, Ly=Ly, Nx=Nx, Ny=Ny)
 
-assert grid.nb_cells == Nx*Ny
+assert grid.nb_cells == Nx * Ny
 
 # Porosity
 phi = 0.2
@@ -40,7 +40,7 @@ mu_g = 0.0285e-3
 kr_model = "quadratic"
 # BOUNDARY CONDITIONS #
 
-cor_ds = [3. / grid.nb_boundary_faces, 3.]
+cor_ds = [3.0 / grid.nb_boundary_faces, 3.0]
 
 nb_samples = 100
 nb_boundaries = seed = 1
@@ -106,5 +106,3 @@ P_imp_generator(
     seed,
     savepath,
 )
-
-

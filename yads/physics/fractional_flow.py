@@ -33,7 +33,7 @@ def fw(sw, mu_w, mu_o, model="cross"):
         m_w, m_o = sw / mu_w, (1.0 - sw) / mu_o
 
     elif model == "quadratic":
-        m_w, m_o = sw ** 2 / mu_w, (1.0 - sw) ** 2 / mu_o
+        m_w, m_o = sw**2 / mu_w, (1.0 - sw) ** 2 / mu_o
 
     assert m_w is not None
     assert m_o is not None
@@ -80,6 +80,6 @@ def dfw_dsw(sw, mu_w, mu_o, model="cross"):
     elif model == "quadratic":
         m = mu_o / mu_w
         num = 2.0 * sw / m * (1.0 - sw)
-        denom = (sw ** 2 + 1.0 / m * (1.0 - sw) ** 2) ** 2
+        denom = (sw**2 + 1.0 / m * (1.0 - sw) ** 2) ** 2
 
     return num / denom

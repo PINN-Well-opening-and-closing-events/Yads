@@ -59,50 +59,52 @@ Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 P_imp_list = []
 
 from mpi4py import MPI
+
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 nb_proc = comm.Get_size()
 
-df = pd.read_csv(path_dir, sep='\t',
-                 converters={'S0': literal_eval})
+df = pd.read_csv(path_dir, sep="\t", converters={"S0": literal_eval})
 
 for i in range(
-        int(len(df) / nb_proc * rank),
-        int(len(df) / nb_proc * (rank + 1)),
+    int(len(df) / nb_proc * rank),
+    int(len(df) / nb_proc * (rank + 1)),
 ):
-    q = df['q'].loc[i]
-    dt = df['dt'].loc[i]
-    S0 = df['S0'].loc[i]
-    Sb_dict['Dirichlet'] = {"injector_one": S0[0], "injector_two": S0[0], "right": 0.0}
+    q = df["q"].loc[i]
+    dt = df["dt"].loc[i]
+    S0 = df["S0"].loc[i]
+    Sb_dict["Dirichlet"] = {"injector_one": S0[0], "injector_two": S0[0], "right": 0.0}
 
     well_co2 = Well(
-            name="well co2",
-            cell_group=np.array([[1500.0, 2250]]),
-            radius=0.1,
-            control={"Neumann": q},
-            s_inj=1.0,
-            schedule=[[0.0, dt],],
-            mode="injector",
-        )
+        name="well co2",
+        cell_group=np.array([[1500.0, 2250]]),
+        radius=0.1,
+        control={"Neumann": q},
+        s_inj=1.0,
+        schedule=[
+            [0.0, dt],
+        ],
+        mode="injector",
+    )
 
     P_imp = implicit_pressure_solver(
-            grid=grid,
-            K=K,
-            T=T,
-            P=P,
-            S=S0,
-            Pb=Pb,
-            Sb_dict=Sb_dict,
-            mu_g=mu_g,
-            mu_w=mu_w,
-            kr_model=kr_model,
-            wells=[well_co2],
-        )
+        grid=grid,
+        K=K,
+        T=T,
+        P=P,
+        S=S0,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        mu_g=mu_g,
+        mu_w=mu_w,
+        kr_model=kr_model,
+        wells=[well_co2],
+    )
     P_imp_list.append(P_imp.tolist())
 
 all_P_imp = comm.gather(P_imp_list, root=0)
 if rank == 0:
     flat_P_imp = [arr for sublist in all_P_imp for arr in sublist]
     print(len(flat_P_imp))
-    df['P_imp'] = flat_P_imp
-    df.to_csv(f'data/train_q_5_3_dt_1_10_S_0_06_P_imp.csv', sep='\t', index=False)
+    df["P_imp"] = flat_P_imp
+    df.to_csv(f"data/train_q_5_3_dt_1_10_S_0_06_P_imp.csv", sep="\t", index=False)

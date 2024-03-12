@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from matplotlib import rc
-rc('text', usetex=True)
-rc('font', **{'family': 'serif', 'size' : 12})
-rc('figure', **{'figsize': (5, 3)})
+
+rc("text", usetex=True)
+rc("font", **{"family": "serif", "size": 12})
+rc("figure", **{"figsize": (5, 3)})
 
 loss_dict = pickle.load(open("models/loss_dict_1500.pkl", "rb"))
 print(
@@ -22,5 +23,5 @@ plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.title("Train/Test loss")
 plt.legend()
-plt.savefig(f"local_approach_2d_loss.pdf", bbox_inches='tight')
+plt.savefig(f"local_approach_2d_loss.pdf", bbox_inches="tight")
 # plt.show()

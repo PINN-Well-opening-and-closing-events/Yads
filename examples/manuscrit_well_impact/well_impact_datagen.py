@@ -40,7 +40,9 @@ well_co2 = Well(
     radius=0.1,
     control={"Dirichlet": 200.0e5},
     s_inj=1.0,
-    schedule=[[4 * dt, 24*dt],],
+    schedule=[
+        [4 * dt, 24 * dt],
+    ],
     mode="injector",
 )
 
@@ -48,29 +50,27 @@ eps = 1e-6
 max_newton_iter = 200
 
 newton_list, dt_list = solss(
-        grid=grid,
-        P=P,
-        S=S,
-        Pb=Pb,
-        Sb_dict=Sb_dict,
-        phi=phi,
-        K=K,
-        mu_g=mu_g,
-        mu_w=mu_w,
-        dt_init=2*dt,
-        total_sim_time=60 * dt,
-        kr_model=kr_model,
-        wells=[well_co2],
-        max_newton_iter=max_newton_iter,
-        eps=eps,
-        save=True,
-        save_step=1,
-        save_path="well_impact_video/well_impact",
-        save_states_to_json=True,
-        json_savepath="./well_impact.json"
-    )
-with open(
-    "newton_list/well_event_newton_list.pkl", "wb"
-) as fp:
+    grid=grid,
+    P=P,
+    S=S,
+    Pb=Pb,
+    Sb_dict=Sb_dict,
+    phi=phi,
+    K=K,
+    mu_g=mu_g,
+    mu_w=mu_w,
+    dt_init=2 * dt,
+    total_sim_time=60 * dt,
+    kr_model=kr_model,
+    wells=[well_co2],
+    max_newton_iter=max_newton_iter,
+    eps=eps,
+    save=True,
+    save_step=1,
+    save_path="well_impact_video/well_impact",
+    save_states_to_json=True,
+    json_savepath="./well_impact.json",
+)
+with open("newton_list/well_event_newton_list.pkl", "wb") as fp:
     pickle.dump(newton_list, fp)
 print(newton_list, dt_list)

@@ -32,7 +32,11 @@ def create_1d(nb_cells: int, interval: Tuple[float, float]) -> Mesh:
     face_groups = {
         "0": np.array(
             list(
-                zip(range(1, nb_faces - 1), range(0, nb_cells - 1), range(1, nb_cells),)
+                zip(
+                    range(1, nb_faces - 1),
+                    range(0, nb_cells - 1),
+                    range(1, nb_cells),
+                )
             )
         ),
         "1": np.array([[0, 0]]),

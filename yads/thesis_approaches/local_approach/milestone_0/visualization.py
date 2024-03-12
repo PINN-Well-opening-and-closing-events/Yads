@@ -9,7 +9,7 @@ test = pd.read_csv(
     converters={"S": literal_eval, "P": literal_eval},
 )
 
-P_plot = np.array(test["P"].loc[0]) / 10 ** 6
+P_plot = np.array(test["P"].loc[0]) / 10**6
 S_plot = np.array(test["S"].loc[0])
 
 first_non_zero_S_x = (np.round(S_plot, 6) != 0).argmax(axis=0)

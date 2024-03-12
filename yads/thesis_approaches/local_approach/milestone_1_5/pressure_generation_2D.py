@@ -66,7 +66,9 @@ def main():
                 radius=0.1,
                 control={"Dirichlet": q[i]},
                 s_inj=1.0,
-                schedule=[[0.0, dt],],
+                schedule=[
+                    [0.0, dt],
+                ],
                 mode="injector",
             )
             Pb = {"left": Pl[i], "upper": Pu[i], "right": Pr[i], "lower": Pd[i]}

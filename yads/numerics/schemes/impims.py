@@ -82,7 +82,6 @@ def impims_solver(
     state_dict = {"simulation data": {}, "metadata": {}}
     # record simulation metadata for json export
     if save_states_to_json:
-
         state_dict["metadata"]["other"] = {
             "total_sim_time": total_sim_time,
             "max_newton_iter": max_newton_iter,
@@ -182,7 +181,7 @@ def impims_solver(
         # number of newton fails
         if dt != dt_save:
             i = 0
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 newton_list.append(-1)
                 i += 1
         if save:

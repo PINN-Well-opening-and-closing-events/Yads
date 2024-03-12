@@ -66,17 +66,17 @@ def add_rotations(grid, groups):
 
     for group in groups:
         # upper right
-        center = (np.array(group[1]) + np.array(group[2]))/2
+        center = (np.array(group[1]) + np.array(group[2])) / 2
         if center[0] == max_x:
             right.append([center, group])
         # upper left
-        elif center[0] == 0.:
+        elif center[0] == 0.0:
             left.append([center, group])
         # lower right
         elif center[1] == max_y:
             up.append([center, group])
         # lower left
-        elif center[1] == 0.:
+        elif center[1] == 0.0:
             down.append([center, group])
 
     x_up = [center[0] for center, _ in up]
@@ -89,8 +89,12 @@ def add_rotations(grid, groups):
     left_idxs = np.flip(np.argsort(y_left))
 
     # everything sorted
-    groups_sorted = [down[i] for i in down_idxs] + [right[i] for i in right_idxs] +\
-                    [up[i] for i in up_idxs] + [left[i] for i in left_idxs]
+    groups_sorted = (
+        [down[i] for i in down_idxs]
+        + [right[i] for i in right_idxs]
+        + [up[i] for i in up_idxs]
+        + [left[i] for i in left_idxs]
+    )
 
     # add rotations
     def make_rotation(sorted_groups):
@@ -126,6 +130,8 @@ def P_interp_to_P_imp(grid: Mesh, P, circle_coords, savepath):
         if not os.path.isdir(savepath + "/" + folder_name):
             os.mkdir(savepath + "/" + folder_name)
         for r, group in enumerate(all_groups):
-            with open(savepath + "/" + folder_name + f"/{i}_rotation_{r}.pkl", "wb") as f:
+            with open(
+                savepath + "/" + folder_name + f"/{i}_rotation_{r}.pkl", "wb"
+            ) as f:
                 pickle.dump((group, Pb_dict), f)
     return

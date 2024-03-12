@@ -60,7 +60,6 @@ def imp_boosting_solss(
     state_dict = {"simulation data": {}, "metadata": {}}
     # record simulation metadata for json export
     if save_states_to_json:
-
         state_dict["metadata"]["other"] = {
             "total_sim_time": total_sim_time,
             "max_newton_iter": max_newton_iter,
@@ -188,7 +187,7 @@ def imp_boosting_solss(
         # number of newton fails
         i = 0
         if dt != dt_save:
-            while dt_save / 2 ** i != dt:
+            while dt_save / 2**i != dt:
                 newton_list.append(-1)
                 i += 1
         dt_list.append(dt)
@@ -337,7 +336,9 @@ if __name__ == "__main__":
         radius=0.1,
         control={"Dirichlet": 115.0e5},
         s_inj=1.0,
-        schedule=[[0.4 * total_sim_time, 0.6 * total_sim_time],],
+        schedule=[
+            [0.4 * total_sim_time, 0.6 * total_sim_time],
+        ],
         mode="injector",
     )
 

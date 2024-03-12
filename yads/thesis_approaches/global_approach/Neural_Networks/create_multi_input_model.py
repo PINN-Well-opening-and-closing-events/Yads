@@ -16,13 +16,12 @@ import tensorflow as tf
 def create_multi_input_model(
     cnn_model: Model, mlp_model: Model, filters=(256, 256, 256, 256)
 ):
-
     concatenated = concatenate([mlp_model.output, cnn_model.output])
     concatenated = tf.reshape(concatenated, [-1, 1, concatenated.shape[1]])
     chanDim = -1
     x = None
     # loop over the number of filters
-    for (i, f) in enumerate(filters):
+    for i, f in enumerate(filters):
         # if this is the first CONV layer then set the input
         # appropriately
         # CONV => RELU => BN => POOL

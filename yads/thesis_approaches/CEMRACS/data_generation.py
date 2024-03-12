@@ -8,16 +8,14 @@ from yads.thesis_approaches.data_generation import raw_solss_1_iter
 import pandas as pd
 
 
-path = os.path.dirname(__file__)
-
-if not os.path.isdir(f"{path}/data"):
-    os.mkdir(f"{path}/data")
-if not os.path.isdir(f"{path}/data/train"):
-    os.mkdir(f"{path}/data/train")
-if not os.path.isdir(f"{path}/data/test"):
-    os.mkdir(f"{path}/data/test")
-if not os.path.isdir(f"{path}/data/validation"):
-    os.mkdir(f"{path}/data/validation")
+if not os.path.isdir("data"):
+    os.mkdir("data")
+if not os.path.isdir("data/train"):
+    os.mkdir("data/train")
+if not os.path.isdir("data/test"):
+    os.mkdir("data/test")
+if not os.path.isdir("data/validation"):
+    os.mkdir("data/validation")
 
 
 def better_data_to_df(pb, state):
@@ -67,7 +65,7 @@ kr_model = "quadratic"
 
 # BOUNDARY CONDITIONS #
 # Pressure
-nb_data = 100
+nb_data = 10
 np.random.seed(42)
 P_list = np.random.uniform(low=105e5, high=200e5, size=nb_data)
 
@@ -115,7 +113,7 @@ for i, Pl in enumerate(P_list):
         )
         data_dict = sim_state["data"]
         df_sim = better_data_to_df(Pb, sim_state)
-        save_path = f"{path}/data/{save_dir}/cemracs_data_{nb_data}_{i}_{nb_t}"
+        save_path = f"data/{save_dir}/cemracs_data_{nb_data}_{i}_{nb_t}"
         # save to csv
         if nb_t != 0:
             df_sim.to_csv(save_path + ".csv", sep="\t", index=False)

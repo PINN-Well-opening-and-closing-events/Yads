@@ -43,7 +43,7 @@ folder_path = "nb_samples_100_nb_boundaries_3/1/"
 fig, axs = plt.subplots(1, 5, figsize=(15, 8))
 
 for i in range(5):
-    with open(folder_path + f"1_rotation_{11 + i}" + ".pkl", 'rb') as f:
+    with open(folder_path + f"1_rotation_{11 + i}" + ".pkl", "rb") as f:
         (groups, Pb_dict) = pickle.load(f)
     grid_temp = copy.deepcopy(grid)
     for group in groups:

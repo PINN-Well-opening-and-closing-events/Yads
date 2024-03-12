@@ -2,14 +2,13 @@ import pickle
 import matplotlib.pyplot as plt
 
 from matplotlib import rc
-rc('text', usetex=True)
-rc('font', **{'family': 'serif', 'size' : 12})
-rc('figure', **{'figsize' : (5, 3)})
+
+rc("text", usetex=True)
+rc("font", **{"family": "serif", "size": 12})
+rc("figure", **{"figsize": (5, 3)})
 
 
-newtons = pickle.load(
-    open("newton_list/well_event_newton_list.pkl", "rb")
-)
+newtons = pickle.load(open("newton_list/well_event_newton_list.pkl", "rb"))
 # print(sum(newtons[2:12]) / (sum(newtons[0:40]) - sum(newtons[2:12])))
 
 
@@ -42,7 +41,7 @@ def draw_newton_plot(cts, savepath=None):
         s=100,
         linewidths=4,
         zorder=1,
-        label=r'\bf{Standard}'
+        label=r"\bf{Standard}",
     )
 
     plt.yticks(fontsize=16)
@@ -61,7 +60,8 @@ def draw_newton_plot(cts, savepath=None):
     plt.tight_layout()
     return fig
 
+
 draw_newton_plot(0)
-plt.savefig(f"well_event_newton.pdf", bbox_inches='tight')
+plt.savefig(f"well_event_newton.pdf", bbox_inches="tight")
 # plt.close()
 plt.show()

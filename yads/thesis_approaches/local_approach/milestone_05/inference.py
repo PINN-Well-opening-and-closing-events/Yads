@@ -88,7 +88,9 @@ def launch_inference(qt, log_qt, Pb_dict, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Pb = Pb_dict

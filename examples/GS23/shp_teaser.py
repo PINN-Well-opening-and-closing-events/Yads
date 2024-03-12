@@ -56,9 +56,11 @@ def main():
         name="well co2",
         cell_group=np.array([[1475.0, 2225]]),
         radius=0.1,
-        control={"Neumann": -(10 ** -3.1)},
+        control={"Neumann": -(10**-3.1)},
         s_inj=1.0,
-        schedule=[[2 * dt, 12 * dt],],
+        schedule=[
+            [2 * dt, 12 * dt],
+        ],
         mode="injector",
     )
 

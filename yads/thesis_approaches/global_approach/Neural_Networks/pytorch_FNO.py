@@ -223,8 +223,8 @@ class LpLoss(object):
 ################################################################
 
 
-sub = 2 ** 3  # subsampling rate
-h = 2 ** 13 // sub  # total grid size divided by the subsampling rate
+sub = 2**3  # subsampling rate
+h = 2**13 // sub  # total grid size divided by the subsampling rate
 s = h
 
 batch_size = 20

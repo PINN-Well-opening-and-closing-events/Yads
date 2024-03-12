@@ -20,7 +20,7 @@ def create_cnn_1D(width, height, output_shape, filters=(128, 64, 32, 16)):
     inputs = Input(shape=inputShape)
     x = None
     # loop over the number of filters
-    for (i, f) in enumerate(filters):
+    for i, f in enumerate(filters):
         # if this is the first CONV layer then set the input
         # appropriately
         if i == 0:

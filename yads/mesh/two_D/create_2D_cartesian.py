@@ -144,7 +144,6 @@ def get_cell_face_node_connectivity(
                 if len(vic) == 2:
                     for k, f in enumerate(faces):
                         if vic == list(f) or vic == list(reversed(f)):
-
                             cell_face_connectivity.append([(i, j), k])
                             faces_done.append(k)
                             continue

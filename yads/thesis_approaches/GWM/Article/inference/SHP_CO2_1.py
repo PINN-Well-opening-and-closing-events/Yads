@@ -94,7 +94,9 @@ def launch_inference(qt, log_qt, i, test_P, test_S):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Sb_dict["Dirichlet"] = {
@@ -224,9 +226,11 @@ def main():
     test["log_dt"] = np.log(test["dt"])
     qts = test[["q", "dt", "S0_local"]].to_numpy()
     log_qts = test[["log_q", "log_dt"]].to_numpy()
-    P_imps = test['P_imp_local'].to_numpy()
+    P_imps = test["P_imp_local"].to_numpy()
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None)
+        result = launch_inference(
+            qt=qts[i], log_qt=log_qts[i], i=i, test_P=P_imps[i], test_S=None
+        )
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_{ext}_test_{rank}_{len(test)}_{i}.csv",
@@ -246,7 +250,9 @@ if __name__ == "__main__":
         test_full = test = pd.read_csv(
             "../../../local_approach/SHPCO2/data/case_0/data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
             converters={"P_imp_local": literal_eval, "S0_local": literal_eval},
-            sep="\t", nrows=2)
+            sep="\t",
+            nrows=2,
+        )
 
         save_dir = "results"
         test_split = np.array_split(test_full, nb_proc)

@@ -83,7 +83,6 @@ def hybrid_newton_inference(
 
 
 def main():
-
     for seed, sample_num in enumerate(sample_dirs):
         rota_files = os.listdir("../" + folder_path + sample_num)
         if not os.path.isdir(save_dir + sample_num):
@@ -101,7 +100,7 @@ def main():
         q_pow = np.round(q_pow, 6)
         dt_init = np.round(dt_init, 1)
         for i, rota in enumerate(rota_files):
-            with open("../" + folder_path + sample_num + "/" + rota, 'rb') as f:
+            with open("../" + folder_path + sample_num + "/" + rota, "rb") as f:
                 (groups, Pb_dict) = pickle.load(f)
 
             data_dict = {"q": q_pow[i], "total_sim_time": dt_init[i], "S0": S0}
@@ -109,11 +108,13 @@ def main():
             # prepare for save
             well_co2 = Well(
                 name="well co2",
-                cell_group=np.array([[Lx/2, Ly/2]]),
+                cell_group=np.array([[Lx / 2, Ly / 2]]),
                 radius=0.1,
                 control={"Neumann": q_pow[i]},
                 s_inj=1.0,
-                schedule=[[0.0,  dt_init[i]],],
+                schedule=[
+                    [0.0, dt_init[i]],
+                ],
                 mode="injector",
             )
             grid_temp = copy.deepcopy(grid)
@@ -137,7 +138,7 @@ def main():
                 Sb_dict=Sb_dict,
                 mu_g=mu_g,
                 mu_w=mu_w,
-                wells=[well_co2]
+                wells=[well_co2],
             )
             # classic sim
             P_i_plus_1, S_i_plus_1, dt_sim, nb_newton, norms = hybrid_newton_inference(
@@ -166,13 +167,19 @@ def main():
 
             Nx_loc, Ny_loc = 9, 9
             # Hybrid sim
-            well_x, well_y = 27*50/2, 27*50/2
+            well_x, well_y = 27 * 50 / 2, 27 * 50 / 2
             well_loc_idx = 40
             grid_dxy = 50
             d = 4
             cells_d = grid.find_cells_inside_square(
-                (grid_dxy * (well_x / grid_dxy - d), grid_dxy * (well_y / grid_dxy + d)),
-                (grid_dxy * (well_x / grid_dxy + d), grid_dxy * (well_y / grid_dxy - d)),
+                (
+                    grid_dxy * (well_x / grid_dxy - d),
+                    grid_dxy * (well_y / grid_dxy + d),
+                ),
+                (
+                    grid_dxy * (well_x / grid_dxy + d),
+                    grid_dxy * (well_y / grid_dxy - d),
+                ),
             )
 
             P_imp_local = P_imp[cells_d]

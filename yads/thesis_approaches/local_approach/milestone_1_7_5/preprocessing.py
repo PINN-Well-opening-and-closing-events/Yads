@@ -4,6 +4,7 @@ import numpy as np
 import os
 import yads.mesh as ym
 import matplotlib.pyplot as plt
+
 path_dir = "data/light_train_q_5_3_dt_1_10_v2.csv"
 dists = [10]
 
@@ -73,9 +74,9 @@ d = 4
 
 ## Usual well
 cells_d = grid.find_cells_inside_square(
-            (grid_dxy * (well_x / grid_dxy - d), grid_dxy * (well_y / grid_dxy + d)),
-            (grid_dxy * (well_x / grid_dxy + d), grid_dxy * (well_y / grid_dxy - d)),
-        )
+    (grid_dxy * (well_x / grid_dxy - d), grid_dxy * (well_y / grid_dxy + d)),
+    (grid_dxy * (well_x / grid_dxy + d), grid_dxy * (well_y / grid_dxy - d)),
+)
 
 K_local = K[cells_d]
 
@@ -84,25 +85,25 @@ well_x_2, well_y_2 = 1675, 1725
 
 
 cells_d_2 = grid.find_cells_inside_square(
-            (grid_dxy * (well_x_2 / grid_dxy - d), grid_dxy * (well_y_2 / grid_dxy + d)),
-            (grid_dxy * (well_x_2 / grid_dxy + d), grid_dxy * (well_y_2 / grid_dxy - d)),
-        )
+    (grid_dxy * (well_x_2 / grid_dxy - d), grid_dxy * (well_y_2 / grid_dxy + d)),
+    (grid_dxy * (well_x_2 / grid_dxy + d), grid_dxy * (well_y_2 / grid_dxy - d)),
+)
 
 ## Long distance well
 well_x_3, well_y_3 = 2975, 425
 
 
 cells_d_3 = grid.find_cells_inside_square(
-            (grid_dxy * (well_x_3 / grid_dxy - d), grid_dxy * (well_y_3 / grid_dxy + d)),
-            (grid_dxy * (well_x_3 / grid_dxy + d), grid_dxy * (well_y_3 / grid_dxy - d)),
-        )
+    (grid_dxy * (well_x_3 / grid_dxy - d), grid_dxy * (well_y_3 / grid_dxy + d)),
+    (grid_dxy * (well_x_3 / grid_dxy + d), grid_dxy * (well_y_3 / grid_dxy - d)),
+)
 
 # df["P_imp_local"] = P_imp_local_list
 # df["S_local"] = S_local_list
 # df["S0_local"] = S0_local_list
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
-ax1.imshow(K_local.reshape(2*d + 1, 2*d+1).T)
+ax1.imshow(K_local.reshape(2 * d + 1, 2 * d + 1).T)
 ax1.invert_yaxis()
 
 K_global = K

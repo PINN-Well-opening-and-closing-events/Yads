@@ -71,7 +71,9 @@ well_co2 = Well(
     radius=0.1,
     control={"Dirichlet": 115.0e5},
     s_inj=1.0,
-    schedule=[[100 / 10000 * total_sim_time, 8000 / 10000 * total_sim_time],],
+    schedule=[
+        [100 / 10000 * total_sim_time, 8000 / 10000 * total_sim_time],
+    ],
 )
 
 """
@@ -125,7 +127,6 @@ ax2.plot(np.cumsum(dt_list), newton_list)
 ax3.plot(np.cumsum(dt_list), dt_list)
 
 for i, schedule in enumerate(well_co2.schedule):
-
     if i == 0:
         ax1.axvline(x=schedule[0], color="red", ls="--", lw=2, label="well opening")
         ax1.axvline(x=schedule[1], color="green", ls="--", lw=2, label="well closing")

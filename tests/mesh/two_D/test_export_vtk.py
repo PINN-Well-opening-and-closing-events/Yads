@@ -32,7 +32,6 @@ def test_wrong_inputs():
 
 
 def test_exports():
-
     disk = load_mesh_2d("./meshes/2D/Disk/disk.mesh")
     export_vtk_2d_triangular("./test", disk)
 

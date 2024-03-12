@@ -160,7 +160,6 @@ def j(
     P_guess=None,
     S_guess=None,
 ):
-
     V = grid.measures(item="cell")
     P = P_guess
     S = S_guess

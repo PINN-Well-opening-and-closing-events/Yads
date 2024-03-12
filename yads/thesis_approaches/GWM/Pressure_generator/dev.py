@@ -69,4 +69,3 @@ P_imp_generator(
     seed,
     savepath,
 )
-

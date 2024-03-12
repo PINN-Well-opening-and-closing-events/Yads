@@ -56,7 +56,9 @@ well_co2 = Well(
     radius=0.1,
     control={"Neumann": -0.002},
     s_inj=1.0,
-    schedule=[[0.0, total_sim_time],],
+    schedule=[
+        [0.0, total_sim_time],
+    ],
     mode="injector",
 )
 

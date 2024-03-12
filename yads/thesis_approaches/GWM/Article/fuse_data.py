@@ -2,8 +2,12 @@ import pandas as pd
 import os
 
 df_list = []
-folder_path = ["test_nb_samples_100_nb_boundaries_1_size_9_9.csv", "test_nb_samples_1000_nb_boundaries_2_size_9_9.csv",
-               "test_nb_samples_1000_nb_boundaries_3_size_9_9.csv", "test_nb_samples_1000_nb_boundaries_4_size_9_9.csv"]
+folder_path = [
+    "test_nb_samples_100_nb_boundaries_1_size_9_9.csv",
+    "test_nb_samples_1000_nb_boundaries_2_size_9_9.csv",
+    "test_nb_samples_1000_nb_boundaries_3_size_9_9.csv",
+    "test_nb_samples_1000_nb_boundaries_4_size_9_9.csv",
+]
 # sample_dirs = os.listdir(folder_path)
 #
 # for d in sample_dirs:

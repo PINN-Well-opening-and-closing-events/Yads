@@ -83,7 +83,7 @@ def hybrid_newton_inference(
 
 
 def launch_inference(qt, log_qt, well_loc, i):
-    dict_save = {"q": qt[0], "total_sim_time": qt[1], 'well_loc': well_loc}
+    dict_save = {"q": qt[0], "total_sim_time": qt[1], "well_loc": well_loc}
     vanilla_grid = copy.deepcopy(grid)
     well_co2 = Well(
         name="well co2",
@@ -91,7 +91,9 @@ def launch_inference(qt, log_qt, well_loc, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
 
@@ -116,9 +118,9 @@ def launch_inference(qt, log_qt, well_loc, i):
 
     dist = 21
     P_imp_local = P_imp_global[
-        well_cell_idx - int((dist - 1) / 2): well_cell_idx + int((dist - 1) / 2) + 1
+        well_cell_idx - int((dist - 1) / 2) : well_cell_idx + int((dist - 1) / 2) + 1
     ]
-    dict_save['well_cell_idx'] = well_cell_idx
+    dict_save["well_cell_idx"] = well_cell_idx
     # Data prep for model
     # shape prep
     # create features maps
@@ -214,10 +216,12 @@ def main():
 
     qts = test[["q", "dt"]].to_numpy()
     log_qts = test[["log_q", "log_dt"]].to_numpy()
-    well_locs = test['well_loc']
+    well_locs = test["well_loc"]
 
     for i in range(len(test)):
-        result = launch_inference(qt=qts[i], log_qt=log_qts[i], well_loc=well_locs[i], i=i)
+        result = launch_inference(
+            qt=qts[i], log_qt=log_qts[i], well_loc=well_locs[i], i=i
+        )
         df = pd.DataFrame([result])
         df.to_csv(
             f"./results/quantification_train_{rank}_{len(test)}_{i}.csv",
@@ -235,7 +239,11 @@ if __name__ == "__main__":
     if rank == 0:
         test_full = pd.read_csv(
             "data/test_well_extension_10.csv",
-            converters={"S_local": literal_eval, "Res_local": literal_eval, "well_loc": literal_eval},
+            converters={
+                "S_local": literal_eval,
+                "Res_local": literal_eval,
+                "well_loc": literal_eval,
+            },
             sep="\t",
         )
 

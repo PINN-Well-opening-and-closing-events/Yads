@@ -76,7 +76,9 @@ def main():
         radius=0.1,
         control={"Neumann": -5e-4},
         s_inj=1.0,
-        schedule=[[0.0, dt],],
+        schedule=[
+            [0.0, dt],
+        ],
         mode="injector",
     )
 
@@ -143,7 +145,10 @@ def main():
     combinations = [(var_list[0][i], var_list[1][i]) for i in range(len(var_dict["q"]))]
 
     combinations_serializable = [
-        (var_list_serializable[0][i], var_list_serializable[1][i],)
+        (
+            var_list_serializable[0][i],
+            var_list_serializable[1][i],
+        )
         for i in range(len(var_dict["q"]))
     ]
 

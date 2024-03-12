@@ -92,7 +92,9 @@ def launch_inference(qt, log_qt, P_sols, i):
         radius=0.1,
         control={"Neumann": qt[0]},
         s_inj=1.0,
-        schedule=[[0.0, qt[1]],],
+        schedule=[
+            [0.0, qt[1]],
+        ],
         mode="injector",
     )
     Sb_dict["Dirichlet"] = {
@@ -274,7 +276,11 @@ if __name__ == "__main__":
     if rank == 0:
         test_full = pd.read_csv(
             "data/test_q_5_3_dt_1_10_S_0_06.csv",
-            converters={"S": literal_eval, "P": literal_eval, "S0": literal_eval,},
+            converters={
+                "S": literal_eval,
+                "P": literal_eval,
+                "S0": literal_eval,
+            },
             sep="\t",
             nrows=1,
         )

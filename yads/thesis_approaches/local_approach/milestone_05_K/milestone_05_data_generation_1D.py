@@ -76,7 +76,9 @@ def main():
         radius=0.1,
         control={"Neumann": -5e-4},
         s_inj=1.0,
-        schedule=[[0.0, dt],],
+        schedule=[
+            [0.0, dt],
+        ],
         mode="injector",
     )
 

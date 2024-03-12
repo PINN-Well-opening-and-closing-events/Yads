@@ -40,7 +40,9 @@ well_co2 = Well(
     radius=1.0,
     control={"Dirichlet": 200.0e5},
     s_inj=1.0,
-    schedule=[[0.4 * total_sim_time, 0.6 * total_sim_time],],
+    schedule=[
+        [0.4 * total_sim_time, 0.6 * total_sim_time],
+    ],
     mode="injector",
 )
 
@@ -50,7 +52,9 @@ productor = Well(
     radius=1.0,
     control={"Dirichlet": 100.0e5},
     s_inj=0.0,
-    schedule=[[0.0, total_sim_time],],
+    schedule=[
+        [0.0, total_sim_time],
+    ],
     mode="productor",
 )
 
