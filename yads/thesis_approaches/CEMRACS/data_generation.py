@@ -1,11 +1,23 @@
 import copy
-
+import os
 import numpy as np
 
 import yads.mesh as ym
 import yads.numerics as yn
 from yads.thesis_approaches.data_generation import raw_solss_1_iter
 import pandas as pd
+
+
+path = os.path.dirname(__file__)
+
+if not os.path.isdir(f"{path}/data"):
+    os.mkdir(f"{path}/data")
+if not os.path.isdir(f"{path}/data/train"):
+    os.mkdir(f"{path}/data/train")
+if not os.path.isdir(f"{path}/data/test"):
+    os.mkdir(f"{path}/data/test")
+if not os.path.isdir(f"{path}/data/validation"):
+    os.mkdir(f"{path}/data/validation")
 
 
 def better_data_to_df(pb, state):
@@ -23,7 +35,7 @@ def better_data_to_df(pb, state):
             "nb_newton": state["data"][t]["nb_newton"],
             "dt_init": state["data"][t]["dt_init"],
             "Res": state["data"][t]["Res"],
-            "Pb": pb
+            "Pb": pb,
         }
         list_of_dict.append(future_df)
 
@@ -75,15 +87,15 @@ for i, Pl in enumerate(P_list):
     S = np.full(grid.nb_cells, 0.0)
     # Pressure initialization
     P = np.full(grid.nb_cells, 100.0e5)
-    print(f'launching simulation {i} with P = {Pl}')
+    print(f"launching simulation {i} with P = {Pl}")
     if i < 0.6 * len(P_list):
-        save_dir = 'train'
+        save_dir = "train"
     elif 0.6 * len(P_list) <= i < 0.8 * len(P_list):
-        save_dir = 'test'
+        save_dir = "test"
     else:
-        save_dir = 'validation'
+        save_dir = "validation"
 
-    for nb_t in range(int(total_sim_time/dt)):
+    for nb_t in range(int(total_sim_time / dt)):
         sim_state = raw_solss_1_iter(
             grid=grid,
             P=P,
@@ -103,7 +115,7 @@ for i, Pl in enumerate(P_list):
         )
         data_dict = sim_state["data"]
         df_sim = better_data_to_df(Pb, sim_state)
-        save_path = f'data/{save_dir}/cemracs_data_{nb_data}_{i}_{nb_t}'
+        save_path = f"{path}/data/{save_dir}/cemracs_data_{nb_data}_{i}_{nb_t}"
         # save to csv
         if nb_t != 0:
             df_sim.to_csv(save_path + ".csv", sep="\t", index=False)
