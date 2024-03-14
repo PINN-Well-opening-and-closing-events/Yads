@@ -3,7 +3,6 @@ import os
 import numpy as np
 
 import yads.mesh as ym
-import yads.numerics as yn
 from yads.thesis_approaches.data_generation import raw_solss_1_iter
 import pandas as pd
 
@@ -65,7 +64,7 @@ kr_model = "quadratic"
 
 # BOUNDARY CONDITIONS #
 # Pressure
-nb_data = 10
+nb_data = 100
 np.random.seed(42)
 P_list = np.random.uniform(low=105e5, high=200e5, size=nb_data)
 

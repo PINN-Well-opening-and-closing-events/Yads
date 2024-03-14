@@ -95,7 +95,13 @@ def sort_clockwise(points):
         polar_points.append((point, angle))
 
     points_tries = sorted(polar_points, key=lambda p: p[1])
-    idxs = np.argsort(np.array(polar_points)[:, 1])
+    # depreciated
+    # idxs = np.argsort(np.array(polar_points)[:, 1])
+    # new version
+    idxs = argsort(list(zip(*polar_points))[1])
     points_result = [p[0] for p in points_tries]
 
     return np.array(points_result), idxs
+
+def argsort(seq):
+    return sorted(range(len(seq)), key=seq.__getitem__)

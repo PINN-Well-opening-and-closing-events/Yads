@@ -1,9 +1,8 @@
 import numpy as np
-from pyDOE import lhs
+import os
 
 import yads.mesh as ym
 import yads.numerics as yn
-from yads.thesis_approaches.data_generation import raw_solss_1_iter
 
 # create 1D cartesian mesh 10 000m x 1000m with 200 cells in x direction and 1 in y direction
 grid = ym.two_D.create_2d_cartesian(50 * 200, 1000, 100, 1)
@@ -42,6 +41,10 @@ Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 eps = 1e-6
 max_newton_iter = 200
 
+save_dir = "save"
+if not os.path.isdir(save_dir):
+    os.mkdir(save_dir)
+save_path = save_dir + "/cemracs_"
 newton_list, dt_list = yn.schemes.solss(
     grid=grid,
     P=P,
@@ -59,7 +62,7 @@ newton_list, dt_list = yn.schemes.solss(
     eps=eps,
     save=True,
     save_step=1,
-    save_path="save/cemracs_",
+    save_path=save_path,
     save_states_to_json=True,
     json_savepath="./cemracs.json",
 )
