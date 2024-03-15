@@ -200,7 +200,6 @@ class MeshData(Mesh):
                     # append the index of the face
                     faces_conn.append(face[0])
                     nb_faces_found += 1
-
         assert nb_faces_found in [1, 3, 4]
         return faces_conn
 
