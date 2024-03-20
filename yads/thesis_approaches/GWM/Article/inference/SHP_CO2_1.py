@@ -2,7 +2,6 @@ import copy
 from typing import Union, List
 from ast import literal_eval
 import pandas as pd
-import matplotlib.pyplot as plt
 from mpi4py import MPI
 import os
 import subprocess as sp
@@ -12,10 +11,6 @@ import pickle
 from models.FNO import FNO2d, UnitGaussianNormalizer
 
 import sys
-
-sys.path.append("/")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
-sys.path.append("/work/lechevaa/PycharmProjects/yads")
 
 from yads.mesh.utils import load_json
 from yads.numerics.physics import calculate_transmissivity
@@ -311,7 +306,7 @@ if __name__ == "__main__":
     S_model = model = FNO2d(modes1=12, modes2=12, width=64, n_features=4)
     S_model.load_state_dict(
         torch.load(
-            "models/GWM_3000_3_checkpoint_2000.pt",
+            "models/GWM_3100_checkpoint_2000.pt",
             map_location=torch.device("cpu"),
         )["model"]
     )

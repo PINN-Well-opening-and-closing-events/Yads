@@ -103,5 +103,6 @@ def sort_clockwise(points):
 
     return np.array(points_result), idxs
 
+
 def argsort(seq):
     return sorted(range(len(seq)), key=seq.__getitem__)

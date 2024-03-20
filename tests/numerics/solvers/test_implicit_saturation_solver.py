@@ -1,6 +1,7 @@
 import pytest
 import numpy as np  # type: ignore
 
+from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 from yads.mesh import load_mesh
 from yads.numerics.solvers.implicit_saturation_solver import implicit_saturation_solver
 from yads.numerics.solvers.implicit_pressure_solver import implicit_pressure_solver
@@ -9,7 +10,7 @@ import yads.physics as yp
 
 
 def test_wrong_inputs():
-    grid = load_mesh("./meshes/2D/Tests/rod_3_1/rod_3_1.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     # Porosity
     phi = np.ones(grid.nb_cells)
     # Diffusion coefficient (i.e Permeability)
@@ -27,12 +28,9 @@ def test_wrong_inputs():
     M = yp.total_mobility(S, mu_w, mu_o)
 
     # BOUNDARY CONDITIONS #
-    # Pressure
-    Pb = {"1": 2.0, "2": 1.0}
-
-    # Saturation
-    Sb_d = {"1": 1.0, "2": 0.1}
-    Sb_n = {"1": None, "2": None}
+    Pb = {"left": 2.0, "right": 1.0}
+    Sb_d = {"left": 1.0, "right": 0.1}
+    Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
     dt = 0.01

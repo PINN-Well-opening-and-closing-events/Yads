@@ -1,5 +1,6 @@
 import pytest
 import numpy as np  # type: ignore
+from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
 from yads.numerics.physics.calculate_transmissivity import calculate_transmissivity_1d  # type: ignore
 from yads.mesh.one_D.create_1d_mesh import create_1d  # type: ignore
@@ -28,7 +29,7 @@ def test_calculate_transmissivity_1d():
 
 
 def test_calculate_transmissivity_2d():
-    grid = load_mesh_2d("./meshes/2D/Square/square.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
     K = np.random.random_sample((grid.nb_cells,)) + 1.0e-3
     T = calculate_transmissivity_2d(grid, K)
     assert len(T) == grid.nb_faces

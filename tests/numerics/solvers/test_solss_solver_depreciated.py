@@ -1,13 +1,14 @@
 import pytest
 import numpy as np  # type: ignore
 
+from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 from yads.mesh import load_mesh
 from yads.numerics.solvers.solss_solver_depreciated import solss_newton_step_depreciated
 from yads.wells import Well
 
 
 def test_wrong_inputs():
-    grid = load_mesh("./meshes/2D/Tests/rod_3_1/rod_3_1.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
 
     P = np.zeros(grid.nb_cells)
     S = np.full(grid.nb_cells, 0.0)
@@ -16,16 +17,16 @@ def test_wrong_inputs():
 
     T = np.ones(grid.nb_faces)
 
-    Pb = {"1": 2.0, "2": 1.0}
-    Sb_d = {"1": 1.0, "2": 0.1}
-    Sb_n = {"1": None, "2": None}
+    Pb = {"left": 2.0, "right": 1.0}
+    Sb_d = {"left": 1.0, "right": 0.1}
+    Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
     dt = 0.1
     mu_w = mu_o = 1.0
 
 
 def test_output():
-    grid = load_mesh("./meshes/2D/Tests/rod_3_1/rod_3_1.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
 
     P = np.zeros(grid.nb_cells)
     S = np.full(grid.nb_cells, 0.0)
@@ -33,11 +34,10 @@ def test_output():
     phi = np.ones(grid.nb_cells)
 
     T = np.ones(grid.nb_faces)
-    M = np.ones(grid.nb_faces)
 
-    Pb = {"1": 2.0, "2": 1.0}
-    Sb_d = {"1": 1.0, "2": 0.1}
-    Sb_n = {"1": None, "2": None}
+    Pb = {"left": 2.0, "right": 1.0}
+    Sb_d = {"left": 1.0, "right": 0.1}
+    Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
     dt = 0.1
     mu_w, mu_g = 1.0, 1.0

@@ -2,7 +2,8 @@ import copy
 
 import pandas as pd
 import sys
-sys.path.append('/Users/anle/Dev/Yads/Yads/')
+
+sys.path.append("/Users/anle/Dev/Yads/Yads/")
 
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 import numpy as np
@@ -15,6 +16,7 @@ from pyDOE import lhs
 
 from yads.thesis_approaches.data_generation import raw_solss_1_iter
 from yads.wells import Well
+
 
 def main():
     folder_path = "nb_samples_1000_nb_boundaries_3_size_9_9/"
@@ -120,7 +122,8 @@ def main():
             # save to csv
             df.to_csv(save_path + ".csv", sep="\t", index=False)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     Nx, Ny = 9, 9
     nb_bound_faces = Nx * 2 + Ny * 2
     dxy = 50

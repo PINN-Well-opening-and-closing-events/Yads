@@ -5,8 +5,7 @@ from yads.physics.mobility import (
     calculate_mobility,
     d_total_mobility_ds,
 )
-from yads.mesh import load_mesh
-
+from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
 def test_wrong_inputs():
     with pytest.raises(ValueError, match=f"Model not handled yet"):
@@ -17,11 +16,11 @@ def test_wrong_inputs():
         total_mobility(1.0, mu_w=mu_wrong, mu_o=mu_ok)
         total_mobility(1.0, mu_w=mu_wrong, mu_o=mu_ok, model="quadratic")
 
-    grid = load_mesh("./meshes/2D/Tests/rod_10_1/rod_10_1.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
     P = S = np.ones(grid.nb_cells)
-    Pb = {"1": 1.0, "2": 2.0}
-    Sb_d = {"1": 1.0, "2": 0.1}
-    Sb_n = {"1": None, "2": None}
+    Pb = {"left": 1.0, "right": 2.0}
+    Sb_d = {"left": 1.0, "right": 0.1}
+    Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
     with pytest.raises(ValueError, match=r"viscosity must be positive"):
         calculate_mobility(grid, P, S, Pb, Sb_dict, mu_w=mu_wrong, mu_o=mu_ok)
@@ -36,11 +35,11 @@ def test_wrong_inputs():
 
 
 def test_output():
-    grid = load_mesh("./meshes/2D/Tests/rod_10_1/rod_10_1.mesh")
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
     mu_wrong, mu_ok = -1.0, 1.0
     P = S = np.ones(grid.nb_cells)
-    Pb = {"1": 1.0, "2": 2.0}
-    Sb_d = {"1": 1.0, "2": 0.1}
-    Sb_n = {"1": None, "2": None}
+    Pb = {"left": 1.0, "right": 2.0}
+    Sb_d = {"left": 1.0, "right": 0.1}
+    Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
     calculate_mobility(grid, P, S, Pb, Sb_dict, mu_w=mu_ok, mu_o=mu_ok)
