@@ -47,7 +47,6 @@ def implicit_pressure_solver(
         )
     if np.any((K < 0)):
         raise ValueError(f"Permeability K must contain only positive values")
-
     #### Pressure solver ####
     if wells:
         for well in wells:
