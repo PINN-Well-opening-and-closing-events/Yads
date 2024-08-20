@@ -1,12 +1,16 @@
 import pickle
+import os
 
 import numpy as np
 import time
 
 from yads.wells import Well
 from yads.mesh.utils import load_json
-from yads.numerics.schemes.solss import solss
+from examples.GS23.hybrid_solss import solss
 
+from yads.thesis_approaches.global_approach.hard_points_predictors.global_2D_S_var.inference.model.FNO import (
+    UnitGaussianNormalizer,
+)
 
 def main():
     grid = load_json("../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
@@ -47,7 +51,7 @@ def main():
     Sb_n = {"injector_one": None, "injector_two": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
-    dt = 2 * (60 * 60 * 24 * 365.25)  # in years
+    dt = 2.0 * (60 * 60 * 24 * 365.25)  # in years
 
     max_newton_iter = 200
     eps = 1e-6
@@ -63,6 +67,8 @@ def main():
         ],
         mode="injector",
     )
+
+    os.makedirs("physical_video/shp_teaser_hybrid", exist_ok=True)
 
     newton_list, dt_list = solss(
         grid=grid,
@@ -82,10 +88,10 @@ def main():
         eps=eps,
         save=True,
         save_step=1,
-        save_path="physical_video/shp_teaser_v2/shp_teaser_",
+        save_path="physical_video/shp_teaser_hybrid/shp_teaser_hybrid_",
     )
     with open(
-        "physical_video/newton_lists/shp_teaser_v2_newton_list_classic.pkl", "wb"
+        "physical_video/newton_lists/shp_teaser_newton_list_hybrid.pkl", "wb"
     ) as fp:
         pickle.dump(newton_list, fp)
     print(newton_list, dt_list)

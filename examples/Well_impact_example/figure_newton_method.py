@@ -1,16 +1,20 @@
 import pickle
 import matplotlib.pyplot as plt
 
-newtons = pickle.load(
-    open("physical_video/newton_lists/shp_teaser_hybrid_v2_newton_list.pkl", "rb")
-)
+from matplotlib import rc
 
+# rc("text", usetex=True)
+rc("font", **{"family": "serif", "size": 12})
+rc("figure", **{"figsize": (5, 3)})
+
+
+newtons = pickle.load(open("newton_list/well_event_newton_list.pkl", "rb"))
 
 def draw_newton_plot(cts, savepath=None):
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
     start = 0
-    end = 40
+    end = 30
 
     plt.axvline(
         x=2,
@@ -35,26 +39,18 @@ def draw_newton_plot(cts, savepath=None):
         s=100,
         linewidths=4,
         zorder=1,
+        label=r"$\bf{Standard}$",
     )
 
     plt.yticks(fontsize=16)
     plt.xticks(fontsize=16)
 
-    plt.axvline(
-        x=cts,
-        color="g",
-        linestyle="dashed",
-        label=r"$\bf{Current}$ $\bf{time-step}$",
-        zorder=0,
-        linewidth=3,
-    )
-
     plt.xlabel(r"$\bf{Time-step}$ $\bf{number}$", fontsize=18)
     plt.ylabel(r"$\bf{Number}$ $\bf{of}$ $\bf{Newton}$ $\bf{iterations}$", fontsize=18)
 
-    ax.set_ylim([-1, 40])
-    xtick_loc = [0, 2, 5, 10, 12, 15, 20, 25, 30, 35, 40]
-    ytick_loc = [0, 2, 4, 6, 8, 10, 20, 30, 40]
+    ax.set_ylim([-1, 25])
+    xtick_loc = [0, 2, 5, 10, 12, 15, 20, 25, 30]
+    ytick_loc = [0, 2, 4, 6, 8, 10, 20, 22, 25]
     ax.set_xticks(xtick_loc)
     ax.set_yticks(ytick_loc)
 
@@ -63,8 +59,7 @@ def draw_newton_plot(cts, savepath=None):
     return fig
 
 
-for i in range(40):
-    draw_newton_plot(i)
-    plt.savefig(f"physical_video/newton_video/newton_video_hybrid_v2/frame_{i}.jpg")
-    plt.close()
-    # plt.show()
+draw_newton_plot(0)
+plt.savefig(f"well_event_newton.pdf", bbox_inches="tight")
+plt.close()
+# plt.show()

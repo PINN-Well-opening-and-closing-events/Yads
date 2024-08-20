@@ -1,27 +1,9 @@
 import pickle
 import matplotlib.pyplot as plt
-
-from matplotlib import rc
-
-rc("text", usetex=True)
-rc("font", **{"family": "serif", "size": 12})
-rc("figure", **{"figsize": (5, 3)})
+import os
 
 
-newtons = pickle.load(
-    open("physical_video/newton_lists/shp_teaser_v2_newton_list_classic.pkl", "rb")
-)
-
-newtons_hybrid = pickle.load(
-    open("physical_video/newton_lists/shp_teaser_hybrid_v2_newton_list.pkl", "rb")
-)
-# print(sum(newtons[2:12]) / (sum(newtons[0:40]) - sum(newtons[2:12])))
-
-print(sum(newtons_hybrid[0:40]) / (sum(newtons[0:40])))
-print(sum(newtons_hybrid[2:12]) / (sum(newtons[2:12])))
-
-
-def draw_newton_plot(cts, savepath=None):
+def draw_newton_plot(cts, newtons, savepath=None):
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
     start = 0
@@ -50,27 +32,24 @@ def draw_newton_plot(cts, savepath=None):
         s=100,
         linewidths=4,
         zorder=1,
-        label=r"\bf{Standard}",
-    )
-
-    plt.scatter(
-        range(start + 1, end + 1),
-        newtons_hybrid[start:end],
-        marker="x",
-        s=100,
-        linewidths=4,
-        zorder=1,
-        color="green",
-        label=r"$\bf{Hybrid}$",
     )
 
     plt.yticks(fontsize=16)
     plt.xticks(fontsize=16)
 
+    plt.axvline(
+        x=cts,
+        color="g",
+        linestyle="dashed",
+        label=r"$\bf{Current}$ $\bf{time-step}$",
+        zorder=0,
+        linewidth=3,
+    )
+
     plt.xlabel(r"$\bf{Time-step}$ $\bf{number}$", fontsize=18)
     plt.ylabel(r"$\bf{Number}$ $\bf{of}$ $\bf{Newton}$ $\bf{iterations}$", fontsize=18)
 
-    ax.set_ylim([-1, 42])
+    ax.set_ylim([-1, 40])
     xtick_loc = [0, 2, 5, 10, 12, 15, 20, 25, 30, 35, 40]
     ytick_loc = [0, 2, 4, 6, 8, 10, 20, 30, 40]
     ax.set_xticks(xtick_loc)
@@ -80,9 +59,26 @@ def draw_newton_plot(cts, savepath=None):
     plt.tight_layout()
     return fig
 
+os.makedirs("physical_video/newton_video", exist_ok=True)
+os.makedirs("physical_video/newton_video/newton_video_hybrid", exist_ok=True)
 
-draw_newton_plot(0)
-# plt.savefig(f"physical_video/newton_video/newton_video_hybrid_v2/frame_{i}.jpg")
-plt.savefig(f"article_hybrid_standard_example.pdf", bbox_inches="tight")
-# plt.close()
-plt.show()
+newtons = pickle.load(
+    open("physical_video/newton_lists/shp_teaser_newton_list_hybrid.pkl", "rb")
+)
+
+for i in range(40):
+    draw_newton_plot(i, newtons=newtons)
+    plt.savefig(f"physical_video/newton_video/newton_video_hybrid/frame_{i}.jpg")
+    plt.close()
+
+
+os.makedirs("physical_video/newton_video/newton_video_classic", exist_ok=True)
+
+newtons = pickle.load(
+    open("physical_video/newton_lists/shp_teaser_newton_list_classic.pkl", "rb")
+)
+
+for i in range(40):
+    draw_newton_plot(i, newtons=newtons)
+    plt.savefig(f"physical_video/newton_video/newton_video_classic/frame_{i}.jpg")
+    plt.close()

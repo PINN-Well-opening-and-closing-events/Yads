@@ -3,11 +3,10 @@ import json
 from matplotlib import rc
 import numpy as np
 
-rc("text", usetex=True)
+# rc("text", usetex=True)
 rc("font", **{"family": "serif", "size": 12})
 
 data_dict = json.load(open("well_impact.json", "rb"))
-print(data_dict.keys())
 x = np.array(data_dict["metadata"]["grid data"]["cell_centers"])[:, 0]
 
 dts = list(data_dict["simulation data"].keys())
@@ -17,7 +16,7 @@ S_cont = data_dict["simulation data"][dts[1]]["S"]
 P_disc = data_dict["simulation data"][dts[3]]["P"]
 S_disc = data_dict["simulation data"][dts[3]]["S"]
 
-fig = plt.figure(figsize=(12, 12))
+fig = plt.figure(figsize=(14, 12))
 
 ax1 = plt.subplot(2, 2, 1)
 ax2 = plt.subplot(2, 2, 2)
@@ -81,14 +80,14 @@ ax4.vlines(
     label="Well C02 injector",
     alpha=0.5,
 )
-# ax1.grid(True)
-# ax2.grid(True)
-# ax3.grid(True)
-# ax4.grid(True)
-# fig.suptitle(r"Example of $\bf{Pressure}$ and $\bf{Saturation}$ $\bf{discontinuities}$ induced by a $\bf{well}$ $\bf{event}$ in a 1D reservoir\n", fontsize=18)
+ax1.grid(True)
+ax2.grid(True)
+ax3.grid(True)
+ax4.grid(True)
+fig.suptitle(r"Example of $\bf{Pressure}$ and $\bf{Saturation}$ $\bf{discontinuities}$ induced by a $\bf{well}$ $\bf{event}$ in a 1D reservoir", fontsize=18)
 fig.tight_layout()
 ax4.legend(prop={"size": 17})
 ax2.legend(prop={"size": 17})
-# plt.savefig("MDS_PS_discontinuity.png", dpi=2400)
 plt.savefig(f"well_event_PS_discontinuity.pdf", bbox_inches="tight")
-plt.show()
+plt.close()
+# plt.show()

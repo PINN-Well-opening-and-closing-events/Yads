@@ -1,16 +1,12 @@
 import pickle
+import os 
 
 import numpy as np
 import time
-import sys
 
 from yads.wells import Well
 from yads.mesh.utils import load_json
-from examples.GS23.hybrid_solss import solss
-from yads.thesis_approaches.global_approach.hard_points_predictors import (
-    FNO2d,
-    UnitGaussianNormalizer,
-)
+from yads.numerics.schemes.solss import solss
 
 
 def main():
@@ -52,11 +48,13 @@ def main():
     Sb_n = {"injector_one": None, "injector_two": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
-    dt = 2.0 * (60 * 60 * 24 * 365.25)  # in years
+    dt = 2 * (60 * 60 * 24 * 365.25)  # in years
 
     max_newton_iter = 200
     eps = 1e-6
-
+    os.makedirs("physical_video", exist_ok=True)
+    os.makedirs("physical_video/shp_teaser", exist_ok=True)
+    os.makedirs("physical_video/newton_lists", exist_ok=True)
     well_co2 = Well(
         name="well co2",
         cell_group=np.array([[1475.0, 2225]]),
@@ -87,14 +85,12 @@ def main():
         eps=eps,
         save=True,
         save_step=1,
-        save_path="physical_video/hybrid_shp_P_imp/shp_teaser_hybrid_",
+        save_path="physical_video/shp_teaser/shp_teaser_",
     )
     with open(
-        "physical_video/newton_lists/shp_teaser_hybrid_v2_P_imp_newton_list.pkl", "wb"
+        "physical_video/newton_lists/shp_teaser_newton_list_classic.pkl", "wb"
     ) as fp:
         pickle.dump(newton_list, fp)
-    print(newton_list, dt_list)
-
 
 if __name__ == "__main__":
     print("launching video teasing")

@@ -7,18 +7,14 @@ from matplotlib import pyplot as plt
 
 import yads.mesh as ym
 from yads.mesh import Mesh
-import sys
-
-sys.path.append("/work/lechevaa/PycharmProjects/IMPES/Yads")
-sys.path.append("/home/irsrvhome1/R16/lechevaa/YADS/Yads")
-
-from yads.numerics.solvers.solss_solver_depreciated import solss_newton_step
+from yads.numerics.solvers.solss_solver import solss_newton_step
+from yads.numerics.solvers import implicit_pressure_solver
 from yads.wells import Well
-from yads.numerics import calculate_transmissivity, implicit_pressure_solver
+from yads.numerics.physics import calculate_transmissivity
 from yads.numerics.timestep_variation_control import update_dt
 from yads.numerics.utils import newton_list_format
 
-from yads.thesis_approaches.global_approach.hard_points_predictors import (
+from yads.thesis_approaches.global_approach.hard_points_predictors.global_2D_S_var.inference.model.FNO import (
     FNO2d,
     UnitGaussianNormalizer,
 )
@@ -102,7 +98,7 @@ def solss(
             grid.connect_well(well)
 
     # load hybrid model
-    model_path = "../../yads/thesis_approaches/global_approach/hard_points_predictors/global_2D_S_var/inference/model"
+    model_path = "model"
     S_model = FNO2d(modes1=12, modes2=12, width=64, n_features=4)
     S_model.load_state_dict(
         torch.load(
