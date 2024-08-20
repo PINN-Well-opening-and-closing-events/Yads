@@ -84,7 +84,10 @@ ax1.grid(True)
 ax2.grid(True)
 ax3.grid(True)
 ax4.grid(True)
-fig.suptitle(r"Example of $\bf{Pressure}$ and $\bf{Saturation}$ $\bf{discontinuities}$ induced by a $\bf{well}$ $\bf{event}$ in a 1D reservoir", fontsize=18)
+fig.suptitle(
+    r"Example of $\bf{Pressure}$ and $\bf{Saturation}$ $\bf{discontinuities}$ induced by a $\bf{well}$ $\bf{event}$ in a 1D reservoir",
+    fontsize=18,
+)
 fig.tight_layout()
 ax4.legend(prop={"size": 17})
 ax2.legend(prop={"size": 17})

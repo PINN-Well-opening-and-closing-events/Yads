@@ -25,7 +25,7 @@ df = pd.read_csv(
     "data/test_gwm_dataset_3100.csv",
     sep="\t",
     converters={"S": literal_eval, "P_imp": literal_eval, "S0": literal_eval},
-    nrows=10000
+    nrows=10000,
 )
 nb_data = len(df)
 df["log_q"] = -np.log10(-df["q"])
@@ -81,13 +81,13 @@ y_true = np.reshape(y.detach().numpy(), (nb_data, res_length * res_length))
 y_true_norms_test = np.linalg.norm(y_true, ord=2, axis=1)
 y_pred_norms_test = np.linalg.norm(y_pred, ord=2, axis=1)
 
-del df,x,y,y_pred,y_true
+del df, x, y, y_pred, y_true
 
 df = pd.read_csv(
     "data/train_gwm_dataset_3100.csv",
     sep="\t",
     converters={"S": literal_eval, "P_imp": literal_eval, "S0": literal_eval},
-    nrows=10000
+    nrows=10000,
 )
 nb_data = len(df)
 df["log_q"] = -np.log10(-df["q"])
@@ -143,27 +143,32 @@ y_true = np.reshape(y.detach().numpy(), (nb_data, res_length * res_length))
 y_true_norms_train = np.linalg.norm(y_true, ord=2, axis=1)
 y_pred_norms_train = np.linalg.norm(y_pred, ord=2, axis=1)
 
-del df,x,y,y_pred,y_true
+del df, x, y, y_pred, y_true
 fig, axs = plt.subplots(1, 2, figsize=(10, 6))
 
 
 axs[1].scatter(
-    x=y_true_norms_test, y=y_pred_norms_test, color='blue', alpha=0.5, label='Test set'
+    x=y_true_norms_test, y=y_pred_norms_test, color="blue", alpha=0.5, label="Test set"
 )
-axs[0].scatter(x=y_true_norms_train, y=y_pred_norms_train, color="green", alpha=0.5, label='Train set')
+axs[0].scatter(
+    x=y_true_norms_train,
+    y=y_pred_norms_train,
+    color="green",
+    alpha=0.5,
+    label="Train set",
+)
 
 
-
-axs[0].plot([0, 5.7], [0, 5.7], color='red', linestyle='--', label='Ideal Fit')
-axs[1].plot([0, 5.7], [0, 5.7], color='red', linestyle='--', label='Ideal Fit')
+axs[0].plot([0, 5.7], [0, 5.7], color="red", linestyle="--", label="Ideal Fit")
+axs[1].plot([0, 5.7], [0, 5.7], color="red", linestyle="--", label="Ideal Fit")
 
 
 # Add labels and title
-axs[0].set_xlabel('Observed Values', fontsize=14)
-axs[0].set_ylabel('Predicted Values', fontsize=14)
+axs[0].set_xlabel("Observed Values", fontsize=14)
+axs[0].set_ylabel("Predicted Values", fontsize=14)
 
-axs[1].set_xlabel('Observed Values', fontsize=14)
-axs[1].set_ylabel('Predicted Values', fontsize=14)
+axs[1].set_xlabel("Observed Values", fontsize=14)
+axs[1].set_ylabel("Predicted Values", fontsize=14)
 
 # Add legend
 axs[0].legend()

@@ -10,6 +10,7 @@ rc("figure", **{"figsize": (5, 3)})
 
 newtons = pickle.load(open("newton_list/well_event_newton_list.pkl", "rb"))
 
+
 def draw_newton_plot(cts, savepath=None):
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 

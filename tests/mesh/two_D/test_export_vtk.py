@@ -7,7 +7,7 @@ import os
 
 
 def test_wrong_inputs():
-    # square = create_2d_cartesian(10, 10, 5, 5) 
+    # square = create_2d_cartesian(10, 10, 5, 5)
 
     # cell_prop = np.ones(square.nb_cells)
     # node_prop = np.ones(square.nb_nodes)
@@ -31,6 +31,7 @@ def test_wrong_inputs():
     #         "./test", square, point_data={"valid": node_prop, "error": cell_prop}
     #     )
     pass
+
 
 def test_exports():
     # disk = load_mesh_2d("./meshes/2D/Disk/disk.mesh")

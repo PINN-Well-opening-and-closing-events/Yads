@@ -3,7 +3,8 @@ import yads.mesh as ym
 from yads.wells import Well
 from yads.numerics.schemes.solss import solss
 import pickle
-import os 
+import os
+
 # create 1D cartesian mesh 10 000m x 1000m with 200 cells in x direction and 1 in y direction
 grid = ym.two_D.create_2d_cartesian(50 * 200, 1000, 200, 1)
 
@@ -49,8 +50,8 @@ well_co2 = Well(
 eps = 1e-6
 max_newton_iter = 200
 
-os.makedirs('well_impact_video', exist_ok=True)
-os.makedirs('newton_list', exist_ok=True)
+os.makedirs("well_impact_video", exist_ok=True)
+os.makedirs("newton_list", exist_ok=True)
 newton_list, dt_list = solss(
     grid=grid,
     P=P,

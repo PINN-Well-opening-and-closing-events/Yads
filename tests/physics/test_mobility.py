@@ -7,6 +7,7 @@ from yads.physics.mobility import (
 )
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
+
 def test_wrong_inputs():
     with pytest.raises(ValueError, match=f"Model not handled yet"):
         total_mobility(0.5, 0.5, 0.5, model="error")
@@ -16,7 +17,7 @@ def test_wrong_inputs():
         total_mobility(1.0, mu_w=mu_wrong, mu_o=mu_ok)
         total_mobility(1.0, mu_w=mu_wrong, mu_o=mu_ok, model="quadratic")
 
-    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     P = S = np.ones(grid.nb_cells)
     Pb = {"left": 1.0, "right": 2.0}
     Sb_d = {"left": 1.0, "right": 0.1}
@@ -35,7 +36,7 @@ def test_wrong_inputs():
 
 
 def test_output():
-    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     mu_wrong, mu_ok = -1.0, 1.0
     P = S = np.ones(grid.nb_cells)
     Pb = {"left": 1.0, "right": 2.0}

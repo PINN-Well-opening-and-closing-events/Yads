@@ -1,5 +1,5 @@
 import pickle
-import os 
+import os
 
 import numpy as np
 import time
@@ -91,6 +91,7 @@ def main():
         "physical_video/newton_lists/shp_teaser_newton_list_classic.pkl", "wb"
     ) as fp:
         pickle.dump(newton_list, fp)
+
 
 if __name__ == "__main__":
     print("launching video teasing")

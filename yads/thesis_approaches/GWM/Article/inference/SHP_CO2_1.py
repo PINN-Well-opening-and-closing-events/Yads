@@ -11,6 +11,7 @@ import pickle
 from models.FNO import FNO2d, UnitGaussianNormalizer
 
 import sys
+
 sys.path.append("/home/AD.NORCERESEARCH.NO/anle/Yads")
 
 from yads.mesh.utils import load_json

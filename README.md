@@ -12,6 +12,9 @@ Still working on proper installation, but numpy alone allows to run most of the 
 ## Launch tests
 
     pytest -vvv tests
+    coverage run -m pytest -vvv tests
+    coverage html 
+
 ## Funds
 The thesis was financed by:
     - DIM Math Innov (see https://www.dim-mathinnov.fr )
@@ -19,6 +22,9 @@ The thesis was financed by:
     - Laboratoire Jacques-Louis Lions (see https://www.ljll.math.upmc.fr )
 
 ## References:
-    
+Antoine Lechevallier PhD report:
+Antoine Lechevallier. Physics Informed Deep Learning : Applications to well opening and closing events. Nonlinear Sciences [physics]. Sorbonne Université, 2024. English. ⟨NNT : 2024SORUS062⟩. ⟨tel-04607497⟩
+Articles: 
+
 
 

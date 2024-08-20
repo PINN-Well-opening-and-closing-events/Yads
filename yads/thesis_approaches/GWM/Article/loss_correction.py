@@ -17,8 +17,10 @@ res_length = 2 * ext + 1
 well_loc = 40
 
 import pickle
-loss_dict = pickle.load(open("inference/models/GWM_loss_dict_2500.pkl", 'rb'))
+
+loss_dict = pickle.load(open("inference/models/GWM_loss_dict_2500.pkl", "rb"))
 print(loss_dict.keys())
+
 
 class UnitGaussianNormalizer(object):
     def __init__(self, x, eps=0.00001):
@@ -336,7 +338,6 @@ train_dataloader = DataLoader(trainData, batch_size=BATCH_SIZE, shuffle=True)
 test_dataloader = DataLoader(testData, batch_size=BATCH_SIZE, shuffle=False)
 
 
-
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # model = FNO2d(modes1=12, modes2=12, width=64, n_features=4)
@@ -401,16 +402,20 @@ test_dataloader = DataLoader(testData, batch_size=BATCH_SIZE, shuffle=False)
 
 x = list(range(1, len(loss_dict["train_loss"]) + 1, 10))
 
-print(len(train_dataloader)/len(trainData))
-print(len(test_dataloader)/len(testData))
+print(len(train_dataloader) / len(trainData))
+print(len(test_dataloader) / len(testData))
 
-train_correction = len(train_dataloader)/len(trainData)
-test_correction = len(test_dataloader)/len(testData)
+train_correction = len(train_dataloader) / len(trainData)
+test_correction = len(test_dataloader) / len(testData)
 
 train_loss = [i * train_correction for i in loss_dict["train_loss"]]
 test_loss = [i * test_correction for i in loss_dict["val_loss"]]
 
-print(min(test_loss), test_loss.index(min(test_loss)) + 1, train_loss[test_loss.index(min(test_loss)) + 1])
+print(
+    min(test_loss),
+    test_loss.index(min(test_loss)) + 1,
+    train_loss[test_loss.index(min(test_loss)) + 1],
+)
 fig = plt.plot(figsize=(16, 16))
 plt.plot(x, train_loss[::10], label="Train loss", markersize=3)
 plt.plot(x, test_loss[::10], label="Test loss", linewidth=1)

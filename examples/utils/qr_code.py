@@ -1,7 +1,7 @@
 import qrcode
 
 # Replace 'https://github.com/username/repository' with your GitHub repository URL
-github_repo_url = 'https://github.com/PINN-Well-opening-and-closing-events/Yads.git'
+github_repo_url = "https://github.com/PINN-Well-opening-and-closing-events/Yads.git"
 
 # Generate QR code
 qr = qrcode.QRCode(
@@ -18,4 +18,3 @@ img = qr.make_image(fill_color="black", back_color="white")
 
 # Save the image
 img.save("github_YADS_repo_qrcode.png")
-

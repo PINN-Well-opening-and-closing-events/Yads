@@ -29,7 +29,7 @@ def test_calculate_transmissivity_1d():
 
 
 def test_calculate_transmissivity_2d():
-    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     K = np.random.random_sample((grid.nb_cells,)) + 1.0e-3
     T = calculate_transmissivity_2d(grid, K)
     assert len(T) == grid.nb_faces

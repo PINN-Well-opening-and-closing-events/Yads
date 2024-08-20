@@ -6,8 +6,9 @@ from yads.numerics.numerical_tests.cfl_condition import cfl_condition
 from yads.physics import dfw_dsw
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
+
 def test_wrong_inputs():
-    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     F = np.ones(grid.nb_faces)
     F_well = {}
     phi = np.ones(grid.nb_cells)
@@ -19,7 +20,7 @@ def test_wrong_inputs():
 
 
 def test_output():
-    grid = create_2d_cartesian(50 * 200, 1000, 10, 1) 
+    grid = create_2d_cartesian(50 * 200, 1000, 10, 1)
     F = np.ones(grid.nb_faces)
     F_well = {}
     phi = np.ones(grid.nb_cells)

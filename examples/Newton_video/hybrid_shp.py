@@ -12,6 +12,7 @@ from yads.thesis_approaches.global_approach.hard_points_predictors.global_2D_S_v
     UnitGaussianNormalizer,
 )
 
+
 def main():
     grid = load_json("../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
 

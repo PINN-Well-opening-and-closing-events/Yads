@@ -59,6 +59,7 @@ def draw_newton_plot(cts, newtons, savepath=None):
     plt.tight_layout()
     return fig
 
+
 os.makedirs("physical_video/newton_video", exist_ok=True)
 os.makedirs("physical_video/newton_video/newton_video_hybrid", exist_ok=True)
 

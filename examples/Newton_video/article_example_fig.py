@@ -16,6 +16,7 @@ newtons_hybrid = pickle.load(
     open("physical_video/newton_lists/shp_teaser_newton_list_hybrid.pkl", "rb")
 )
 
+
 def draw_newton_plot(cts, savepath=None):
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
@@ -79,4 +80,3 @@ def draw_newton_plot(cts, savepath=None):
 draw_newton_plot(0)
 plt.savefig(f"article_hybrid_standard_example.pdf", bbox_inches="tight")
 plt.close()
-
