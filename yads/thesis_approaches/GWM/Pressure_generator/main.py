@@ -26,7 +26,7 @@ from yads.thesis_approaches.GWM.Pressure_generator.P_interpolation import P_inte
 
 from matplotlib import rc
 
-rc("text", usetex=True)
+rc("text", usetex=False)
 rc("font", **{"family": "serif", "size": 12})
 
 if __name__ == "__main__":

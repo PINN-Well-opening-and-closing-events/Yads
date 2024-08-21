@@ -590,7 +590,8 @@ def raw_solss_1_hard_iter(
     #### ONLY MODIF FROM RAW SOLSS 1 ITER
     # ensure there are no more that maxiter iterations
     dt_min = 0.99 * dt_init
-
+    #### End of modification
+    
     simulation_state = {
         "metadata": {
             "kr_model": kr_model,
