@@ -164,7 +164,7 @@ def implicit_saturation_solver(
         step += 1
         # stop criterion
         norm = np.linalg.norm(N_i, ord=2)
-        print(f"norm: {norm:0.2E}")
+        # print(f"norm: {norm:0.2E}")
         if norm <= eps:
             stop = True
 
