@@ -22,6 +22,8 @@ __pycache__
 *.index
 *.dat
 
+!environment.yml 
+
 Yads/examples/
 Yads/yads/thesis_approaches/global_approach/hard_points_predictors/global_2D/visualization/
 Yads/examples/GS23/first_non_physical_video/

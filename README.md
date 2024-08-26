@@ -9,6 +9,12 @@ This library has been developed during Antoine Lechevallier's thesis. It is a sa
 
 Still working on proper installation, but numpy alone allows to run most of the scripts 
     
+    git clone https://github.com/PINN-Well-opening-and-closing-events/Yads.git
+    cd Yads
+    conda create --name Yads python=3.12.2
+    conda activate Yads
+    conda env update --file environment.yml
+
 ## Launch tests
 
     pytest -vvv tests
