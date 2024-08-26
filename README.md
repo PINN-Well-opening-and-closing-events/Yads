@@ -1,5 +1,6 @@
 ![CI Pipeline](https://github.com/PINN-Well-opening-and-closing-events/Yads/actions/workflows/build-test.yml/badge.svg)
-![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue)
+![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.11%20%7C%203.12-blue)
+
 
 # YADS: Yet Another Darcy Solver
 ## Context 
