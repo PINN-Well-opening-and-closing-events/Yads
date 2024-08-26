@@ -1,3 +1,4 @@
+![CI Pipeline](https://github.com/PINN-Well-opening-and-closing-events/Yads/actions/workflows/ci.yml/badge.svg)
 # YADS: Yet Another Darcy Solver
 ## Context 
 This library has been developed during Antoine Lechevallier's thesis. It is a sandbox with two main functionalities: 
