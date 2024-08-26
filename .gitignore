@@ -23,7 +23,8 @@ __pycache__
 *.dat
 
 !environment.yml 
-!.github/workflows/ci.yml
+!.github/workflows/conda.yml
+!.github/workflows/venv.yml
 
 Yads/examples/
 Yads/yads/thesis_approaches/global_approach/hard_points_predictors/global_2D/visualization/

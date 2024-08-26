@@ -1,4 +1,4 @@
-name: Conda Install
+name: Conda install
 
 on:
   push:
