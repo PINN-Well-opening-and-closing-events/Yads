@@ -26,7 +26,6 @@ def impes_solver(
     mu_w: Union[float, int],
     mu_o: Union[float, int],
     total_sim_time: Union[float, int],
-    max_iter: int,
     dt_init: Union[float, int],
     wells: Union[List[Well], None] = None,
     auto_dt: bool = False,
@@ -142,10 +141,9 @@ def impes_solver(
 
         mid_time = time.time()
         print(f"step: {nb_iter} done in {(mid_time - start_time)} seconds")
-
         nb_iter += 1
         # stop criterion
-        if total_time >= total_sim_time or nb_iter == max_iter:
+        if total_time >= total_sim_time:
             stop = True
 
     print("total simulation time: ", total_time)
