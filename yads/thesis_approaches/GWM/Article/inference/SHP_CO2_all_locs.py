@@ -10,7 +10,7 @@ import torch
 import numpy as np
 import pickle
 from models.FNO import FNO2d, UnitGaussianNormalizer
-from pyDOE import lhs 
+from pyDOE import lhs
 
 import sys
 
@@ -23,20 +23,21 @@ from yads.mesh import Mesh
 import yads.mesh as ym
 from yads.numerics.solvers.newton import res
 
+
 def is_well_loc_ok(well_loc, grid: Mesh, K, i):
     well_x, well_y = well_loc
     cells_d = grid.find_cells_inside_square(
-    (grid_dxy * (well_x / grid_dxy - d), grid_dxy * (well_y / grid_dxy + d)),
-    (grid_dxy * (well_x / grid_dxy + d), grid_dxy * (well_y / grid_dxy - d)),
+        (grid_dxy * (well_x / grid_dxy - d), grid_dxy * (well_y / grid_dxy + d)),
+        (grid_dxy * (well_x / grid_dxy + d), grid_dxy * (well_y / grid_dxy - d)),
     )
 
-    # Ensure the local domain has the correct size 
-    if len(cells_d) != (2*d + 1) * (2*d + 1):
+    # Ensure the local domain has the correct size
+    if len(cells_d) != (2 * d + 1) * (2 * d + 1):
         return False
     # Ensure local domain does not touch boundary
     for c in cells_d:
         if c in fbd_cells:
-             return False
+            return False
     cells_d_plus_i = grid.find_cells_inside_square(
         (
             grid_dxy * (well_x / grid_dxy - (d + i)),
@@ -51,6 +52,7 @@ def is_well_loc_ok(well_loc, grid: Mesh, K, i):
     if not np.all(K[cells_d_plus_i] == 100.0e-15):
         return False
     return True
+
 
 def hybrid_newton_inference(
     grid: Mesh,
@@ -113,9 +115,15 @@ def hybrid_newton_inference(
 
 
 def launch_inference(qt, log_qt, i, well_loc, grid):
-    tmp_well_location = grid.centers(item='cell')[well_loc]
+    tmp_well_location = grid.centers(item="cell")[well_loc]
     print(f"launching step number {i}, with {qt[0], qt[1], qt[2], tmp_well_location}")
-    dict_save = {"q": qt[0], "total_sim_time": qt[1], "S0": qt[2], "well_loc_idx":well_loc, "well_loc":tmp_well_location.tolist()}
+    dict_save = {
+        "q": qt[0],
+        "total_sim_time": qt[1],
+        "S0": qt[2],
+        "well_loc_idx": well_loc,
+        "well_loc": tmp_well_location.tolist(),
+    }
 
     well_co2 = Well(
         name="well co2",
@@ -148,7 +156,7 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
         kr_model=kr_model,
         wells=[well_co2],
     )
-   
+
     dict_save["P_imp"] = P_imp.tolist()
 
     # Data prep for model
@@ -223,7 +231,7 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
         P_guess=P_imp,
         S_guess=S,
     )
-    
+
     dict_save["P_i_plus_1_classic"] = P_i_plus_1.tolist()
     dict_save["S_i_plus_1_classic"] = S_i_plus_1.tolist()
     dict_save["nb_newton_classic"] = nb_newton
@@ -264,30 +272,30 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
     Local_S_pred_global[cells_d] = local_S_pred
 
     P_i_plus_1, S_i_plus_1, dt_sim, nb_newton, norms = hybrid_newton_inference(
-    grid=grid,
-    P=P_imp,
-    S=S,
-    Pb=Pb,
-    Sb_dict=Sb_dict,
-    phi=phi,
-    K=K,
-    mu_g=mu_g,
-    mu_w=mu_w,
-    dt_init=qt[1],
-    total_sim_time=qt[1],
-    kr_model=kr_model,
-    max_newton_iter=max_newton_iter,
-    eps=1e-6,
-    wells=[well_co2],
-    P_guess=P_imp,
-    S_guess=Local_S_pred_global)
- 
+        grid=grid,
+        P=P_imp,
+        S=S,
+        Pb=Pb,
+        Sb_dict=Sb_dict,
+        phi=phi,
+        K=K,
+        mu_g=mu_g,
+        mu_w=mu_w,
+        dt_init=qt[1],
+        total_sim_time=qt[1],
+        kr_model=kr_model,
+        max_newton_iter=max_newton_iter,
+        eps=1e-6,
+        wells=[well_co2],
+        P_guess=P_imp,
+        S_guess=Local_S_pred_global,
+    )
+
     dict_save["Local_S_i_plus_1_hybrid"] = S_i_plus_1.tolist()
     dict_save["Local_P_i_plus_1_hybrid"] = P_i_plus_1.tolist()
     dict_save["Local_nb_newton_hybrid"] = nb_newton
     dict_save["Local_dt_sim_hybrid"] = dt_sim
     dict_save["Local_norms_hybrid"] = norms
-
 
     ### Domain decomposition
     DD_grid = ym.two_D.create_2d_cartesian(
@@ -428,7 +436,7 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
         P_guess=P_imp_DD,
         S_guess=S_DD,
     )
- 
+
     dict_save["S_DD_local"] = S_DD_plus_1.tolist()
     dict_save["P_DD_local"] = P_DD_plus_1.tolist()
 
@@ -476,7 +484,7 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
     # plt.savefig(f'debug/{i}_{well_loc}.png')
 
     print(
-        f'''step {i}: Newton classic {dict_save['nb_newton_classic']}, GWM hybrid {dict_save['GWM_nb_newton_hybrid']}, local Hybrid {dict_save['Local_nb_newton_hybrid']}, Local DD {dict_save['nb_newton_DD']}'''
+        f"""step {i}: Newton classic {dict_save['nb_newton_classic']}, GWM hybrid {dict_save['GWM_nb_newton_hybrid']}, local Hybrid {dict_save['Local_nb_newton_hybrid']}, Local DD {dict_save['nb_newton_DD']}"""
     )
     print(f"step number {i} finished")
     return dict_save
@@ -484,7 +492,7 @@ def launch_inference(qt, log_qt, i, well_loc, grid):
 
 def main():
     for i in range(len(well_locs)):
-        # set seed to avoid similar lhs 
+        # set seed to avoid similar lhs
         np.random.seed(well_locs[i])
         lhs_sample = 10
         lhd = lhs(3, samples=lhs_sample, criterion="maximin")
@@ -597,56 +605,76 @@ if __name__ == "__main__":
         )
     )
 
-    local_q_normalizer = pickle.load(open("../../../local_approach/SHPCO2/data/case_0/models/q_normalizer.pkl", "rb"))
-    local_P_imp_normalizer = pickle.load(open("../../../local_approach/SHPCO2/data/case_0/models/P_imp_normalizer.pkl", "rb"))
-    local_dt_normalizer = pickle.load(open("../../../local_approach/SHPCO2/data/case_0/models/dt_normalizer.pkl", "rb"))
+    local_q_normalizer = pickle.load(
+        open("../../../local_approach/SHPCO2/data/case_0/models/q_normalizer.pkl", "rb")
+    )
+    local_P_imp_normalizer = pickle.load(
+        open(
+            "../../../local_approach/SHPCO2/data/case_0/models/P_imp_normalizer.pkl",
+            "rb",
+        )
+    )
+    local_dt_normalizer = pickle.load(
+        open(
+            "../../../local_approach/SHPCO2/data/case_0/models/dt_normalizer.pkl", "rb"
+        )
+    )
     ###### Compute well locs
     if rank == 0:
         print("Computing well locs")
         # pre-compute cells the are on boundary (forbidden)
         fbd_cells_1 = []
         for group in grid.face_groups.keys():
-            if group != '0':
+            if group != "0":
                 for f in grid.faces(group=group, with_nodes=False):
-                    c = grid.face_to_cell(f, face_type='boundary')
+                    c = grid.face_to_cell(f, face_type="boundary")
                     fbd_cells_1.append(c)
-        # pre-compute cells the are two cells away from boundary (forbidden) 
-        fbd_cells_2 = []         
-        for group in grid.face_groups.keys():        
-            if group == '0':
+        # pre-compute cells the are two cells away from boundary (forbidden)
+        fbd_cells_2 = []
+        for group in grid.face_groups.keys():
+            if group == "0":
                 for f in grid.faces(group=group, with_nodes=False):
-                    c1, c2 = grid.face_to_cell(f, face_type='inner')
+                    c1, c2 = grid.face_to_cell(f, face_type="inner")
                     # check if one of the cells is on the boundary
                     if c1 in fbd_cells_1:
                         fbd_cells_2.append(c2)
                     elif c2 in fbd_cells_1:
                         fbd_cells_2.append(c1)
         # Stay far from boundary conditions
-        fbd_cells_3 = list(grid.find_cells_inside_square((0.0, 1000.0), (1250.0, 0)))    
-        fbd_cells_4 = list(grid.find_cells_inside_square((2500.0, 3000.0), (3500.0, 2500.0)))  
-        fbd_cells_5 = list(grid.find_cells_inside_square((3750.0, 3000.0), (4500.0, 0.0)))
+        fbd_cells_3 = list(grid.find_cells_inside_square((0.0, 1000.0), (1250.0, 0)))
+        fbd_cells_4 = list(
+            grid.find_cells_inside_square((2500.0, 3000.0), (3500.0, 2500.0))
+        )
+        fbd_cells_5 = list(
+            grid.find_cells_inside_square((3750.0, 3000.0), (4500.0, 0.0))
+        )
 
         fbd_cells = fbd_cells_1 + fbd_cells_2 + fbd_cells_3 + fbd_cells_4 + fbd_cells_5
 
         fbd_cells = list(dict.fromkeys(fbd_cells))
 
-        
         print("Forbidden cells computed")
-        well_locs_cell_idxs = [i for i,_ in enumerate(grid.cells) if is_well_loc_ok(grid.centers(item="cell")[i], grid, K, 3)]
+        well_locs_cell_idxs = [
+            i
+            for i, _ in enumerate(grid.cells)
+            if is_well_loc_ok(grid.centers(item="cell")[i], grid, K, 3)
+        ]
         print(f"Found {len(well_locs_cell_idxs)} possible well locations")
         np.random.seed(42)
         nb_well_samples = 200
         print(f"Sampling {nb_well_samples} well locations in the location pool")
-        well_loc_samples = np.random.randint(low=0, high=len(well_locs_cell_idxs)-1, size=nb_well_samples)
+        well_loc_samples = np.random.randint(
+            low=0, high=len(well_locs_cell_idxs) - 1, size=nb_well_samples
+        )
         well_loc_samples_cell_idxs = [well_locs_cell_idxs[i] for i in well_loc_samples]
         well_locs_split = np.array_split(well_loc_samples_cell_idxs, nb_proc)
-        
+
     else:
         well_locs = None
         well_locs_split = None
 
     well_locs = comm.scatter(well_locs_split, root=0)
-    
+
     if rank == 0:
         print("Launching main script")
     main()
