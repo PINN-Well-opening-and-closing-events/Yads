@@ -23,9 +23,9 @@ def test_wrong_inputs():
     T = calculate_transmissivity(grid, K)
 
     mu_w = 1.0
-    mu_o = 1.0
+    mu_g = 1.0
 
-    M = yp.total_mobility(S, mu_w, mu_o)
+    M = yp.total_mobility(S, mu_w, mu_g)
 
     # BOUNDARY CONDITIONS #
     Pb = {"left": 2.0, "right": 1.0}
@@ -34,7 +34,7 @@ def test_wrong_inputs():
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
     dt = 0.01
-    P = implicit_pressure_solver(grid, K, T, M, P, Pb, Sb_dict, mu_w, mu_o)
+    P = implicit_pressure_solver(grid, K, T, M, P, Pb, Sb_dict, mu_w, mu_g)
 
     with pytest.raises(ValueError, match=r"phi length must match grid.nb_cells"):
         phi_wrong = np.ones(grid.nb_faces)

@@ -19,9 +19,9 @@ P = np.full(grid.nb_cells, 1.5)
 T = yn.calculate_transmissivity(grid, K)
 
 mu_w = 1.0
-mu_o = 1.0
+mu_g = 1.0
 
-M = yp.total_mobility(S, mu_w, mu_o)
+M = yp.total_mobility(S, mu_w, mu_g)
 
 # BOUNDARY CONDITIONS #
 # Pressure
@@ -57,7 +57,7 @@ yn.impims_solver(
     phi,
     K,
     mu_w,
-    mu_o,
+    mu_g,
     total_sim_time=total_sim_time,
     dt_init=dt,
     max_iter=max_iter,

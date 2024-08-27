@@ -24,7 +24,7 @@ def impes_solver(
     phi: np.ndarray,
     K: np.ndarray,
     mu_w: Union[float, int],
-    mu_o: Union[float, int],
+    mu_g: Union[float, int],
     total_sim_time: Union[float, int],
     dt_init: Union[float, int],
     wells: Union[List[Well], None] = None,
@@ -49,7 +49,7 @@ def impes_solver(
         phi: porosity in each cell, np.ndarray size(grid.nb_cells)
         K: diffusion coefficient (i.e. permeability), np.ndarray size(grid.nb_cells)
         mu_w: water viscosity
-        mu_o: oil viscosity
+        mu_g: oil viscosity
         total_sim_time: total simulation time
         max_iter: maximum number of iteration to reach total_sim_time
         dt_init: initial time step, must not be too high is setting auto_dt as False
@@ -82,16 +82,16 @@ def impes_solver(
                     if schedule[0] <= total_time <= schedule[1]:
                         effective_wells.append(well)
 
-        M = yp.total_mobility(S, mu_w, mu_o)
+        M = yp.total_mobility(S, mu_w, mu_g)
 
         P = implicit_pressure_solver(
-            grid, K, T, M, P, Pb, Sb_dict, mu_w, mu_o, wells=effective_wells
+            grid, K, T, M, P, Pb, Sb_dict, mu_w, mu_g, wells=effective_wells
         )
 
         S_n = copy.deepcopy(S)
 
         S, Fl, F_well = explicit_saturation_solver(
-            grid, P, S, K, T, phi, Pb, Sb_dict, dt, mu_w, mu_o, wells=effective_wells
+            grid, P, S, K, T, phi, Pb, Sb_dict, dt, mu_w, mu_g, wells=effective_wells
         )
 
         dt_lim, flow_sum = cfl_condition(
@@ -102,7 +102,7 @@ def impes_solver(
             yp.fractional_flow.dfw_dsw,
             Pb,
             mu_w,
-            mu_o,
+            mu_g,
             effective_wells,
         )
 

@@ -13,7 +13,7 @@ def cfl_condition(
     dfw,
     Pb: dict,
     mu_w: Union[float, int],
-    mu_o: Union[float, int],
+    mu_g: Union[float, int],
     wells: Union[List[Well], None] = None,
 ):
     """Compute the limit value of time step dt according to CFL (Courant-Friedrichs-Lewy) condition: dt <= dt_lim
@@ -27,21 +27,21 @@ def cfl_condition(
         Pb: pressure boundary conditions dict
             example: Pb = {"left":1.0, "right": 2.0}
         mu_w: water viscosity
-        mu_o: oil viscosity
+        mu_g: oil viscosity
         wells:
     Returns:
         limit time step allowed
     """
     assert len(phi) == grid.nb_cells
     assert len(F) == grid.nb_faces
-    if mu_w <= 0.0 or mu_o <= 0.0:
-        raise ValueError(f"viscosity must be positive (got mu_w: {mu_w}, mu_o: {mu_o})")
+    if mu_w <= 0.0 or mu_g <= 0.0:
+        raise ValueError(f"viscosity must be positive (got mu_w: {mu_w}, mu_g: {mu_g})")
     # Numerator
     cell_vols = grid.measures(item="cell")
     num = min(np.multiply(cell_vols, phi))
     # Denominator
     sw = np.linspace(0.0, 1.0, num=1000)
-    sup_dfw = max(dfw(sw, mu_w, mu_o))
+    sup_dfw = max(dfw(sw, mu_w, mu_g))
 
     flow_sum = np.zeros(grid.nb_cells)
 

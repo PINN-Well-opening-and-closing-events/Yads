@@ -18,14 +18,14 @@ def test_wrong_inputs():
     Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
 
-    mu_w, mu_o = 1.0, 1.0
+    mu_w, mu_g = 1.0, 1.0
 
     K_wrong_1 = np.full(grid.nb_cells, -1.0)
     with pytest.raises(
         ValueError, match=r"Permeability K must contain only positive values"
     ):
-        implicit_pressure_solver(grid, K_wrong_1, T, P, S, Pb, Sb_dict, mu_w, mu_o)
+        implicit_pressure_solver(grid, K_wrong_1, T, P, S, Pb, Sb_dict, mu_w, mu_g)
 
     K_wrong_2 = np.ones(grid.nb_faces)
     with pytest.raises(ValueError, match=r"K length must match grid.nb_cells"):
-        implicit_pressure_solver(grid, K_wrong_2, T, P, S, Pb, Sb_dict, mu_w, mu_o)
+        implicit_pressure_solver(grid, K_wrong_2, T, P, S, Pb, Sb_dict, mu_w, mu_g)

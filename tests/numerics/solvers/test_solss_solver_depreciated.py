@@ -22,7 +22,7 @@ def test_wrong_inputs():
     Sb_n = {"left": None, "right": None}
     Sb_dict = {"Dirichlet": Sb_d, "Neumann": Sb_n}
     dt = 0.1
-    mu_w = mu_o = 1.0
+    mu_w = mu_g = 1.0
 
 
 def test_output():

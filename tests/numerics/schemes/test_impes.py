@@ -25,7 +25,7 @@ def test_outputs():
     P = np.full(grid.nb_cells, 1.5)
 
     mu_w = 1.0
-    mu_o = 1.0
+    mu_g = 1.0
 
     # BOUNDARY CONDITIONS #
     # Pressure
@@ -38,7 +38,6 @@ def test_outputs():
 
     dt = 0.5
     total_sim_time = 0.5
-    max_iter = 5
 
     impes_solver(
         grid,
@@ -49,8 +48,7 @@ def test_outputs():
         phi,
         K,
         mu_w,
-        mu_o,
+        mu_g,
         total_sim_time=total_sim_time,
         dt_init=dt,
-        max_iter=max_iter,
     )

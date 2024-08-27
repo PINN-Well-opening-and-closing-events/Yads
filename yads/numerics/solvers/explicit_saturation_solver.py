@@ -19,7 +19,7 @@ def explicit_saturation_solver(
     Sb_dict: dict,
     dt: Union[float, int],
     mu_w: Union[float, int],
-    mu_o: Union[float, int],
+    mu_g: Union[float, int],
     wells: Union[List[Well], None] = None,
     eps: Union[float, int] = 1e-4,
 ) -> (np.ndarray, np.ndarray):
@@ -38,7 +38,7 @@ def explicit_saturation_solver(
             example: Sb_dict = {"Neumann":{"left":1.0, "right": 0.2}, "Dirichlet": "left":None, "right":None}
         dt: time step
         mu_w: water viscosity
-        mu_o
+        mu_g
         wells:
         eps: clipping tolerance
 
@@ -68,7 +68,7 @@ def explicit_saturation_solver(
     # initialize flow, size nb_faces for CFL
     Fl = np.full(grid.nb_faces, None)
     F_well = {}
-    M = total_mobility(S, mu_w, mu_o)
+    M = total_mobility(S, mu_w, mu_g)
     #### Saturation Solver ####
     cell_measures = grid.measures(item="cell")
     # boundary conditions
@@ -95,7 +95,7 @@ def explicit_saturation_solver(
 
     # well faces
     if wells:
-        F_well = compute_well_flows(grid, P, S, M, wells, mu_w, mu_o)
+        F_well = compute_well_flows(grid, P, S, M, wells, mu_w, mu_g)
         for well in wells:
             for c in grid.cell_groups[well.name]:
                 S[c] -= dt / (cell_measures[c] * phi[c]) * F_well[well.name]
@@ -159,7 +159,7 @@ def compute_flow_by_face(
             F = m * T[f] * (P[front] - P[back])
 
         # Phi = T[f] * m * (P[i] - P[j])
-        # F = fw(S[i], mu_w, mu_o) * max(Phi, 0.0) + fw(S[j], mu_w, mu_o) * min(Phi, 0.0)
+        # F = fw(S[i], mu_w, mu_g) * max(Phi, 0.0) + fw(S[j], mu_w, mu_g) * min(Phi, 0.0)
 
     elif group in Pb.keys():
         # Boundary conditions
@@ -177,8 +177,8 @@ def compute_flow_by_face(
                 F = T[f] * m * (P[c] - Pb[group])
 
             # Phi = T[f] * m * (P[c] - Pb[group])
-            # F = fw(S[c], mu_w, mu_o) * max(Phi, 0.0) + fw(
-            #   Sb_dict["Dirichlet"][group], mu_w, mu_o
+            # F = fw(S[c], mu_w, mu_g) * max(Phi, 0.0) + fw(
+            #   Sb_dict["Dirichlet"][group], mu_w, mu_g
             # ) * min(Phi, 0.0)
 
         elif Sb_dict["Neumann"][group] is not None:
@@ -194,7 +194,7 @@ def compute_well_flows(
     M: np.ndarray,
     wells: Union[List[Well], None],
     mu_w: Union[float, int],
-    mu_o: Union[float, int],
+    mu_g: Union[float, int],
 ) -> Dict:
     """computes the flow Flux w.r.t the effective wells connected to the grid
 
@@ -205,7 +205,7 @@ def compute_well_flows(
         M:
         wells:
         mu_w: water viscosity
-        mu_o
+        mu_g
 
     Returns:
         updated Flux
@@ -224,12 +224,12 @@ def compute_well_flows(
                     if P[c] >= well.control["Dirichlet"]:
                         m = M[c]
                     else:
-                        m = total_mobility(well.injected_saturation, mu_w, mu_o)
+                        m = total_mobility(well.injected_saturation, mu_w, mu_g)
 
                     ip = well.ip
                     value = ip * m
                     Phi = value * (P[c] - well.control["Dirichlet"])
-                    F_well[well.name] = fw(S[c], mu_w, mu_o) * max(Phi, 0.0) + fw(
-                        well.water_saturation, mu_w, mu_o
+                    F_well[well.name] = fw(S[c], mu_w, mu_g) * max(Phi, 0.0) + fw(
+                        well.water_saturation, mu_w, mu_g
                     ) * min(Phi, 0.0)
     return F_well
