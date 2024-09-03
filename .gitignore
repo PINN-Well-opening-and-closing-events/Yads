@@ -24,7 +24,7 @@ __pycache__
 
 !environment.yml 
 !.github/workflows/build-test.yml
-
+!yads/thesis_approaches/CEMRACS/models/article_ressources/figs/*
 
 Yads/examples/
 Yads/yads/thesis_approaches/global_approach/hard_points_predictors/global_2D/visualization/

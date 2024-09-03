@@ -15,16 +15,19 @@ Tutorials explaining the main functionalities of the library are available in ex
 
 ## Black-box machine learning model for 1D piston flow
 
-This work is part of the CEMRACS 2023 () on Scientific Machine-Learning. A 1D piston flow is setup with a gradient of pressure from the left to the right. Given different left boundary conditions in pressure and a constant step of time, we generate saturation and pressure profiles at different times. Finally, we learn the solution in pressure and saturation to evolve from a time t to the next timestep t+dt using a neural network. 
-
-INCLUDE IMAGES: Learning set example / Prediction example / Auto-regressive example
+This work is part of the ![CEMRACS 2023](http://smai.emath.fr/cemracs/cemracs23/) on Scientific Machine-Learning. A 1D piston flow is setup with a gradient of pressure from the left to the right. Given different left boundary conditions in pressure and a constant step of time, we generate saturation and pressure profiles at different times. Finally, we learn the solution in pressure and saturation to evolve from a time t to the next timestep t+dt using a neural network. 
 
 Example saturation and pressure profiles obtained at different times with a left boundary pressure of NN MPA. 
 
+![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
+
 Predicted saturation and pressure profiles at different times given previous timestep solution. 
+
+![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
 
 Predicted saturation and pressure profiles at different times given initial solution. 
 
+![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
 
 ## Global Hybrid Newton
 
