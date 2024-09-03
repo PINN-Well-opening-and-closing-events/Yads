@@ -19,18 +19,16 @@ This work is part of the ![CEMRACS 2023](http://smai.emath.fr/cemracs/cemracs23/
 
 Example saturation and pressure profiles obtained at different times with a left boundary pressure of NN MPA. 
 
-![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
-
-<img src="https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf" alt="Logo" width="200"/>
+<img src="https://github.com/PINN-Well-opening-and-closing-events/Yads/blob/main/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf" alt="Logo" width="200"/>
 
 
 Predicted saturation and pressure profiles at different times given previous timestep solution. 
 
-![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
+<img src="https://github.com/PINN-Well-opening-and-closing-events/Yads/blob/main/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_pred_darcy.pdf" alt="Logo" width="200"/>
 
-Predicted saturation and pressure profiles at different times given initial solution. 
+Predicted saturation and pressure profiles at different times given initial solution.  
 
-![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
+<img src="https://github.com/PINN-Well-opening-and-closing-events/Yads/blob/main/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_black_box_train_good.pdf" alt="Logo" width="200"/>
 
 ## Global Hybrid Newton
 
