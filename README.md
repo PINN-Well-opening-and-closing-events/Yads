@@ -21,6 +21,9 @@ Example saturation and pressure profiles obtained at different times with a left
 
 ![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
 
+<img src="https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf" alt="Logo" width="200"/>
+
+
 Predicted saturation and pressure profiles at different times given previous timestep solution. 
 
 ![](https://github.com/PINN-Well-opening-and-closing-events/Yads.git/yads/thesis_approaches/CEMRACS/models/article_ressources/figs/sample_piston_darcy.pdf) 
