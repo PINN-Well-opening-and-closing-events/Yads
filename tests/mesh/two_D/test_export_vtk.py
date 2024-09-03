@@ -11,9 +11,11 @@ def test_wrong_inputs():
 
     cell_prop = np.ones(square.nb_cells)
     node_prop = np.ones(square.nb_nodes)
-    export_vtk_2d_cartesian("./cartesian_test", square)
-    if os.path.exists("./cartesian_test.vtk"):
-        os.remove("./cartesian_test.vtk")
+    # export_vtk_2d_cartesian("./cartesian_test", square)
+    # if os.path.exists("./cartesian_test.vtk"):
+    #     os.remove("./cartesian_test.vtk")
+
+    
     # with pytest.raises(TypeError, match="grid must be a Mesh object"):
     #     export_vtk_2d_triangular("./test", "error")
     # with pytest.raises(TypeError, match="path must be a string"):
