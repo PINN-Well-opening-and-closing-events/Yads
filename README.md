@@ -9,6 +9,27 @@ This library has been developed during Antoine Lechevallier's thesis. It is a sa
     - run reservoir simulations for CO2 storage
     - couple simulations with machine learning models
 
+
+## Tutorials 
+Tutorials explaining the main functionalities of the library are available in example/tutorial. The final objective being the modifification of standard numerical schemes and combine it with machine-learning methods. 
+
+## Black-box machine learning model for 1D piston flow
+
+This work is part of the CEMRACS 2023 () on Scientific Machine-Learning. A 1D piston flow is setup with a gradient of pressure from the left to the right. Given different left boundary conditions in pressure and a constant step of time, we generate saturation and pressure profiles at different times. Finally, we learn the solution in pressure and saturation to evolve from a time t to the next timestep t+dt using a neural network. 
+
+INCLUDE IMAGES: Learning set example / Prediction example / Auto-regressive example
+
+Example saturation and pressure profiles obtained at different times with a left boundary pressure of NN MPA. 
+
+Predicted saturation and pressure profiles at different times given previous timestep solution. 
+
+Predicted saturation and pressure profiles at different times given initial solution. 
+
+
+## Global Hybrid Newton
+
+## Local Hybrid Newton
+
 ## Installation (Not working yet)
 
 Still working on proper installation, but numpy alone allows to run most of the scripts 
@@ -31,10 +52,11 @@ The thesis was financed by:
     - IFP Energies Nouvelles (see https://www.ifpenergiesnouvelles.fr )
     - Laboratoire Jacques-Louis Lions (see https://www.ljll.math.upmc.fr )
 
-## References:
+## References and publications:
 Antoine Lechevallier PhD report:
 Antoine Lechevallier. Physics Informed Deep Learning : Applications to well opening and closing events. Nonlinear Sciences [physics]. Sorbonne Université, 2024. English. ⟨NNT : 2024SORUS062⟩. ⟨tel-04607497⟩
-Articles: 
+Articles:
+
 
 
 

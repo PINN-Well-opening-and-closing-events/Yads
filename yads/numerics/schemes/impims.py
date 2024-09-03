@@ -18,7 +18,7 @@ import yads.mesh as ym
 import time
 
 
-def impims_solver(
+def impims(
     grid: ym.Mesh,
     P: np.ndarray,
     S: np.ndarray,
@@ -97,14 +97,15 @@ def impims_solver(
             "dimension": grid.dim,
         }
         state_dict["metadata"]["well data"] = {}
-        for well in wells:
-            state_dict["metadata"]["well data"][well.name] = {
-                "cell_group": well.cell_group.tolist(),
-                "control": well.control,
-                "sat_inj": well.injected_saturation,
-                "radius": well.radius,
-                "schedule": well.schedule,
-            }
+        if wells:
+            for well in wells:
+                state_dict["metadata"]["well data"][well.name] = {
+                    "cell_group": well.cell_group.tolist(),
+                    "control": well.control,
+                    "sat_inj": well.injected_saturation,
+                    "radius": well.radius,
+                    "schedule": well.schedule,
+                }
         # record initial state
         state_dict["simulation data"][str(total_time)] = {}
         state_dict["simulation data"][str(total_time)]["dt"] = 0.0

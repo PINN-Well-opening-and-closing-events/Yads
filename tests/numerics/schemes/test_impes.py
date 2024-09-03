@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from yads.numerics.schemes.impes import impes_solver
+from yads.numerics.schemes.impes import impes
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 
 
@@ -39,7 +39,7 @@ def test_outputs():
     dt = 0.5
     total_sim_time = 0.5
 
-    impes_solver(
+    impes(
         grid,
         P,
         S,

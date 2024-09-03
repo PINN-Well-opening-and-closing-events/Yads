@@ -22,7 +22,7 @@ def explicit_saturation_solver(
     mu_g: Union[float, int],
     wells: Union[List[Well], None] = None,
     eps: Union[float, int] = 1e-4,
-) -> (np.ndarray, np.ndarray):
+) -> tuple[np.ndarray, np.ndarray]:
     """Explicitly updates saturation
 
     Args:
@@ -38,8 +38,8 @@ def explicit_saturation_solver(
             example: Sb_dict = {"Neumann":{"left":1.0, "right": 0.2}, "Dirichlet": "left":None, "right":None}
         dt: time step
         mu_w: water viscosity
-        mu_g
-        wells:
+        mu_g: gas viscosity
+        wells: list of Well object
         eps: clipping tolerance
 
     Returns:

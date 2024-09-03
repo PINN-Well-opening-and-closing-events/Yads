@@ -1,4 +1,4 @@
-from yads.mesh.two_D.export_vtk import export_vtk_2d_triangular  # type: ignore
+from yads.mesh.two_D.export_vtk import export_vtk_2d_triangular, export_vtk_2d_cartesian
 from yads.mesh.two_D.load_2d import load_mesh_2d
 from yads.mesh.two_D.create_2D_cartesian import create_2d_cartesian
 import numpy as np  # type: ignore
@@ -7,11 +7,13 @@ import os
 
 
 def test_wrong_inputs():
-    # square = create_2d_cartesian(10, 10, 5, 5)
+    square = create_2d_cartesian(10, 10, 5, 5)
 
-    # cell_prop = np.ones(square.nb_cells)
-    # node_prop = np.ones(square.nb_nodes)
-
+    cell_prop = np.ones(square.nb_cells)
+    node_prop = np.ones(square.nb_nodes)
+    export_vtk_2d_cartesian("./cartesian_test", square)
+    if os.path.exists("./cartesian_test.vtk"):
+        os.remove("./cartesian_test.vtk")
     # with pytest.raises(TypeError, match="grid must be a Mesh object"):
     #     export_vtk_2d_triangular("./test", "error")
     # with pytest.raises(TypeError, match="path must be a string"):

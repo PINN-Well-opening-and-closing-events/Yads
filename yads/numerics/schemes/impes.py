@@ -15,7 +15,7 @@ import yads.mesh as ym
 import time
 
 
-def impes_solver(
+def impes(
     grid: ym.Mesh,
     P: np.ndarray,
     S: np.ndarray,

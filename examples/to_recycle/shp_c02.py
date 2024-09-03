@@ -71,7 +71,7 @@ well_1 = Well(
 )
 
 print("IMPLICIT")
-yn.impims_solver(
+yn.impims(
     grid,
     P,
     S,
