@@ -3,6 +3,7 @@ import pandas as pd
 from ast import literal_eval
 import numpy as np
 import matplotlib.pyplot as plt
+from joblib import Parallel, delayed
 
 import sys
 
@@ -17,45 +18,58 @@ def compute_distance(sample_1, sample_2):
     sample_2 = (sample_2 - sample_2.min()) / (sample_2.max() - sample_2.min())
     return wasserstein_distance(sample_1, sample_2)
 
+def compute_min_distance(i, physical_row, synthetic_data):
+    distances = np.apply_along_axis(compute_distance, 1, synthetic_data, physical_row)
+    return i, np.min(distances)
 
 def compute_dataset_quality(physical_df, synthetic_df):
     physical_data = np.array(
         [np.array(row["P_imp_local"]) for _, row in physical_df.iterrows()]
     )
     synthetic_data = np.array(
-        [np.array(row["P_imp"]) for _, row in synthetic_df.iterrows()]
+        [np.array(row["P_imp_local"]) for _, row in synthetic_df.iterrows()]
     )
 
-    score = np.full(len(synthetic_data), np.inf)
+    score = np.full(len(physical_data), np.inf)
 
-    for i, synthetic_row in enumerate(synthetic_data):
-        distances = np.apply_along_axis(
-            compute_distance, 1, physical_data, synthetic_row
-        )
-        score[i] = np.min(distances)
+    # for i, physical_row in enumerate(physical_data):
+    #     distances = np.apply_along_axis(
+    #         compute_distance, 1, synthetic_data, physical_row
+    #     )
+    #     score[i] = np.min(distances)
+    results = Parallel(n_jobs=-1)(
+        delayed(compute_min_distance)(i, physical_row, synthetic_data) 
+        for i, physical_row in enumerate(physical_data)
+    )
+    for i, min_distance in results:
+        score[i] = min_distance
+
     return np.max(score)
 
 
 if __name__ == "__main__":
-    synthetic_df = pd.read_csv(
-        "../data/train_gwm_dataset_3100.csv",
-        sep="\t",
-        converters={"P_imp": literal_eval},
-        nrows=10,
-    )
+    # synthetic_df = pd.read_csv(
+    #     "../data/train_gwm_dataset_3100.csv",
+    #     sep="\t",
+    #     converters={"P_imp": literal_eval},
+    # )
 
-    physical_df = pd.read_csv(
+    train_physical_df = pd.read_csv(
         "../../../local_approach/SHPCO2/data/case_0/data/train_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
         converters={"P_imp_local": literal_eval},
         sep="\t",
-        nrows=10,
+    )
+
+    test_physical_df = pd.read_csv(
+        "../../../local_approach/SHPCO2/data/case_0/data/test_q_5_3_dt_1_10_S_0_06_P_imp_extension_4.csv",
+        converters={"P_imp_local": literal_eval},
+        sep="\t",
     )
 
     physical_variable_df = pd.read_csv(
         "data/results_variable_2.csv",
         sep="\t",
         converters={"P_imp": literal_eval, "well_loc": literal_eval},
-        nrows=10,
     )
 
     grid = load_json("../../../../../meshes/SHP_CO2/2D/SHP_CO2_2D_S.json")
@@ -76,6 +90,10 @@ if __name__ == "__main__":
 
     physical_variable_df["P_imp_local"] = Pimp_local_df
 
-    print(compute_dataset_quality(physical_df, synthetic_df))
-    print(compute_dataset_quality(physical_variable_df, synthetic_df))
-    print(compute_dataset_quality(physical_variable_df, synthetic_df))
+    # print(compute_dataset_quality(train_physical_df, synthetic_df))
+    # print(compute_dataset_quality(test_physical_df, synthetic_df))
+    # print(compute_dataset_quality(physical_variable_df, synthetic_df))
+
+    print(compute_dataset_quality(test_physical_df, train_physical_df))
+    print(compute_dataset_quality(physical_variable_df, train_physical_df))
+    

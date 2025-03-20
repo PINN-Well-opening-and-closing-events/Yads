@@ -1,10 +1,15 @@
 import pandas as pd
 import os
 import shutil
+import re
 
-for dir in ["train", "test", "validation"]:
+for dir in ["ood", "train", "test", "validation"]:
     path_dir = f"data/{dir}"
-    filenames = os.listdir(path_dir)
+    if not os.path.exists(path_dir):
+        continue
+    filenames = sorted(os.listdir(path_dir))
+    filenames.sort(key=lambda x: tuple(map(int, re.findall(r'\d+', x)[1:])))
+
     list_of_df = []
     for file in filenames:
         file_df = pd.read_csv(path_dir + "/" + file, sep="\t")

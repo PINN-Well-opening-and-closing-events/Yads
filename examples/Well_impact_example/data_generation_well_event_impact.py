@@ -6,7 +6,7 @@ import pickle
 import os
 
 # create 1D cartesian mesh 10 000m x 1000m with 200 cells in x direction and 1 in y direction
-grid = ym.two_D.create_2d_cartesian(50 * 200, 1000, 200, 1)
+grid = ym.two_D.create_2d_cartesian(50 * 200, 1000, 201, 1)
 
 # define initial time step and total simulation time in seconds
 dt = 1 * (60 * 60 * 24 * 365.25)  # in years
