@@ -57,6 +57,8 @@ def hybrid_newton_inference(
     if S_guess is None:
         S_guess = S_i
 
+    T = calculate_transmissivity(grid, K)
+    
     P_i_plus_1, S_i_plus_1, dt_sim, nb_newton, norms = solss_newton_step(
         grid=grid,
         P_i=P_i,
@@ -164,11 +166,6 @@ def launch_inference(qt, log_qt, i):
         S_guess=S,
         save_path=f"results/test_classic_{i}.json"
     )
-
-    # visualize prediction
-    #fig = plt.plot(S_pred_global)
-    # plt.plot(S_i_plus_1)
-    # plt.show()
  
     dict_save["P_i_plus_1_classic"] = P_i_plus_1.tolist()
     dict_save["S_i_plus_1_classic"] = S_i_plus_1.tolist()
